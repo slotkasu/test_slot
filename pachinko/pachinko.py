@@ -29,27 +29,36 @@ print("Date:"+getCalendar(-1))
 warnings.simplefilter("ignore")
 url = "https://papimo.jp/h/00061833/hit/view/"
 
-for daiban in range(100):
-	time.sleep(1)
-	html = requests.get(url+str(daiban+1100)+"/"+getCalendar(-1))
+data_list=[]
+
+for daiban in range(10):
+	daiban+=1
+	temp_list=[]
+	
+	html = requests.get(url+str(daiban+1180)+"/"+getCalendar(-1))
 	html.encoding = html.apparent_encoding
+	
 	soup = BeautifulSoup(html.text)
 
-	title = soup.find("title")
-	#- -で囲まれた台の名前を抽出している。
-	title = title.get_text().split("-")[1].strip()
-	if title == "":
-		print("ない")
-		continue
-
-	print(str(daiban)+":"+title)
-
-	
 	ps = soup.find_all("p",class_="cost")
+	if len(ps) == 0:
+		print("ないです")
+		continue
 	if not "２０スロ" in ps[0].string:
 		print("いらんやつ")
 		continue
 
+	title = soup.find("title")
+	#- -で囲まれた台の名前を抽出している。
+	title = title.get_text().split("-")[1].strip()
+	print(str(daiban)+":"+title)
+
+	##tempリストにデータを入力
+	#台番をappend
+	temp_list.append(str(daiban))
+
+	#機種名をappend
+	temp_list.append(title)
 	name = soup.find_all("td")
 	day="本日"
 
@@ -60,8 +69,18 @@ for daiban in range(100):
 			break
 		if flag == 1:
 			#print(i.get_text())
+			temp_list.append(i.get_text().strip())
 			cnt+=1
 		if i.get_text() == day:
 			flag=1
-			print(day)
+			#各項目をappend
+			
+
+	data_list.append(temp_list)
+	time.sleep(1)
+
+print(data_list)
+with open('data/out'+getCalendar(-1)+'.csv','w',newline="") as f:
+	writer=csv.writer(f)
+	writer.writerows(data_list)
 
