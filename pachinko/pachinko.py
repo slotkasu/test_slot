@@ -26,20 +26,28 @@ print(getCalendar(0))
 #print(type(getCalendar(0)))
 
 
-"""
 warnings.simplefilter("ignore")
-url = "https://papimo.jp/h/00061833/hit/view/816/"
+url = "https://papimo.jp/h/00061833/hit/view/"
 
-html = requests.get(url)
-html.encoding = html.apparent_encoding
-soup = BeautifulSoup(html.text)
-name = soup.find_all("td")
+for daiban in range(5):
+	html = requests.get(url+str(daiban))#+"/"+getCalendar(-1))
+	html.encoding = html.apparent_encoding
+	soup = BeautifulSoup(html.text)
+	name = soup.find_all("td")
 
-days=["本日","1日前","2日前"]
+	title = soup.find("title")
+	#- -で囲まれた台の名前を抽出している。
+	title = title.get_text().split("-")[1].strip()
+	if title == "":
+		print("NODATA")
+		continue
+	else:
+		print(str(daiban)+":"+title)
 
-for day in days:
-	flag=0
+	day="本日"
+
 	cnt=0
+	flag=0
 	for i in name:
 		if cnt == 7:
 			break
@@ -50,5 +58,3 @@ for day in days:
 			flag=1
 			print(day)
 
-	
-"""
