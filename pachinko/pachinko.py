@@ -38,7 +38,7 @@ print(getCalendar(0))
 warnings.simplefilter("ignore")
 url = "https://papimo.jp/h/00061833/hit/view/"
 
-data_list=[]
+data_list=[["台番","機種名","BB","RB","BB確率","合成確率","総スタート","最終スタート","最大放出"]]
 
 for daiban in range(10):
 	daiban+=1
