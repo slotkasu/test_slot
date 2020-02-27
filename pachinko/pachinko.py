@@ -11,9 +11,24 @@ import warnings
 import csv
 import pprint
 import time
+import datetime
 
+def getCalendar(i):
+	now = datetime.date.today()
+	year = now.year
+	month = now.month
+	day = now.day-1
+	print(year,month,day)
+	string = str(year)+str(month).zfill(2)+str(day).zfill(2)
+	return string
+
+print(getCalendar(0))
+#print(type(getCalendar(0)))
+
+
+"""
 warnings.simplefilter("ignore")
-url = "https://papimo.jp/h/00061833/hit/view/816/20200225"
+url = "https://papimo.jp/h/00061833/hit/view/816/"
 
 html = requests.get(url)
 html.encoding = html.apparent_encoding
@@ -36,3 +51,4 @@ for day in days:
 			print(day)
 
 	
+"""
