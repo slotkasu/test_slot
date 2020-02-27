@@ -43,21 +43,24 @@ url = "https://papimo.jp/h/00061833/hit/view/"
 
 data_list=[["台番","機種名","BB","RB","BB確率","合成確率","総スタート","最終スタート","最大放出"]]
 
-for daiban in range(10):
-	daiban+=1
+for daiban in range(1,3000):
+	if getSkipper([4,9],daiban):
+		print(str(daiban)+":SKIP")
+		continue
+	
 	temp_list=[]
 	
-	html = requests.get(url+str(daiban+1180)+"/"+getCalendar(-1))
+	html = requests.get(url+str(daiban)+"/"+getCalendar(-1))
 	html.encoding = html.apparent_encoding
 	
 	soup = BeautifulSoup(html.text)
 
 	ps = soup.find_all("p",class_="cost")
 	if len(ps) == 0:
-		print("ないです")
+		print(str(daiban)+":（店に）ないです。")
 		continue
 	if not "２０スロ" in ps[0].string:
-		print("いらんやつ")
+		print(str(daiban)+":（２０スロでは）ないです。")
 		continue
 
 	title = soup.find("title")
@@ -91,7 +94,7 @@ for daiban in range(10):
 	data_list.append(temp_list)
 	time.sleep(1)
 
-print(data_list)
+#print(data_list)
 with open('data/out'+getCalendar(-1)+'.csv','w',newline="") as f:
 	writer=csv.writer(f)
 	writer.writerows(data_list)
