@@ -41,15 +41,19 @@ print(getCalendar(0))
 warnings.simplefilter("ignore")
 url = "https://papimo.jp/h/00061833/hit/view/"
 
-data_list=[["台番","機種名","BB","RB","BB確率","合成確率","総スタート","最終スタート","最大放出"]]
+data_list=["台番","機種名","BB","RB","BB確率","合成確率","総スタート","最終スタート","最大放出"]
 
-for daiban in range(1,3000):
+f = open('data/out'+getCalendar(-1)+'.csv','w',newline="")
+writer = csv.writer(f)
+writer.writerow(data_list)
+mise_nai_cnt=0
+for daiban in range(777,1500):
 	if getSkipper([4,9],daiban):
 		print(str(daiban)+":SKIP")
 		continue
 	
 	temp_list=[]
-	
+	time.sleep(1)
 	html = requests.get(url+str(daiban)+"/"+getCalendar(-1))
 	html.encoding = html.apparent_encoding
 	
@@ -58,11 +62,16 @@ for daiban in range(1,3000):
 	ps = soup.find_all("p",class_="cost")
 	if len(ps) == 0:
 		print(str(daiban)+":（店に）ないです。")
+		mise_nai_cnt+=1
+		if mise_nai_cnt==100:
+			break
 		continue
 	if not "２０スロ" in ps[0].string:
 		print(str(daiban)+":（２０スロでは）ないです。")
+		mise_nai_cnt=0
 		continue
 
+	mise_nai_cnt=0
 	title = soup.find("title")
 	#- -で囲まれた台の名前を抽出している。
 	title = title.get_text().split("-")[1].strip()
@@ -89,13 +98,12 @@ for daiban in range(1,3000):
 		if i.get_text() == day:
 			flag=1
 			#各項目をappend
-			
-
-	data_list.append(temp_list)
-	time.sleep(1)
+	
+	writer.writerow(temp_list)
+	
 
 #print(data_list)
-with open('data/out'+getCalendar(-1)+'.csv','w',newline="") as f:
-	writer=csv.writer(f)
-	writer.writerows(data_list)
+
+f.close()
+print("書き込み完了")	
 
