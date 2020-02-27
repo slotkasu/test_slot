@@ -22,18 +22,21 @@ def getCalendar(i):
 	string = str(year)+str(month).zfill(2)+str(day).zfill(2)
 	return string
 
-def skipper(skip_value, daiban):
+
+#list skip_value and int daiban
+#return 0 if success
+def getSkipper(skip_value, daiban):
 	for i in skip_value:
-		if i in daiban:
+		if str(i) in str(daiban):
 			return 1
 	return 0
 
-print(skipper(4,14))
 
-
+#ls = [4,9]
+#for i in range(100):
+#	print(i,skipper(ls,i))
 
 print(getCalendar(0))
-#print(type(getCalendar(0)))
 
 warnings.simplefilter("ignore")
 url = "https://papimo.jp/h/00061833/hit/view/"
