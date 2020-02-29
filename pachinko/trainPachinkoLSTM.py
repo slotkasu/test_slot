@@ -4,7 +4,6 @@ from estimate_setting import getSettingList
 import numpy as np
 import csv
 import matplotlib.pyplot as plt
-import pandas
 import math
 from keras.models import Sequential
 from keras.layers import Dense
