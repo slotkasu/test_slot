@@ -35,7 +35,7 @@ single_setting = np.argmax(setting, axis=1)+1
 
 print(len(single_setting))
 print(len(setting))
-dataset=np.concatenate([single_setting, setting])
+dataset=np.concatenate([single_setting, setting],1)
 print(datasets)
 
 dataX, dataY=[], []
