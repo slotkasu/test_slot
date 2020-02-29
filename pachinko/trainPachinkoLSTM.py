@@ -37,6 +37,7 @@ single_setting = single_setting.reshape([len(setting),1])
 print(single_setting.shape)
 print(setting.shape)
 dataset=np.concatenate([single_setting, setting],1)
+dataset=create_dataset(datset, 30)
 print(dataset)
 
 dataX, dataY=[], []
