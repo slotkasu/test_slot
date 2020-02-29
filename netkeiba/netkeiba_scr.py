@@ -31,6 +31,7 @@ for na in name:
     temp = re.sub("\n{1,}"," ",temp)
     temp = temp.replace("\xa0"," ")
     temp = temp.replace(" ","",1)
+    temp = temp.strip()
     temp = temp.split(" ")
     
     if "[馬記号]" in temp:
