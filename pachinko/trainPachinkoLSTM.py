@@ -15,7 +15,7 @@ def create_dataset(dataset, look_back=1):
             xset.append(a)
         dataY.append(dataset[i + look_back, 0])
         dataX.append(xset)
-    return numpy.array(dataX), numpy.array(dataY)
+    return np.array(dataX), np.array(dataY)
 
 #データ読み込み
 with open('data/feb.csv') as f:
