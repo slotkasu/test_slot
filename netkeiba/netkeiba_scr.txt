@@ -1,0 +1,12 @@
+import sys
+import requests
+import re
+from bs4 import BeautifulSoup
+import warnings
+import csv
+import pprint
+import time
+import datetime
+from datetime import timedelta
+
+url = "https://race.netkeiba.com/race/newspaper.html?race_id=202006020102&rf=shutuba_submenu#"

@@ -13,8 +13,8 @@ import pprint
 import time
 
 warnings.simplefilter("ignore")
-#url = "http://swallow.5ch.net/livejupiter/subback.html"
-url = "http://papimo.jp/h/00062026/hit/view/373/20200227"
+url = "http://swallow.5ch.net/livejupiter/subback.html"
+#url = "http://papimo.jp/h/00062026/hit/view/373/20200227"
 
 def thread_and_res(string):#スレッド名とレス数を返す
     #print(string) #test
@@ -30,7 +30,8 @@ def thread_and_res(string):#スレッド名とレス数を返す
         title,number = title[:-4],title[-4:]#スレタイとレス数に分割する
     elif title[-5] == '(':
         title,number = title[:-5],title[-5:]#スレタイとレス数に分割する
-    
+    else 
+        break
     number = re.findall("\((.*)\)",number)#レス数を数字にする
     
     #return title.encode('unicode-escape'), number[0].encode('unicode-escape')
