@@ -1,0 +1,10 @@
+def getCalendar(i):
+	now = datetime.date.today()
+	year = now.year
+	month = now.month
+	day = now.day-1
+	print(year,month,day)
+	string = str(year)+str(month).zfill(2)+str(day).zfill(2)
+	return string
+
+print(getCalendar(0))

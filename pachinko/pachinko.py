@@ -12,15 +12,16 @@ import csv
 import pprint
 import time
 import datetime
+from datetime import timedelta
+
+#取ってくる日付の指定 default = -1
+#2日前がほしい→-2　7日前がほしい→-7
+calendar_i = -1
 
 def getCalendar(i):
-	now = datetime.date.today()
-	year = now.year
-	month = now.month
-	day = now.day-1
-	#print(year,month,day)
-	string = str(year)+str(month).zfill(2)+str(day).zfill(2)
-	return string
+	now = datetime.date.today()-datetime.timedelta(days = -i)
+	string_date = str(now.year)+str(now.month).zfill(2)+str(now.day).zfill(2)
+	return string_date
 
 
 #list skip_value and int daiban
@@ -31,23 +32,18 @@ def getSkipper(skip_value, daiban):
 			return 1
 	return 0
 
-
-#ls = [4,9]
-#for i in range(100):
-#	print(i,skipper(ls,i))
-
-print(getCalendar(0))
+print(getCalendar(calendar_i))
 
 warnings.simplefilter("ignore")
 url = "https://papimo.jp/h/00061833/hit/view/"
 
 data_list=["台番","機種名","BB","RB","BB確率","合成確率","総スタート","最終スタート","最大放出"]
 
-f = open('data/out'+getCalendar(-1)+'.csv','w',newline="")
+f = open('data/out'+getCalendar(calendar_i)+'.csv','w',newline="")
 writer = csv.writer(f)
 writer.writerow(data_list)
 mise_nai_cnt=0
-for daiban in range(777,1500):
+for daiban in range(780,1260):
 	if getSkipper([4,9],daiban):
 		print(str(daiban)+":SKIP")
 		continue

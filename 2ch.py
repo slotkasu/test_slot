@@ -13,7 +13,8 @@ import pprint
 import time
 
 warnings.simplefilter("ignore")
-url = "http://swallow.5ch.net/livejupiter/subback.html"
+#url = "http://swallow.5ch.net/livejupiter/subback.html"
+url = "http://papimo.jp/h/00062026/hit/view/373/20200227"
 
 def thread_and_res(string):#スレッド名とレス数を返す
     #print(string) #test
@@ -35,6 +36,7 @@ def thread_and_res(string):#スレッド名とレス数を返す
     #return title.encode('unicode-escape'), number[0].encode('unicode-escape')
     return title.strip(), number[0]
     #return ascii(title), ascii(number[0])
+
 
 def __init__():
     html = requests.get(url)
