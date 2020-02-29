@@ -9,28 +9,38 @@ import time
 import datetime
 from datetime import timedelta
 
+#target url
 url = "https://race.netkeiba.com/race/shutuba_past.html?race_id=202006020102&rf=shutuba_submenu"
 
+#file
+f = open('keiba/out.csv','w',newline = "")
+writer = csv.writer(f)
 
+#beautifulsoup
 html = requests.get(url)
 html.encoding = html.apparent_encoding
 soup = BeautifulSoup(html.content,'html.parser')
 name = soup.find_all("td")
 
+
+
+
 ls = []
 for na in name:
     temp = na.get_text()
     temp = re.sub("\n{1,}"," ",temp)
-    temp = temp.replace("\xa0","")
+    temp = temp.replace("\xa0"," ")
     temp = temp.replace(" ","",1)
+    temp = temp.split(" ")
     
     if "[馬記号]" in temp:
         print("\n\n")
         break
-    elif "--◎◯▲" in temp:
+    elif "\&#10003" in temp:
         continue
-    if na.get_text().strip() != "":
+    elif na.get_text().strip() != "":
         ls.append(temp)
+        
         #print(temp)
 
 #for i in ls:#ノーブレークスペース(\xa0)がところどころ入ってる
@@ -38,6 +48,12 @@ for na in name:
 
 for i in ls:
     print(i)
+#print(ls)
+
+writer.writerows(ls)
+
+
+
 """
 ,,ジャングルポケット,, グランクロワ,,カラフルトーク,(サンデーサイレンス),美浦・大和田  ,中16週,,456kg(+6),,---.-,**,,,,
 ジャングルポケット キョウエイリヴァルキョウエイダルク (ネオユニヴァース) 美浦・武藤   中4週466kg(-2)---.- **
