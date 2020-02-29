@@ -1,4 +1,4 @@
-#using -*shift-jis*-
+# -*- coding: utf-8 -*-
 
 from estimate_setting import getSettingList
 import numpy as np
