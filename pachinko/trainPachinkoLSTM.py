@@ -6,8 +6,19 @@ import csv
 
 #print(getSettingList(40,35,8000))
 
+def create_dataset(dataset, look_back=1):
+    dataX, dataY = [], []
+    for i in range(len(dataset)-look_back-1):
+        xset = []
+        for j in range(dataset.shape[1]):
+            a = dataset[i:(i+look_back), j]
+            xset.append(a)
+        dataY.append(dataset[i + look_back, 0])
+        dataX.append(xset)
+    return numpy.array(dataX), numpy.array(dataY)
+
 #データ読み込み
-with open('data/feb.csv') as f:
+with open('data/feb.csv') as f:s
     reader = csv.reader(f)
     data = [row for row in reader]
 
@@ -19,4 +30,8 @@ setting=[getSettingList(int(i[2]),int(i[3]),int(i[1])) for i in data360]
 
 setting = np.array(setting,dtype='float32')
 single_setting = np.argmax(setting, axis=1)+1
-print(single_setting)
+dataset=np.concatenate([single_setting, setting])
+print(datasets)
+
+dataX, dataY=[], []
+for i in range(len(setting))
