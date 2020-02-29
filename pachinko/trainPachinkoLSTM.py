@@ -29,9 +29,10 @@ data360 = [i for i in data if i[0] == "366"]
 setting=[getSettingList(int(i[2]),int(i[3]),int(i[1])) for i in data360]
 
 setting = np.array(setting,dtype='float32')
-setting = setting.reshape([len(setting),1])
+
 #0～5なので、設定値の1～6に変更する。
 single_setting =np.array(np.argmax(setting, axis=1)+1)
+setting = setting.reshape([len(setting),1])
 
 print(single_setting.shape)
 print(setting.shape)
