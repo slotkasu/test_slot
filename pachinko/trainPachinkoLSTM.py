@@ -5,6 +5,7 @@ import numpy as np
 import csv
 import matplotlib.pyplot as plt
 import math
+import keras
 from keras.models import Sequential
 from keras.layers import Dense
 from keras.layers import LSTM
@@ -31,7 +32,7 @@ with open('data/feb.csv') as f:
     data = [row for row in reader]
 
 #360番で実験　別にどれでもいい
-data360 = [i for i in data if i[0] == "366"]
+data360 = [i for i in data if i[0] == "360"]
 
 #BB RB TotalGames
 setting=[getSettingList(int(i[2]),int(i[3]),int(i[1])) for i in data360]
@@ -51,12 +52,12 @@ scaler = MinMaxScaler(feature_range=(0, 1))
 dataset = scaler.fit_transform(dataset)
 
 # split into train and test sets
-train_size = int(len(dataset) * 0.67)
+train_size = int(len(dataset) * 2/3)
 test_size = len(dataset) - train_size
 train, test = dataset[0:train_size,:], dataset[train_size:len(dataset),:]
 print(len(train), len(test))
 
-look_back=14
+look_back=10
 trainX, trainY = create_dataset(train, look_back)
 testX, testY = create_dataset(test,look_back)
 print(testX.shape)
@@ -68,16 +69,20 @@ trainX = np.reshape(trainX, (trainX.shape[0], trainX.shape[1], trainX.shape[2]))
 testX = np.reshape(testX, (testX.shape[0], testX.shape[1], testX.shape[2]))
 
 # create and fit the LSTM network
+es_cb = keras.callbacks.EarlyStopping(monitor='val_loss', patience=0, verbose=0, mode='auto')
+
 model = Sequential()
 model.add(LSTM(4, input_shape=(testX.shape[1], look_back)))	#shape：変数数、遡る時間数
 model.add(Dense(1))
 model.compile(loss='mean_squared_error', optimizer='adam')
-model.fit(trainX, trainY, epochs=100, batch_size=1, verbose=2)
+model.fit(trainX, trainY, epochs=500, batch_size=2, verbose=2,callbacks=[es_cb])
 
 # make predictions
 trainPredict = model.predict(trainX)
 testPredict = model.predict(testX)
 pad_col = np.zeros(dataset.shape[1]-1)
+
+###こっから先理解していない###
 
 # invert predictions
 def pad_array(val):
