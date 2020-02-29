@@ -57,8 +57,40 @@ test_size = len(dataset) - train_size
 train, test = dataset[0:train_size,:], dataset[train_size:len(dataset),:]
 print(len(train), len(test))
 
-dataset=create_dataset(dataset, 30)
-print(dataset)
+look_back=14
+trainX, trainY = create_dataset(train, look_back)
+testX, testY = create_dataset(test,look_back)
+print(testX.shape)
+print(testX[0])
+print(testY)
 
-dataX, dataY=[], []
-# for i in range(len(setting))
+# reshape input to be [samples, time steps(number of variables), features] *convert time series into column
+trainX = numpy.reshape(trainX, (trainX.shape[0], trainX.shape[1], trainX.shape[2]))
+testX = numpy.reshape(testX, (testX.shape[0], testX.shape[1], testX.shape[2]))
+
+# create and fit the LSTM network
+model = Sequential()
+model.add(LSTM(4, input_shape=(testX.shape[1], look_back)))	#shape：変数数、遡る時間数
+model.add(Dense(1))
+model.compile(loss='mean_squared_error', optimizer='adam')
+model.fit(trainX, trainY, epochs=1000, batch_size=1, verbose=2)
+
+# make predictions
+trainPredict = model.predict(trainX)
+testPredict = model.predict(testX)
+pad_col = numpy.zeros(dataset.shape[1]-1)
+
+# invert predictions
+def pad_array(val):
+    return numpy.array([numpy.insert(pad_col, 0, x) for x in val])
+
+trainPredict = scaler.inverse_transform(pad_array(trainPredict))
+trainY = scaler.inverse_transform(pad_array(trainY))
+testPredict = scaler.inverse_transform(pad_array(testPredict))
+testY = scaler.inverse_transform(pad_array(testY))
+
+# calculate root mean squared error
+trainScore = math.sqrt(mean_squared_error(trainY[:,0], trainPredict[:,0]))
+print('Train Score: %.2f RMSE' % (trainScore))
+testScore = math.sqrt(mean_squared_error(testY[:,0], testPredict[:,0]))
+print('Test Score: %.2f RMSE' % (testScore))
