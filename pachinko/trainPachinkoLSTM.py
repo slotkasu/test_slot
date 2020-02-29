@@ -97,12 +97,12 @@ print('Test Score: %.2f RMSE' % (testScore))
 print(testY[:,0])
 print(testPredict[:,0])
 # shift train predictions for plotting
-trainPredictPlot = numpy.empty_like(dataset)
-trainPredictPlot[:, :] = numpy.nan
+trainPredictPlot = np.empty_like(dataset)
+trainPredictPlot[:, :] = np.nan
 trainPredictPlot[look_back:len(trainPredict)+look_back, :] = trainPredict
 # shift test predictions for plotting
-testPredictPlot = numpy.empty_like(dataset)
-testPredictPlot[:, :] = numpy.nan
+testPredictPlot = np.empty_like(dataset)
+testPredictPlot[:, :] = np.nan
 testPredictPlot[len(trainPredict)+(look_back*2)+1:len(dataset)-1, :] = testPredict
 # plot baseline and predictions
 plt.plot(scaler.inverse_transform(dataset))
