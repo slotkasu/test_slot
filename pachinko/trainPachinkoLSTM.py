@@ -18,7 +18,7 @@ def create_dataset(dataset, look_back=1):
     return numpy.array(dataX), numpy.array(dataY)
 
 #データ読み込み
-with open('data/feb.csv') as f:s
+with open('data/feb.csv') as f:
     reader = csv.reader(f)
     data = [row for row in reader]
 
