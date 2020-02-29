@@ -31,7 +31,7 @@ setting=[getSettingList(int(i[2]),int(i[3]),int(i[1])) for i in data360]
 setting = np.array(setting,dtype='float32')
 
 #0～5なので、設定値の1～6に変更する。
-single_setting = [np.argmax(setting, axis=1)+1]
+single_setting =np.array(np.argmax(setting, axis=1)+1)
 
 print(single_setting.shape)
 print(setting.shape)
