@@ -65,8 +65,8 @@ print(testX[0])
 print(testY)
 
 # reshape input to be [samples, time steps(number of variables), features] *convert time series into column
-trainX = numpy.reshape(trainX, (trainX.shape[0], trainX.shape[1], trainX.shape[2]))
-testX = numpy.reshape(testX, (testX.shape[0], testX.shape[1], testX.shape[2]))
+trainX = np.reshape(trainX, (trainX.shape[0], trainX.shape[1], trainX.shape[2]))
+testX = np.reshape(testX, (testX.shape[0], testX.shape[1], testX.shape[2]))
 
 # create and fit the LSTM network
 model = Sequential()
@@ -78,11 +78,11 @@ model.fit(trainX, trainY, epochs=1000, batch_size=1, verbose=2)
 # make predictions
 trainPredict = model.predict(trainX)
 testPredict = model.predict(testX)
-pad_col = numpy.zeros(dataset.shape[1]-1)
+pad_col = np.zeros(dataset.shape[1]-1)
 
 # invert predictions
 def pad_array(val):
-    return numpy.array([numpy.insert(pad_col, 0, x) for x in val])
+    return np.array([np.insert(pad_col, 0, x) for x in val])
 
 trainPredict = scaler.inverse_transform(pad_array(trainPredict))
 trainY = scaler.inverse_transform(pad_array(trainY))
