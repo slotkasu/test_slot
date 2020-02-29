@@ -10,7 +10,8 @@ import datetime
 from datetime import timedelta
 
 #target url
-url = "https://race.netkeiba.com/race/shutuba_past.html?race_id=202006020102&rf=shutuba_submenu"
+#url = "https://race.netkeiba.com/race/shutuba_past.html?race_id=202006020102&rf=shutuba_submenu"
+url = "https://race.netkeiba.com/race/shutuba_past.html?race_id=202009010111"
 
 #file
 f = open('keiba/out.csv','w',newline = "")
@@ -21,9 +22,6 @@ html = requests.get(url)
 html.encoding = html.apparent_encoding
 soup = BeautifulSoup(html.content,'html.parser')
 name = soup.find_all("td")
-
-
-
 
 ls = []
 for na in name:
@@ -37,28 +35,56 @@ for na in name:
     if "[馬記号]" in temp:
         print("\n\n")
         break
-    elif "\&#10003" in temp:
-        continue
     elif na.get_text().strip() != "":
         ls.append(temp)
         
-        #print(temp)
+ls_new = [[]]
+count = 0
+flag = 0
+evac = []
 
-#for i in ls:#ノーブレークスペース(\xa0)がところどころ入ってる
-    #print(re.split(" |\xa0|  ",i))
-
+dirt = []
 for i in ls:
-    print(i)
-#print(ls)
+    ls_new.append(i)
 
-writer.writerows(ls)
+    if len(i) == 1:
+        if count == 2:
+            del ls_new[-1]
+            count = 0
+            flag = 1
+            continue
+        elif count == 0:
+            temp = [ls_new.pop(-1)]
+            count += 1
+        else:
+            temp.append(ls_new.pop(-1))
+            count += 1
+    elif flag == 1:
+        if len(temp) == 2:
+            temp.append(ls_new.pop(-1))
+        else:
+            temp.append(ls_new.pop(-1))
+            
+            for j in temp:
+                for t in j:
+                    if t == "":
+                        continue
+                    else:
+                        
+                        if re.search(r"芝\d\d00",t) != None:
+                            dirt.append(t)
+                        evac.append(t)
+            ls_new.append(evac)
+            evac = []
+            flag = 0
+
+for i in ls_new:
+    if len(i) > 15:
+        for j in i:
+            if re.match(r"ダ\d*|芝\d",j) != None:# or "ダ2" or "芝2" or "芝3"
+                print(j)
 
 
 
-"""
-,,ジャングルポケット,, グランクロワ,,カラフルトーク,(サンデーサイレンス),美浦・大和田  ,中16週,,456kg(+6),,---.-,**,,,,
-ジャングルポケット キョウエイリヴァルキョウエイダルク (ネオユニヴァース) 美浦・武藤   中4週466kg(-2)---.- **
-
-,,,2019.06.02 東京,4,,,2歳新馬,,,,,,,,,,,,,,,,,,芝1600 1:37.4 良,7頭 3番 7人 大塚海渡 51.0,3-3 (34.6) 392(0),モーベット(0.5),,,,,
- 2019.06.01 東京 11 2歳新馬芝1400 1:25.4 良 12頭 10番 6人 藤田菜七 51.0 1-1 (35.8) 428(0) カイトレッド(1.5)
-"""
+writer.writerows(ls_new)
+print("お疲れさまでした（朧）")
