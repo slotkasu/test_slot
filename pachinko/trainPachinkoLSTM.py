@@ -33,8 +33,8 @@ setting = np.array(setting,dtype='float32')
 #0～5なので、設定値の1～6に変更する。
 single_setting = np.argmax(setting, axis=1)+1
 
-print(len(single_setting))
-print(len(setting))
+print(type(single_setting))
+print(type(setting))
 dataset=np.concatenate([single_setting, setting],1)
 print(datasets)
 
