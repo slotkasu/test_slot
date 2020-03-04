@@ -40,7 +40,7 @@ def getResults(day):
     ###
     return results
 
-getResults("202006020103")
+#getResults("202006020103")
 
 #file in out
 # f = open('datasets/'+"urlの数字"+'.csv','w',newline="")
