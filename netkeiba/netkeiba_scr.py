@@ -84,7 +84,39 @@ for i in ls:
             evac = []
             flag = 0
 
+# for i in ls_new:
+#     if len(i) > 15:
+#         for j in i:
+#             if re.match(r"ダ\d*|芝\d",j) != None:# or "ダ2" or "芝2" or "芝3"
+#                 print(j)
 
+#1行目のごみを削除
+ls_new.pop(0)
+
+sex=["牡","牝","セ"]
+
+uma_ban=1
+for i in ls_new:
+	#print(i)
+	if i[1] == str(uma_ban):
+		temp_list=[]
+		temp_list.append(i[0])
+		temp_list.append(i[1])
+		#中〇週の数字部分を抽出
+		temp_list.append(re.search(r'\d+',i[7]).group())
+		#体重
+		temp_list.append(re.search(r'\d+',i[8]).group())
+		#体重増減
+		temp_list.append(re.findall(r'\((.*)\)',i[8])[0])
+		#性別
+		temp_list.append(i[11][0])
+		#馬齢
+		temp_list.append(re.search(r'\d+',i[11]).group())
+		#斤量
+		temp_list.append(i[13])
+
+		uma_ban+=1
+		print(temp_list)
 
 writer.writerows(ls_new)
 print("お疲れさまでした（朧）")
