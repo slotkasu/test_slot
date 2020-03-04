@@ -8,10 +8,12 @@ import pprint
 import time
 import datetime
 from datetime import timedelta
-from results import getResults
+#from results import getResults
+
+year="2019"
 
 #target url
-url = "https://race.netkeiba.com/race/shutuba_past.html?race_id=202006020102&rf=shutuba_submenu"
+url = "https://race.netkeiba.com/race/shutuba_past.html?race_id=201906020111&rf=shutuba_submenu"
 
 def getCalendar(i):
 	now = datetime.date.today()-datetime.timedelta(days = -i)
@@ -39,7 +41,7 @@ for na in name:
     temp = temp.split(" ")
     
     if "[馬記号]" in temp:
-        print("\n\n")
+        #print("\n\n")
         break
     elif na.get_text().strip() != "":
         ls.append(temp)
@@ -95,10 +97,22 @@ ls_new.pop(0)
 
 sex=["牡","牝","セ"]
 
+new_list=[]
+temp_list=[0,0]
 uma_ban=1
 for i in ls_new:
-	#print(i)
+	
+	#今だけの処理
+	if uma_ban==3:
+		break
+	
 	if i[1] == str(uma_ban):
+		print(i)
+		if len(temp_list) != 0:
+			uma_ban+=1
+			print(uma_ban)
+			#temp_listが空では無ければ書き込み。
+			new_list.append(temp_list)
 		temp_list=[]
 		temp_list.append(i[0])
 		temp_list.append(i[1])
@@ -115,8 +129,50 @@ for i in ls_new:
 		#斤量
 		temp_list.append(i[13])
 
-		uma_ban+=1
-		print(temp_list)
+		
+		#print(temp_list)
 
-writer.writerows(ls_new)
+	elif "20" in i[0]:
+		print(i)
+		#競馬場
+		temp_list.append(i[1])
+		#人気
+		temp_list.append(i[2])
+		#芝ダ
+		temp_list.append(i[5][0])
+		#距離
+		temp_list.append(re.search(r'\d+',i[5]).group())
+		#タイム
+		temp_list.append(i[6])
+		#馬場状態
+		temp_list.append(i[7])
+		#頭数
+		temp_list.append(re.search(r'\d+',i[8]).group())
+		#馬番
+		temp_list.append(re.search(r'\d+',i[9]).group())
+		#人気
+		temp_list.append(re.search(r'\d+',i[10]).group())
+		#斤量
+		temp_list.append(i[12])
+		#通過順
+		#空のリストの数
+		through=i[13].split('-')
+		empty=4-len(through)
+		for j in through:
+			temp_list.append(j)
+		for j in range(empty):
+			temp_list.append(0)
+		#３ハロン
+		temp_list.append(re.findall(r'\((.*)\)',i[14])[0])
+		#体重
+		temp_list.append(re.search(r'\d+',i[15]).group())
+		#体重増減
+		temp_list.append(re.findall(r'\((.*)\)',i[15])[0])
+		#着差
+		temp_list.append(re.findall(r'\((.*)\)',i[16])[0])
+
+
+new_list.append(temp_list)
+
+writer.writerows(new_list)
 print("お疲れさまでした（朧）")
