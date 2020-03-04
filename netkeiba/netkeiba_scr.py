@@ -10,11 +10,16 @@ import datetime
 from datetime import timedelta
 
 #target url
-#url = "https://race.netkeiba.com/race/shutuba_past.html?race_id=202006020102&rf=shutuba_submenu"
-url = "https://race.netkeiba.com/race/shutuba_past.html?race_id=202009010111"
+url = "https://race.netkeiba.com/race/shutuba_past.html?race_id=202006020102&rf=shutuba_submenu"
+
+def getCalendar(i):
+	now = datetime.date.today()-datetime.timedelta(days = -i)
+	string_date = str(now.year)+str(now.month).zfill(2)+str(now.day).zfill(2)
+	return string_date
+
 
 #file
-f = open('keiba/out.csv','w',newline = "")
+f = open('keiba/'+getCalendar(0)+'out.csv','w',newline = "")
 writer = csv.writer(f)
 
 #beautifulsoup
