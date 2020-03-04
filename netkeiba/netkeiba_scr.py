@@ -8,6 +8,7 @@ import pprint
 import time
 import datetime
 from datetime import timedelta
+from results import getResults
 
 #target url
 url = "https://race.netkeiba.com/race/shutuba_past.html?race_id=202006020102&rf=shutuba_submenu"
@@ -82,12 +83,6 @@ for i in ls:
             ls_new.append(evac)
             evac = []
             flag = 0
-
-for i in ls_new:
-    if len(i) > 15:
-        for j in i:
-            if re.match(r"ダ\d*|芝\d",j) != None:# or "ダ2" or "芝2" or "芝3"
-                print(j)
 
 
 

@@ -16,7 +16,7 @@ from datetime import timedelta
 
 #取ってくる日付の指定 default = -1
 #2日前がほしい→-2　7日前がほしい→-7
-calendar_i = -1
+calendar_i = -13
 
 def getCalendar(i):
 	now = datetime.date.today()-datetime.timedelta(days = -i)
@@ -35,7 +35,8 @@ def getSkipper(skip_value, daiban):
 print(getCalendar(calendar_i))
 
 warnings.simplefilter("ignore")
-url = "https://papimo.jp/h/00061833/hit/view/"
+url = "https://papimo.jp/h/00061833/hit/view/"#gachapon
+url = "http://papimo.jp/h/00062026/hit/view/"
 
 data_list=["台番","機種名","BB","RB","BB確率","合成確率","総スタート","最終スタート","最大放出"]
 
@@ -43,7 +44,7 @@ f = open('data/out'+getCalendar(calendar_i)+'.csv','w',newline="")
 writer = csv.writer(f)
 writer.writerow(data_list)
 mise_nai_cnt=0
-for daiban in range(780,1260):
+for daiban in range(281,582):#780 1280
 	if getSkipper([4,9],daiban):
 		print(str(daiban)+":SKIP")
 		continue
@@ -62,7 +63,7 @@ for daiban in range(780,1260):
 		if mise_nai_cnt==100:
 			break
 		continue
-	if not "２０スロ" in ps[0].string:
+	if not "20円" in ps[0].string:#２０スロ
 		print(str(daiban)+":（２０スロでは）ないです。")
 		mise_nai_cnt=0
 		continue
