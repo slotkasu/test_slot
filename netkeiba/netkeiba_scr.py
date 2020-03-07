@@ -45,7 +45,7 @@ for na in name:
 		break
 	elif na.get_text().strip() != "":
 		ls.append(temp)
-		
+
 ls_new = [[]]
 count = 0
 flag = 0#馬番、枠番、馬情報を1行に結合するためのフラグです
