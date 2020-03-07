@@ -18,10 +18,8 @@ soup = BeautifulSoup(html.content,'html.parser')
 # name = soup.find_all("td")
 # div = name.find_all("div")
 
-name = soup.select("td div")
+name = soup.select("td div.Horse04")
 
-for na in name:
-	if "Horse04" in na:
-		print(na)
 
-#print(name)
+for i in name:
+	print(i.text)
