@@ -124,7 +124,7 @@ for i in ls_new:
 		print(i)
 		if len(temp_list) != 0:
 			uma_ban+=1
-			print(uma_ban)
+			#print(uma_ban)
 			#temp_listが空では無ければ書き込み。
 			new_list.append(temp_list)
 		temp_list=[]
@@ -153,38 +153,39 @@ for i in ls_new:
 		#人気
 		temp_list.append(i[2])
 		#芝ダ
-		temp_list.append(i[5][0])
+		temp_list.append(i[4][0])
 		#距離
-		temp_list.append(re.search(r'\d+',i[5]).group())
+		temp_list.append(re.search(r'\d+',i[4]).group())
 		#タイム
-		temp_list.append(i[6])
+		temp_list.append(i[5])
 		#馬場状態
-		temp_list.append(i[7])
+		temp_list.append(i[6])
 		#頭数
-		temp_list.append(re.search(r'\d+',i[8]).group())
+		print(i[7])
+		temp_list.append(re.search(r'\d+',i[7]).group())
 		#馬番
-		temp_list.append(re.search(r'\d+',i[9]).group())
+		temp_list.append(re.search(r'\d+',i[8]).group())
 		#人気
-		print(i[10])
-		temp_list.append(re.search(r'\d+',i[10]).group())
+		print(i[9])
+		temp_list.append(re.search(r'\d+',i[9]).group())
 		#斤量
-		temp_list.append(i[12])
+		temp_list.append(i[11])
 		#通過順
 		#空のリストの数
-		through=i[13].split('-')
+		through=i[12].split('-')
 		empty=4-len(through)
 		for j in through:
 			temp_list.append(j)
 		for j in range(empty):
 			temp_list.append(0)
 		#３ハロン
-		temp_list.append(re.findall(r'\((.*)\)',i[14])[0])
+		temp_list.append(re.findall(r'\((.*)\)',i[13])[0])
 		#体重
-		temp_list.append(re.search(r'\d+',i[15]).group())
+		temp_list.append(re.search(r'\d+',i[14]).group())
 		#体重増減
-		temp_list.append(re.findall(r'\((.*)\)',i[15])[0])
+		temp_list.append(re.findall(r'\((.*)\)',i[14])[0])
 		#着差
-		temp_list.append(re.findall(r'\((.*)\)',i[16])[0])
+		temp_list.append(re.findall(r'\((.*)\)',i[15])[0])
 
 
 new_list.append(temp_list)
