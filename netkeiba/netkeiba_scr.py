@@ -33,115 +33,92 @@ name = soup.find_all("td")
 
 ls = []
 for na in name:
-    temp = na.get_text()
-    temp = re.sub("\n{1,}"," ",temp)
-    temp = temp.replace("\xa0"," ")
-    temp = temp.replace(" ","",1)
-    temp = temp.strip()
-    temp = temp.split(" ")
-    
-    if "[馬記号]" in temp:
-        #print("\n\n")
-        break
-    elif na.get_text().strip() != "":
-        ls.append(temp)
-        
+	temp = na.get_text()
+	temp = re.sub("\n{1,}"," ",temp)
+	temp = temp.replace("\xa0"," ")
+	temp = temp.replace(" ","",1)
+	temp = temp.strip()
+	temp = temp.split(" ")
+	
+	if "[馬記号]" in temp:
+		#print("\n\n")
+		break
+	elif na.get_text().strip() != "":
+		ls.append(temp)
+		
 ls_new = [[]]
 count = 0
-flag = 0
+flag = 0#馬番、枠番、馬情報を1行に結合するためのフラグです
 evac = []
-
 dirt = []
 
 for i in ls:#リストを2重リストにしています
-    if len(i) == 15:
-        i.insert(12,"0")
-    ls_new.append(i)
+	if ("芝1000" in i) and ("新潟" in i):
+		i.pop(3)
+	if len(i) == 15:
+		i.insert(12,"0")
+	elif len(i) == 17:
+		i.pop(3)
 
-    if len(i) == 1:
-        if count == 2:
-            del ls_new[-1]
-            count = 0
-            flag = 1
-            continue
-        elif count == 0:
-            temp = [ls_new.pop(-1)]
-            count += 1
-        else:
-            temp.append(ls_new.pop(-1))
-            count += 1
-    elif flag == 1:
-        if len(temp) == 2:
-            temp.append(ls_new.pop(-1))
-        else:
-            temp.append(ls_new.pop(-1))
-            
-            for j in temp:
-                for t in j:
-                    if t == "":
-                        continue
-                    else:
-                        
-                        if re.search(r"芝\d\d00",t) != None:
-                            dirt.append(t)
-                        evac.append(t)
-            ls_new.append(evac)
-            evac = []
-            flag = 0
+	ls_new.append(i)#すべての要素を入れます
+
+	if len(i) == 1:#長さが1（馬番のみ、枠番のみ、よくわからん予想印）だとここで弾かれます
+		if count == 2:
+			del ls_new[-1]
+			count = 0
+			flag = 1#長さ1の要素が3つ続くとフラグがオンになります
+			continue
+		elif count == 0:
+			temp = [ls_new.pop(-1)]#予想印の要素を飛ばします
+			count += 1
+		else:
+			temp.append(ls_new.pop(-1))
+			count += 1
+	elif flag == 1:
+		if len(temp) == 2:
+			temp.append(ls_new.pop(-1))
+		else:
+			temp.append(ls_new.pop(-1))
+			
+			for j in temp:
+				for t in j:
+					if t == "":
+						continue
+					else:
+						if re.search(r"芝\d\d00",t) != None:
+							dirt.append(t)
+						evac.append(t)
+			ls_new.append(evac)
+			evac = []
+			flag = 0
 
 for i in ls_new:
-    print(i)
+	print(i)
 
 
 # for i in ls_new:
-#     print(i)
+#	 print(i)
 
 # for i in ls_new:
-#     if len(i) > 15:
-#         for j in i:
-#             if re.match(r"ダ\d*|芝\d",j) != None:# or "ダ2" or "芝2" or "芝3"
-#                 print(j)
+#	 if len(i) > 15:
+#		 for j in i:
+#			 if re.match(r"ダ\d*|芝\d",j) != None:# or "ダ2" or "芝2" or "芝3"
+#				 print(j)
 
 #1行目のごみを削除
-# ls_new.pop(0)
 
-# sex=["牡","牝","セ"]
+ls_new.pop(0)
 
-<<<<<<< HEAD
-# uma_ban=1
-# for i in ls_new:
-# 	#print(i)
-# 	if i[1] == str(uma_ban):
-# 		temp_list=[]
-# 		temp_list.append(i[0])
-# 		temp_list.append(i[1])
-# 		#中〇週の数字部分を抽出
-# 		temp_list.append(re.search(r'\d+',i[7]).group())
-# 		#体重
-# 		temp_list.append(re.search(r'\d+',i[8]).group())
-# 		#体重増減
-# 		temp_list.append(re.findall(r'\((.*)\)',i[8])[0])
-# 		#性別
-# 		temp_list.append(i[11][0])
-# 		#馬齢
-# 		temp_list.append(re.search(r'\d+',i[11]).group())
-# 		#斤量
-# 		temp_list.append(i[13])
+sex=["牡","牝","セ"]
 
-# 		uma_ban+=1
-# 		print(temp_list)
-
-writer.writerows(ls_new)
-# print("お疲れさまでした（朧）")
-=======
 new_list=[]
 temp_list=[0,0]
 uma_ban=1
 for i in ls_new:
 	
 	#今だけの処理
-	if uma_ban==3:
-		break
+	# if uma_ban==3:
+	# 	break
 	
 	if i[1] == str(uma_ban):
 		print(i)
@@ -188,6 +165,7 @@ for i in ls_new:
 		#馬番
 		temp_list.append(re.search(r'\d+',i[9]).group())
 		#人気
+		print(i[10])
 		temp_list.append(re.search(r'\d+',i[10]).group())
 		#斤量
 		temp_list.append(i[12])
@@ -213,4 +191,3 @@ new_list.append(temp_list)
 
 writer.writerows(new_list)
 print("お疲れさまでした（朧）")
->>>>>>> 212184f1d4976ef3fae5c84ad724328a9db07f4a

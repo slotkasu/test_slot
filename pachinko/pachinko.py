@@ -40,18 +40,18 @@ url = "http://papimo.jp/h/00062026/hit/view/"
 
 data_list=["台番","機種名","BB","RB","BB確率","合成確率","総スタート","最終スタート","最大放出"]
 
-f = open('data/out'+getCalendar(calendar_i)+'.csv','w',newline="")
+f = open('data/crown_'+getCalendar(calendar_i)+'.csv','w',newline="")
 writer = csv.writer(f)
 writer.writerow(data_list)
 mise_nai_cnt=0
-for daiban in range(281,582):#780 1280
+for daiban in range(281,584):#780 1280
 	if getSkipper([4,9],daiban):
 		print(str(daiban)+":SKIP")
 		continue
 	
 	temp_list=[]
 	time.sleep(1)
-	html = requests.get(url+str(daiban)+"/"+getCalendar(-1))
+	html = requests.get(url+str(daiban)+"/"+getCalendar(calendar_i))
 	html.encoding = html.apparent_encoding
 	
 	soup = BeautifulSoup(html.text)
