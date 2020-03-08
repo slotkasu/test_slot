@@ -27,7 +27,6 @@ for year in years:
 
 y=[1 if int(i[1])<=3 else 0 for i in y]
 
-
 X=np.array(X, dtype="float32")
 y=np.array(y, dtype="int")
 
