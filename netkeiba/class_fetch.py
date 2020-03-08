@@ -105,7 +105,10 @@ def makeKeibaDataset(date):
 				#距離
 				temp_past_list.append(re.search(r'\d+',detail_past.text).group())
 				#タイム d:dd.dを正規表現で取得
-				temp_past_list.append(re.search(r'[0-9].[0-9]+.[0-9]',detail_past.text).group())
+				if re.search(r'[0-9].[0-9]+.[0-9]',detail_past.text):
+					temp_past_list.append(re.search(r'[0-9].[0-9]+.[0-9]',detail_past.text).group())
+				else:
+					temp_past_list.append("0:00.0")
 				#馬場状態
 				temp_past_list.append(getStateNum(detail_past.strong.text))
 
@@ -187,7 +190,7 @@ def makeKeibaDataset(date):
 	return 0
 
 #yasumoto
-makeKeibaDataset("201906010111")
+makeKeibaDataset("201901020211")
 
 """
 required information
