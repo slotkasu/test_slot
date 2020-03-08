@@ -8,7 +8,7 @@ import pprint
 import time
 import datetime
 from datetime import timedelta
-from results import getResults
+from class_fetch import makeKeibaDataset
 
 year = '2019'
 
@@ -20,18 +20,21 @@ def getRaceID():
     name = soup.find_all("td")
 
 date = datetime.datetime.now()
+#競馬場	開催	日目	レース
 
-month_list = ['01','02','03','04','05','06','07','08','09','10','11','12']
-cource_list = ['01','02','03','04','05','06','07','08','09','10']
-race_list = []
-kaisai_list = []
-for i in range(12):
-    race_list.append(str(i+1))
-for i in range(5):
-    kaisai_list.append(str(i+1))
-    競馬場	開催	日目	レース
-for month in month_list:
-    for cource in cource_list:
-        for kaisai in kaisai_list:
+course_list = [str(i+1).zfill(2) for i in range(10)]
+kaisai_list = [str(i+1).zfill(2) for i in range(4)]
+date_list = [str(i+1).zfill(2) for i in range(9)]
+race_list = [str(i+1).zfill(2) for i in range(12)]
+
+for course in course_list:
+    for kaisai in kaisai_list:
+        for date in date_list:
             for race in race_list:
-                
+                makeKeibaDataset(year+course+kaisai+date+race)
+                time.sleep(1)
+    
+# for month in month_list:
+#     for cource in cource_list:
+#         for kaisai in kaisai_list:
+#             for race in race_list:
