@@ -77,7 +77,7 @@ def TtoF(time_origin):#stringでください
 	ls = time_origin.split(":",1)
 	if len(ls) == 1:
 		ls = []
-		ls = time_origin.split(".",1)
+		ls = re.split('.',time_origin,1)
 	if len(ls) == 1:
 		return time_origin
 	min = float(ls[0])
