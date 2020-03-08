@@ -35,7 +35,10 @@ def makeKeibaDataset(date):
 		#中n週
 		#"中2週"とかの数字だけ抜き出す
 		temp = horseList.find("div", class_="Horse06").get_text().strip()
-		temp_info_list.append(re.search(r'\d+', temp).group())
+		if re.search(r'\d+', temp):
+			temp_info_list.append(re.search(r'\d+', temp).group())
+		else:
+			temp_info_list.append("0")
 		#体重、体重増減
 		#体重は484kg(-4)のような形で与えられるので、kgを境に分割
 		#増減のほうは括弧を削って格納
