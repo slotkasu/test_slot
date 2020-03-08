@@ -18,10 +18,17 @@ soup = BeautifulSoup(html.content,'html.parser')
 # name = soup.find_all("td")
 # div = name.find_all("div")
 
-name = soup.select("td div")
+name = soup.find_all("tr")
 
-for na in name:
-	if "Horse04" in na:
-		print(na)
+#name = [i for a in soup.find_all("tr") for i in a.find_all("td")]
+aaa = []
+# for i in name:
+	# print(i)
+	# print("___________________________________________________")
+# for i in name:
 
-#print(name)
+for i in name:
+	aaa.append(i.find_all("td"))
+	
+
+print(aaa)
