@@ -77,6 +77,12 @@ def makeKeibaDataset(date):
 					temp_past_list.append("0")
 				continue
 
+			elif not re.search(r'\d',past.find("div", class_="Data01").find(class_="Num").text):
+				#除外された場合
+				for i in range(18):
+					temp_past_list.append("0")
+				continue
+
 			else:
 				#競馬場に関する情報
 				baba_past=past.find("div",class_="Data01")
@@ -92,6 +98,7 @@ def makeKeibaDataset(date):
 				#距離
 				temp_past_list.append(re.search(r'\d+',detail_past.text).group())
 				#タイム d:dd.dを正規表現で取得
+				print(temp_past_list)
 				temp_past_list.append(re.search(r'[0-9]:[0-9]+\.[0-9]',detail_past.text).group())
 				#馬場状態
 				temp_past_list.append(getStateNum(detail_past.strong.text))
@@ -161,6 +168,8 @@ def makeKeibaDataset(date):
 	writer = csv.writer(f)
 	writer.writerows(RaceInfo)
 	print("書き込み完了。お疲れさまでした（朧）")
+
+makeKeibaDataset("201901010104")
 
 """
 required information
