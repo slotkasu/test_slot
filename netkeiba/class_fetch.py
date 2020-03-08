@@ -105,8 +105,8 @@ def makeKeibaDataset(date):
 				#距離
 				temp_past_list.append(re.search(r'\d+',detail_past.text).group())
 				#タイム d:dd.dを正規表現で取得
-				if re.search(r'[0-9].[0-9]+.[0-9]',detail_past.text):
-					temp_past_list.append(re.search(r'[0-9].[0-9]+.[0-9]',detail_past.text).group())
+				if re.search(r'[0-9][^0-9][0-9]+\.[0-9]',detail_past.text):
+					temp_past_list.append(re.search(r'[0-9][^0-9][0-9]+\.[0-9]',detail_past.text).group())
 				else:
 					temp_past_list.append("0:00.0")
 				#馬場状態
@@ -182,6 +182,14 @@ def makeKeibaDataset(date):
 		RaceInfo[i].extend(Horseinfo[i])
 	#print(RaceInfo)
 	#csv書き込み
+
+	#テンプレートのtemp
+	temp_horse=["馬名","着順","オッズ","枠番","馬番","中週","体重","体重増減","性別","馬齢","斤量"]
+	temp_past=["競馬場","人気","芝ダ","距離","タイム","馬場状態","頭数","馬番","人気","斤量","通過順1","通過順2","通過順3","通過順4","3ハロン","体重","体重増減","着差"]
+	for i in range(5):
+		temp_horse.extend(temp_past)
+
+	RaceInfo.insert(0,temp_horse)
 	f = open('keiba/'+date+'out.csv','w',newline = "")
 	writer = csv.writer(f)
 
