@@ -8,8 +8,9 @@ import csv
 import pprint
 import time
 import datetime
-from keiba_function import getRaceNum, getSexNum, getShibadaNum, getStateNum, getRaceResult
+from keiba_function import getRaceNum, getSexNum, getShibadaNum, getStateNum, getRaceResult, TtoF
 from datetime import timedelta
+
 
 def makeKeibaDataset(date):
 	url = "https://race.netkeiba.com/race/shutuba_past.html?race_id="+date+"&rf=shutuba_submenu"
@@ -110,9 +111,9 @@ def makeKeibaDataset(date):
 				time=detail_past.text.split()[1]
 				#タイム d:dd.dを正規表現で取得
 				if re.search(r'[0-9][^0-9][0-9]+\.[0-9]',time):
-					temp_past_list.append(re.search(r'[0-9][^0-9][0-9]+\.[0-9]',time).group())
+					temp_past_list.append(TtoF(re.search(r'[0-9][^0-9][0-9]+\.[0-9]',time).group()))
 				else:
-					temp_past_list.append("0:00.0")
+					temp_past_list.append("0")
 				#馬場状態
 				temp_past_list.append(getStateNum(detail_past.strong.text))
 
