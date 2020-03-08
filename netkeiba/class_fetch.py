@@ -11,7 +11,7 @@ from datetime import timedelta
 
 url = "https://race.netkeiba.com/race/shutuba_past.html?race_id=201906020111&rf=shutuba_submenu"
 
-Past=[]
+
 
 html = requests.get(url)
 html.encoding = html.apparent_encoding
@@ -21,6 +21,7 @@ soup = BeautifulSoup(html.content,'html.parser')
 horseLists = soup.find_all("tr",class_="HorseList",id=re.compile(r"tr_[0-9]+"))
 
 Horseinfo = []#馬情報（前のほうのやつ）
+Past=[]
 
 for horseList in horseLists:
 	temp_info_list = []
@@ -48,17 +49,22 @@ for horseList in horseLists:
 
 	#斤量
 	temp = horseList.find_all("span")
-	print(temp)
-	Horseinfo.append(temp_info_list)
+	#print(temp)
+
 
 	#ここからPast
 	temp_past_list=[]
+	#PastとRestの情報をhorseListから取得
 	pasts=horseList.find_all("td",class_=["Past", "Rest"])
 	for past in pasts:
 		
 		if past.get("class")[0] == "Rest":
-			#休養中の例外を後で書く。
+			#休養中の例外
+			#過去レースの情報数：18個
+			for i in range(18):
+				temp_past_list.append("0")
 			continue
+
 		else:
 			#競馬場に関する情報
 			baba_past=past.find("div",class_="Data01")
@@ -80,6 +86,7 @@ for horseList in horseLists:
 
 			#データ03
 			data03_past=past.find("div",class_="Data03")
+			#スペース区切りでsplit
 			data03_past=data03_past.text.split()
 			# print(data03_past)
 			#頭数
@@ -96,7 +103,8 @@ for horseList in horseLists:
 			#スペース区切り
 			data06_past=data06_past.text.split()
 			#通過順がある場合
-			if re.match(r'[0-9]-[0-9]',data06_past[0]):
+			if re.match(r'[0-9]+-[0-9]+',data06_past[0]):
+				#通過順を"-"でスプリット
 				through_past=data06_past[0].split("-")
 				#通過順を全て入れる
 				for i in through_past:
@@ -115,15 +123,23 @@ for horseList in horseLists:
 				temp_past_list.append("0")
 				#通過順4
 				temp_past_list.append("0")
-			
+
+				#通過順の代わりにダミーを作成し、インデックスを保護
+				data06_past.insert(0,"0")
+			# print(data06_past[1])
 			#３ハロン
-			temp_past_list.append()
+			temp_past_list.append(re.findall(r'\((.*)\)',data06_past[1])[0])
 			#体重
+			temp_past_list.append(re.search(r'\d+',data06_past[2]).group())
 			#体重増減
+			temp_past_list.append(re.findall(r'\((.*)\)',data06_past[2])[0])
+			#着差用データ
+			data07_past_text=past.find("div",class_="Data07").text
 			#着差
+			temp_past_list.append(re.findall(r'\((.*)\)',data07_past_text)[0])
 
+	Horseinfo.append(temp_info_list+temp_past_list)
 
-	print(len(temp_past_list))
 
 
 
