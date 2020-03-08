@@ -51,12 +51,12 @@ def getRaceResult(day):
         #馬名
         horse = na.find("span", class_="Horse_Name")
         temp.append(horse.text.strip())
-        #オッズ
-        odds = na.find("td", class_="Odds Txt_R")
-        temp.append(odds.text.strip())
         #着順
         rank = na.find("div", class_="Rank")
         temp.append(rank.text.strip())
+        #オッズ
+        odds = na.find("td", class_="Odds Txt_R")
+        temp.append(odds.text.strip())
         #馬番（ソート用）
         umaban = na.find("td", class_="Num Txt_C")
         temp.append(int(umaban.text.strip()))
@@ -65,9 +65,8 @@ def getRaceResult(day):
 
     results.sort(key=lambda x: x[3])#2列めを基準にソート
 
+    #ソートに利用した馬番を削除
     for i in results:
         i.pop(3)
 
-    for i in results:
-        print(i)
     return results
