@@ -32,8 +32,11 @@ for course in course_list:
         for date in date_list:
             for race in race_list:
                 print(year+course+kaisai+date+race)
-                makeKeibaDataset(year+course+kaisai+date+race)
-
+                try:
+                    makeKeibaDataset(year+course+kaisai+date+race)
+                except AttributeError as e:
+                    print(e)
+            
                 time.sleep(1)
     
 # for month in month_list:
