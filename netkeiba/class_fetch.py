@@ -17,13 +17,15 @@ html.encoding = html.apparent_encoding
 soup = BeautifulSoup(html.content,'html.parser')
 
 #trタグのHorseListクラスからtr_[0-9]{2}のものだけを抽出
-name = soup.find_all("tr",class_="HorseList",id=re.compile('tr_[0-9]+'))
+horseLists = soup.find_all("tr",class_="HorseList",id=re.compile('tr_[0-9]+'))
 
-for na in name:	
-	divs = na.find_all("div")
-	for div in na.find_all("div"):
-		print(div.text.strip())
+for horseList in horseLists:	
+	
+	#divs = horseList.find_all("td",class_=)
 	print("\n_________________________")
+
+	#ここからPast
+
 
 # for i in name:
 # 	print(i.text)
