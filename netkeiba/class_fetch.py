@@ -21,6 +21,9 @@ def makeKeibaDataset(date):
 	horseLists = soup.find_all("tr",class_="HorseList",id=re.compile(r"tr_[0-9]+"))
 	if len(horseLists) == 0:
 		return
+	if soup.find("tr",class_="HorseList Cancel"):
+		return 
+
 	Horseinfo = []#馬情報（前のほうのやつ）
 
 
@@ -98,7 +101,6 @@ def makeKeibaDataset(date):
 				#距離
 				temp_past_list.append(re.search(r'\d+',detail_past.text).group())
 				#タイム d:dd.dを正規表現で取得
-				print(temp_past_list)
 				temp_past_list.append(re.search(r'[0-9]:[0-9]+\.[0-9]',detail_past.text).group())
 				#馬場状態
 				temp_past_list.append(getStateNum(detail_past.strong.text))
@@ -169,7 +171,7 @@ def makeKeibaDataset(date):
 	writer.writerows(RaceInfo)
 	print("書き込み完了。お疲れさまでした（朧）")
 
-makeKeibaDataset("201901010104")
+makeKeibaDataset("201901010108")
 
 """
 required information
