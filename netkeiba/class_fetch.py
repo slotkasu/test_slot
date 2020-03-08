@@ -24,7 +24,7 @@ def makeKeibaDataset(date):
 		return -1
 	if soup.find("tr",class_="HorseList Cancel"):
 		print("除外馬が存在するためスキップします。")
-		return -1
+		return 1
 
 	Horseinfo = []#馬情報（前のほうのやつ）
 

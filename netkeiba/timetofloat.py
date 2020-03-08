@@ -2,16 +2,7 @@ import numpy as np
 import re
 import csv
 import glob
-
-#string time_origin to string tt
-def TtoF(time_origin):
-	ls = time_origin.split(":",1)
-	if len(ls) == 1:
-		return time_origin
-	min = float(ls[0])
-	sec = float(ls[1])
-	tt = min*60 + sec
-	return str(tt)
+from keiba_function import TtoF
 
 def getCsv(filename):#csv wo tottekuru
 #16+18+18 kono kankaku
