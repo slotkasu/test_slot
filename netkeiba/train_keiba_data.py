@@ -25,8 +25,6 @@ for year in years:
             #情報
             X.append(i[3:])
 
-for i in y:
-    print(i[1])
 y=[1 if int(i[1])<=3 else 0 for i in y]
 
 
