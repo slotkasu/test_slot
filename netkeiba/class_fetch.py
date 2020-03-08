@@ -72,9 +72,7 @@ def makeKeibaDataset(date):
 		kin = horseList.find("td", class_="Jockey")
 		span = kin.find_all("span")					
 		temp_info_list.append(span[1].get_text())
-		
-
-		
+	
 		#ここからPast
 		temp_past_list=[]
 		#PastとRestの情報をhorseListから取得
@@ -191,6 +189,9 @@ def makeKeibaDataset(date):
 	
 	#レース結果のデータと結合させる。
 	RaceInfo=getRaceResult(date)
+	for i in RaceInfo:
+		if "中止" in i:
+			RaceInfo.remove(i)
 	for i in range(len(RaceInfo)):
 		RaceInfo[i].extend(Horseinfo[i])
 	#print(RaceInfo)
@@ -210,4 +211,4 @@ def makeKeibaDataset(date):
 	print("書き込み完了。お疲れさまでした（朧）")
 	return 0
 
-
+makeKeibaDataset("201905040809")
