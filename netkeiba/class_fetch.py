@@ -122,7 +122,6 @@ def makeKeibaDataset(date):
 				data06_past=past.find("div",class_="Data06")
 				#スペース区切り
 				data06_past=data06_past.text.split()
-				print(data06_past)
 				#通過順がある場合
 				if len(data06_past) == 3:
 					#通過順を"-"でスプリット
@@ -148,12 +147,19 @@ def makeKeibaDataset(date):
 					#通過順の代わりにダミーを作成し、インデックスを保護
 					data06_past.insert(0,"0")
 				#３ハロン
-				print(data06_past)
 				temp_past_list.append(re.findall(r'\((.*)\)',data06_past[1])[0])
-				#体重
-				temp_past_list.append(re.search(r'\d+',data06_past[2]).group())
-				#体重増減
-				temp_past_list.append(re.findall(r'\((.*)\)',data06_past[2])[0])
+				if len(data06_past)==3:
+					#体重
+					temp_past_list.append(re.search(r'\d+',data06_past[2]).group())
+					#体重増減
+					temp_past_list.append(re.findall(r'\((.*)\)',data06_past[2])[0])
+				
+				#体重と体重増減のデータが無い場合の考慮
+				#0で埋めておく
+				else:
+					temp_past_list.append("0")
+					temp_past_list.append("0")
+				
 				#着差用データ
 				data07_past_text=past.find("div",class_="Data07").text
 				#着差
@@ -176,6 +182,7 @@ def makeKeibaDataset(date):
 	writer.writerows(RaceInfo)
 	print("書き込み完了。お疲れさまでした（朧）")
 
+makeKeibaDataset("201901010311")
 
 #yasumoto
 makeKeibaDataset("201906010111")
