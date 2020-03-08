@@ -19,7 +19,8 @@ def makeKeibaDataset(date):
 
 	#trタグのHorseListクラスからtr_[0-9]{2}のものだけを抽出
 	horseLists = soup.find_all("tr",class_="HorseList",id=re.compile(r"tr_[0-9]+"))
-
+	if len(horseLists) == 0:
+		return
 	Horseinfo = []#馬情報（前のほうのやつ）
 
 
@@ -156,8 +157,7 @@ def makeKeibaDataset(date):
 	f = open('keiba/'+date+'out.csv','w',newline = "")
 	writer = csv.writer(f)
 	writer.writerows(RaceInfo)
-
-
+	print("書き込み完了。お疲れさまでした（朧）")
 
 """
 required information
