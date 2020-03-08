@@ -181,10 +181,12 @@ def makeKeibaDataset(date):
 	#csv書き込み
 	f = open('keiba/'+date+'out.csv','w',newline = "")
 	writer = csv.writer(f)
+
 	writer.writerows(RaceInfo)
 	print("書き込み完了。お疲れさまでした（朧）")
 	return 0
 
+#yasumoto
 makeKeibaDataset("201906010111")
 
 """
