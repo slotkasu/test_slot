@@ -18,7 +18,7 @@ html.encoding = html.apparent_encoding
 soup = BeautifulSoup(html.content,'html.parser')
 
 #trタグのHorseListクラスからtr_[0-9]{2}のものだけを抽出
-horseLists = soup.find_all("tr",class_="HorseList",id=re.compile('tr_[0-9]+'))
+horseLists = soup.find_all("tr",class_="HorseList",id=re.compile(r"tr_[0-9]+"))
 
 Horseinfo = []#馬情報（前のほうのやつ）
 
@@ -26,7 +26,7 @@ for horseList in horseLists:
 	temp_info_list = []
 	#divs = horseList.find_all("td",class_=)
 	#枠番
-	temp_info_list.append(horseList.find("td", class_=re.compile("Waku\d")).get_text())
+	temp_info_list.append(horseList.find("td", class_=re.compile(r"Waku\d")).get_text())
 	#馬番
 	temp_info_list.append(horseList.find("td", class_="Waku").get_text())
 	#temp = horseList.find("td", class_="Horse_Info")
@@ -50,10 +50,6 @@ for horseList in horseLists:
 	temp = horseList.find_all("span")
 	print(temp)
 	Horseinfo.append(temp_info_list)
-	
-	
-	#print("\n_________________________")
-
 
 	#ここからPast
 	temp_past_list=[]
