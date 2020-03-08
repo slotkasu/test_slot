@@ -104,11 +104,19 @@ def makeKeibaDataset(date):
 				#競馬場の詳細情報
 				detail_past=past.find("div",class_="Data05")
 				#芝ダ
-				temp_past_list.append(getShibadaNum(detail_past.text[0]))
+				if getShibadaNum(detail_past.text[0]) != "-1":
+					temp_past_list.append(getShibadaNum(detail_past.text[0]))
+				else:
+					print(detail_past.text)
+
+					print("GAI")
+					return
 				#距離
 				temp_past_list.append(re.search(r'\d+',detail_past.text).group())
 				#時間部分だけ取り出す
-				time=detail_past.text.split()[1]
+				time=detail_past.text.split()
+				#print(time)
+				time=time[-1]
 				#タイム d:dd.dを正規表現で取得
 				if re.search(r'[0-9][^0-9][0-9]+\.[0-9]',time):
 					temp_past_list.append(TtoF(re.search(r'[0-9][^0-9][0-9]+\.[0-9]',time).group()))
@@ -190,13 +198,13 @@ def makeKeibaDataset(date):
 	
 	#レース結果のデータと結合させる。
 	RaceInfo=getRaceResult(date)
-	for i in RaceInfo:
-		if "中止" in i:
-			RaceInfo.remove(i)
+	
 	for i in range(len(RaceInfo)):
 		RaceInfo[i].extend(Horseinfo[i])
 	#print(RaceInfo)
 	#csv書き込み
+	RaceInfo=[i for i in RaceInfo if not "中止" in i]
+	#print(RaceInfo)
 
 	#テンプレートのtemp
 	temp_horse=["馬名","着順","オッズ","枠番","馬番","中週","体重","体重増減","性別","馬齢","斤量"]
@@ -212,4 +220,4 @@ def makeKeibaDataset(date):
 	print("書き込み完了。お疲れさまでした（朧）")
 	return 0
 
-makeKeibaDataset("201905040809")
+makeKeibaDataset("201907010405")
