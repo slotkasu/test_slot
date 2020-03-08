@@ -187,7 +187,6 @@ def makeKeibaDataset(date):
 
 #yasumoto
 makeKeibaDataset("201906010111")
-´
 
 """
 required information
