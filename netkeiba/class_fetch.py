@@ -147,6 +147,7 @@ def makeKeibaDataset(date):
 					#通過順の代わりにダミーを作成し、インデックスを保護
 					data06_past.insert(0,"0")
 				#３ハロン
+				print(data06_past)
 				temp_past_list.append(re.findall(r'\((.*)\)',data06_past[1])[0])
 				#体重
 				temp_past_list.append(re.search(r'\d+',data06_past[2]).group())
