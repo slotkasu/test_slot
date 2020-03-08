@@ -1,5 +1,0 @@
-
-
-
-getRaceResult(2020)
-
