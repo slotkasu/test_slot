@@ -15,20 +15,15 @@ url = "https://race.netkeiba.com/race/shutuba_past.html?race_id=201906020111&rf=
 html = requests.get(url)
 html.encoding = html.apparent_encoding
 soup = BeautifulSoup(html.content,'html.parser')
-# name = soup.find_all("td")
-# div = name.find_all("div")
 
-name = soup.find_all("tr")
+#trタグのHorseListクラスからtr_[0-9]{2}のものだけを抽出
+name = soup.find_all("tr",class_="HorseList",id=re.compile('tr_[0-9]+'))
 
-#name = [i for a in soup.find_all("tr") for i in a.find_all("td")]
-aaa = []
+for na in name:	
+	divs = na.find_all("div")
+	for div in na.find_all("div"):
+		print(div.text.strip())
+	print("\n_________________________")
+
 # for i in name:
-	# print(i)
-	# print("___________________________________________________")
-# for i in name:
-
-for i in name:
-	aaa.append(i.find_all("td"))
-	
-
-print(aaa)
+# 	print(i.text)
