@@ -33,12 +33,12 @@ name = soup.find_all("td")
 
 ls = []
 for na in name:
-	temp = na.get_text()
-	temp = re.sub("\n{1,}"," ",temp)
-	temp = temp.replace("\xa0"," ")
-	temp = temp.replace(" ","",1)
-	temp = temp.strip()
-	temp = temp.split(" ")
+	temp = na.get_text()#テキストを取得
+	temp = re.sub("\n{1,}"," ",temp)#1つ以上の改行がある場合、単独のスペースに置換
+	temp = temp.replace("\xa0"," ")#特殊空白文字を通常のスペースに置換
+	temp = temp.replace(" ","",1)#スペースを消す
+	temp = temp.strip()#いらんやつを消す
+	temp = temp.split(" ")#スペースで文字列を分割
 	
 	if "[馬記号]" in temp:
 		#print("\n\n")
@@ -54,7 +54,8 @@ dirt = []
 
 for i in ls:#リストを2重リストにしています
 	if ("芝1000" in i) and ("新潟" in i):
-		i.pop(3)
+		if len(i) == 16:
+			i.pop(3)
 	if len(i) == 15:
 		i.insert(12,"0")
 	elif len(i) == 17:
