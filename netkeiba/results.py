@@ -12,12 +12,16 @@ from datetime import timedelta
 #url = "https://race.netkeiba.com/race/shutuba_past.html?race_id=202006020102&rf=shutuba_submenu"#shutubahyo page
 url = "https://race.netkeiba.com/race/result.html?race_id=202006020102&rf=race_submenu"#results page
 
+
+#着順、オッズをリストで返す
 def getResults(day):
     url = "https://race.netkeiba.com/race/result.html?race_id="+day+"&rf=race_submenu"
     html = requests.get(url)
     html.encoding = html.apparent_encoding
     soup = BeautifulSoup(html.content,'html.parser')
-    name = soup.find_all("td")
+    name = soup.find_all("tr")
+
+#span Horse_Name
 
     results = []
     temp = []
@@ -32,13 +36,16 @@ def getResults(day):
             temp = []
             count = 0
         count += 1
-    results.sort(key=lambda x: x[1])
+    results.sort(key=lambda x: x[1])#2列めを基準にソート
     ###
     print("着順、馬番、オッズ")
     for i in results:
         print(i)
     ###
     return results
+
+
+
 
 #getResults("202006020103")
 
