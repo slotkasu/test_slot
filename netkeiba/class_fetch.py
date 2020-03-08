@@ -56,8 +56,8 @@ for horseList in horseLists:
 
 	#ここからPast
 #print(Horseinfo)
-for i in Horseinfo:
-	print(i)
+# for i in Horseinfo:
+# 	print(i)
 
 
 
