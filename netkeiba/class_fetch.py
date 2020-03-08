@@ -101,6 +101,7 @@ def makeKeibaDataset(date):
 				#距離
 				temp_past_list.append(re.search(r'\d+',detail_past.text).group())
 				#タイム d:dd.dを正規表現で取得
+				print(detail_past.text)
 				temp_past_list.append(re.search(r'[0-9]:[0-9]+\.[0-9]',detail_past.text).group())
 				#馬場状態
 				temp_past_list.append(getStateNum(detail_past.strong.text))
@@ -171,7 +172,7 @@ def makeKeibaDataset(date):
 	writer.writerows(RaceInfo)
 	print("書き込み完了。お疲れさまでした（朧）")
 
-makeKeibaDataset("201901010108")
+makeKeibaDataset("201901010311")
 
 """
 required information
