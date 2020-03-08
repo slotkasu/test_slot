@@ -200,7 +200,7 @@ def makeKeibaDataset(date):
 		temp_horse.extend(temp_past)
 
 	RaceInfo.insert(0,temp_horse)
-	f = open('keiba/'+date+'out.csv','w',newline = "")
+	f = open('keiba/datasets/'+date+'out.csv','w',newline = "")
 	writer = csv.writer(f)
 
 	writer.writerows(RaceInfo)
