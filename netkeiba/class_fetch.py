@@ -50,7 +50,11 @@ def makeKeibaDataset(date):
 		#増減のほうは括弧を削って格納
 		weight = horseList.find("div", class_="Weight").get_text().strip().split("kg")
 		temp_info_list.append(weight[0])
-		temp_info_list.append(re.findall(r'\((.*)\)',weight[1])[0])
+		horse_weight_diff=re.findall(r'\((.*)\)',weight[1])[0]
+		if re.search(r'\d',horse_weight_diff):
+			temp_info_list.append(horse_weight_diff)
+		else:
+			temp_info_list.append("0")
 
 		#性別,馬齢
 		#性別、年齢、毛色が1つの要素で取れる ex.牡4芦
@@ -104,9 +108,11 @@ def makeKeibaDataset(date):
 				temp_past_list.append(getShibadaNum(detail_past.text[0]))
 				#距離
 				temp_past_list.append(re.search(r'\d+',detail_past.text).group())
+				#時間部分だけ取り出す
+				time=detail_past.text.split()[1]
 				#タイム d:dd.dを正規表現で取得
-				if re.search(r'[0-9][^0-9][0-9]+\.[0-9]',detail_past.text):
-					temp_past_list.append(re.search(r'[0-9][^0-9][0-9]+\.[0-9]',detail_past.text).group())
+				if re.search(r'[0-9][^0-9][0-9]+\.[0-9]',time):
+					temp_past_list.append(re.search(r'[0-9][^0-9][0-9]+\.[0-9]',time).group())
 				else:
 					temp_past_list.append("0:00.0")
 				#馬場状態
@@ -160,7 +166,11 @@ def makeKeibaDataset(date):
 					#体重
 					temp_past_list.append(re.search(r'\d+',data06_past[2]).group())
 					#体重増減
-					temp_past_list.append(re.findall(r'\((.*)\)',data06_past[2])[0])
+					horse_weight_diff=re.findall(r'\((.*)\)',data06_past[2])[0]
+					if re.search(r'\d',horse_weight_diff):
+						temp_past_list.append(horse_weight_diff)
+					else:
+						temp_past_list.append("0")
 				
 				#体重と体重増減のデータが無い場合の考慮
 				#0で埋めておく
