@@ -180,8 +180,6 @@ def makeKeibaDataset(date):
 	f = open('keiba/'+date+'out.csv','w',newline = "")
 	writer = csv.writer(f)
 
-	print(RaceInfo)
-
 	writer.writerows(RaceInfo)
 	print("書き込み完了。お疲れさまでした（朧）")
 
