@@ -7,6 +7,7 @@ import csv
 import pprint
 import time
 import datetime
+from keiba_function import getRaceNum, getSexNum, getShibadaNum, getStateNum
 from datetime import timedelta
 
 url = "https://race.netkeiba.com/race/shutuba_past.html?race_id=201906020111&rf=shutuba_submenu"
@@ -46,7 +47,7 @@ for horseList in horseLists:
 	#性別、年齢、毛色が1つの要素で取れる ex.牡4芦
 	#前から1文字目が性別、2文字目が年齢なので、それを取る
 	temp = horseList.find("span", class_="Barei").get_text().strip()
-	sei, rei = temp[:1],temp[1:2]
+	sei, rei = getSexNum(temp[:1]),temp[1:2]
 	temp_info_list.append(sei)
 	temp_info_list.append(rei)
 
@@ -77,20 +78,20 @@ for horseList in horseLists:
 			#競馬場に関する情報
 			baba_past=past.find("div",class_="Data01")
 			#競馬場
-			temp_past_list.append(baba_past.span.text.split(" ")[-1])
+			temp_past_list.append(getRaceNum(baba_past.span.text.split(" ")[-1]))
 			#人気
 			temp_past_list.append(baba_past.find(class_="Num").text)
 			
 			#競馬場の詳細情報
 			detail_past=past.find("div",class_="Data05")
 			#芝ダ
-			temp_past_list.append(detail_past.text[0])
+			temp_past_list.append(getShibadaNum(detail_past.text[0]))
 			#距離
 			temp_past_list.append(re.search(r'\d+',detail_past.text).group())
 			#タイム d:dd.dを正規表現で取得
 			temp_past_list.append(re.search(r'[0-9]:[0-9]+\.[0-9]',detail_past.text).group())
 			#馬場状態
-			temp_past_list.append(detail_past.strong.text)
+			temp_past_list.append(getStateNum(detail_past.strong.text))
 
 			#データ03
 			data03_past=past.find("div",class_="Data03")
@@ -146,6 +147,7 @@ for horseList in horseLists:
 			#着差
 			temp_past_list.append(re.findall(r'\((.*)\)',data07_past_text)[0])
 
+	#現在と過去の情報を結合させる。
 	Horseinfo.append(temp_info_list+temp_past_list)
 
 
