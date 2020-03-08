@@ -1,3 +1,4 @@
+
 import sys
 import requests
 import re
@@ -14,9 +15,8 @@ def makeKeibaDataset(date):
 	url = "https://race.netkeiba.com/race/shutuba_past.html?race_id="+date+"&rf=shutuba_submenu"
 
 	html = requests.get(url)
-	html.encoding = html.apparent_encoding
-	soup = BeautifulSoup(html.content,'html.parser')
-
+	html.encoding =html.apparent_encoding
+	soup = BeautifulSoup(html.content,'lxml',from_encoding="euc-jp")
 	#trタグのHorseListクラスからtr_[0-9]{2}のものだけを抽出
 	horseLists = soup.find_all("tr",class_="HorseList",id=re.compile(r"tr_[0-9]+"))
 	if len(horseLists) == 0:
@@ -28,6 +28,7 @@ def makeKeibaDataset(date):
 
 
 	for horseList in horseLists:
+		# print(horseList)
 		temp_info_list = []
 		#馬名
 		#temp_info_list.append(horseList.find("div", class_="Horse02").get_text().strip())
@@ -53,6 +54,7 @@ def makeKeibaDataset(date):
 		#性別、年齢、毛色が1つの要素で取れる ex.牡4芦
 		#前から1文字目が性別、2文字目が年齢なので、それを取る
 		temp = horseList.find("span", class_="Barei").get_text().strip()
+		# print(temp)
 		sei, rei = getSexNum(temp[:1]),temp[1:2]
 		temp_info_list.append(sei)
 		temp_info_list.append(rei)
@@ -107,6 +109,7 @@ def makeKeibaDataset(date):
 
 				#データ03
 				data03_past=past.find("div",class_="Data03")
+				
 				#スペース区切りでsplit
 				data03_past=data03_past.text.split()
 				#頭数
@@ -172,7 +175,7 @@ def makeKeibaDataset(date):
 	RaceInfo=getRaceResult(date)
 	for i in range(len(RaceInfo)):
 		RaceInfo[i].extend(Horseinfo[i])
-
+	#print(RaceInfo)
 	#csv書き込み
 	f = open('keiba/'+date+'out.csv','w',newline = "")
 	writer = csv.writer(f)
@@ -182,7 +185,7 @@ def makeKeibaDataset(date):
 	writer.writerows(RaceInfo)
 	print("書き込み完了。お疲れさまでした（朧）")
 
-makeKeibaDataset("201901010311")
+makeKeibaDataset("201906010111")
 
 #yasumoto
 makeKeibaDataset("201906010111")
