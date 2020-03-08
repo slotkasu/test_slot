@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 import warnings
 import csv
 import pprint
-import tim
+import time
 import datetime
 from datetime import timedelta
 
