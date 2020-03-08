@@ -22,7 +22,7 @@ def getRaceID():
 date = datetime.datetime.now()
 #競馬場	開催	日目	レース
 
-course_list = [str(i+1).zfill(2) for i in range(5)]
+course_list = [str(i+6).zfill(2) for i in range(5)]
 kaisai_list = [str(i+1).zfill(2) for i in range(4)]
 date_list = [str(i+1).zfill(2) for i in range(9)]
 race_list = [str(i+1).zfill(2) for i in range(12)]

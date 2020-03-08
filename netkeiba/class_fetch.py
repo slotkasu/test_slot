@@ -124,7 +124,7 @@ def makeKeibaDataset(date):
 				data06_past=data06_past.text.split()
 				print(data06_past)
 				#通過順がある場合
-				if re.match(r'[0-9]+-[0-9]+',data06_past[0]):
+				if len(data06_past) == 3:
 					#通過順を"-"でスプリット
 					through_past=data06_past[0].split("-")
 					#通過順を全て入れる
@@ -148,6 +148,7 @@ def makeKeibaDataset(date):
 					#通過順の代わりにダミーを作成し、インデックスを保護
 					data06_past.insert(0,"0")
 				#３ハロン
+				print(data06_past)
 				temp_past_list.append(re.findall(r'\((.*)\)',data06_past[1])[0])
 				#体重
 				temp_past_list.append(re.search(r'\d+',data06_past[2]).group())
@@ -172,7 +173,6 @@ def makeKeibaDataset(date):
 	writer.writerows(RaceInfo)
 	print("書き込み完了。お疲れさまでした（朧）")
 
-makeKeibaDataset("201901010311")
 
 """
 required information
