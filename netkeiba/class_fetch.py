@@ -122,7 +122,10 @@ def makeKeibaDataset(date):
 				#馬番
 				temp_past_list.append(re.match(r'([0-9]+)',data03_past[1]).group())
 				#人気
-				temp_past_list.append(re.match(r'([0-9]+)',data03_past[2]).group())
+				if re.search(r'\d+', data03_past[2]):
+					temp_past_list.append(re.search(r'([0-9]+)', temp).group())
+				else:
+					temp_past_list.append("0")
 				#斤量
 				temp_past_list.append(re.match(r'([0-9]+)',data03_past[4]).group())
 				
@@ -197,54 +200,4 @@ def makeKeibaDataset(date):
 	print("書き込み完了。お疲れさまでした（朧）")
 	return 0
 
-#yasumoto
-makeKeibaDataset("201901020211")
 
-"""
-required information
-
-馬名 -Horse02
-着順 --別ページ　別関数から取得
-オッズ　--同上
-枠 --Waku1
-馬番 --Waku
-中週 --Horse06
-体重 --Weight[0]
-体重増減 --Weight[1]
-性別 
-馬齢
-斤量
-
-4つ分↓
-競馬場
-人気
-芝ダ
-距離
-タイム
-馬場状態
-頭数
-馬番
-人気
-斤量
-通過順１
-2
-3
-4
-上がり3ハロン
-体重
-体重増減
-着差
-
-#競馬場の名前を数値化
-def getCourseName(course):
-	if course == "":
-	elif course == "":
-	elif course == "":
-	elif course == "":
-	elif course == "":
-	elif course == "":
-	elif course == "":
-	elif course == "":
-	elif course == "":
-	elif course == "":
-"""

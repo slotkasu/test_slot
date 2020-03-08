@@ -22,7 +22,7 @@ def getRaceID():
 date = datetime.datetime.now()
 #競馬場	開催	日目	レース
 
-course_list = [str(i+1).zfill(2) for i in range(5)]
+course_list = [str(i+7).zfill(2) for i in range(4)]
 kaisai_list = [str(i+1).zfill(2) for i in range(4)]
 date_list = [str(i+1).zfill(2) for i in range(9)]
 race_list = [str(i+1).zfill(2) for i in range(12)]
@@ -34,7 +34,7 @@ for course in course_list:
                 print(year+course+kaisai+date+race)
                 kekka = makeKeibaDataset(year+course+kaisai+date+race)
                 if kekka == -1:
-                    break;
+                    break
 
                 time.sleep(1)
     
