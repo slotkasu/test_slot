@@ -185,8 +185,6 @@ def makeKeibaDataset(date):
 	writer.writerows(RaceInfo)
 	print("書き込み完了。お疲れさまでした（朧）")
 
-makeKeibaDataset("201906010111")
-
 #yasumoto
 makeKeibaDataset("201906010111")
 ´
