@@ -14,37 +14,43 @@ url = "https://race.netkeiba.com/race/result.html?race_id=202006020102&rf=race_s
 
 
 #着順、オッズをリストで返す
-def getResults(day):
-    url = "https://race.netkeiba.com/race/result.html?race_id="+day+"&rf=race_submenu"
+def getRaceResult(day):
+    #url = "https://race.netkeiba.com/race/result.html?race_id="+day+"&rf=race_submenu"
     html = requests.get(url)
     html.encoding = html.apparent_encoding
     soup = BeautifulSoup(html.content,'html.parser')
-    name = soup.find_all("tr")
-
-#span Horse_Name
+    name = soup.find_all("tr", class_="HorseList")
 
     results = []
-    temp = []
-    count = 1
+
     for na in name:
-        if re.search(r".人気",na.get_text()):
-            break
-        if (count == 1) or (count == 3) or (count == 11):#1：着順　3：馬番　11：オッズ
-            temp.append(float(na.get_text().strip()))#flost
-        if count == 15:#1行15要素
-            results.append(temp)
-            temp = []
-            count = 0
-        count += 1
-    results.sort(key=lambda x: x[1])#2列めを基準にソート
-    ###
-    print("着順、馬番、オッズ")
+        #2重リスト用
+        temp = []
+        #馬名
+        horse = na.find("span", class_="Horse_Name")
+        temp.append(horse.text.strip())
+        #オッズ
+        odds = na.find("td", class_="Odds Txt_R")
+        temp.append(odds.text.strip())
+        #着順
+        rank = na.find("div", class_="Rank")
+        temp.append(rank.text.strip())
+        #馬番（ソート用）
+        umaban = na.find("td", class_="Num Txt_C")
+        temp.append(int(umaban.text.strip()))
+        results.append(temp)
+    
+
+    results.sort(key=lambda x: x[3])#2列めを基準にソート
+
+    for i in results:
+        i.pop(3)
+
     for i in results:
         print(i)
-    ###
     return results
 
-
+getRaceResult(2020)
 
 
 #getResults("202006020103")
