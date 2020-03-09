@@ -115,8 +115,7 @@ def makeKeibaDataset(date):
 				temp_past_list.append(re.search(r'\d+',detail_past.text).group())
 				#時間部分だけ取り出す
 				time=detail_past.text.split()
-				#print(time)
-				time=time[-1]
+				time=time[1]
 				#タイム d:dd.dを正規表現で取得
 				if re.search(r'[0-9][^0-9][0-9]+\.[0-9]',time):
 					temp_past_list.append(TtoF(re.search(r'[0-9][^0-9][0-9]+\.[0-9]',time).group()))
@@ -220,4 +219,4 @@ def makeKeibaDataset(date):
 	print("書き込み完了。お疲れさまでした（朧）")
 	return 0
 
-makeKeibaDataset("201907010405")
+makeKeibaDataset("201905010405")
