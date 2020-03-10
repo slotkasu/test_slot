@@ -219,4 +219,4 @@ def makeKeibaDataset(date):
 	print("書き込み完了。お疲れさまでした（朧）")
 	return 0
 
-makeKeibaDataset("201905010405")
+makeKeibaDataset("201906020304")
