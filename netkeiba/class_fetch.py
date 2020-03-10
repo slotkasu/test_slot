@@ -222,3 +222,4 @@ def makeKeibaDataset(date):
 	return 0
 
 makeKeibaDataset("201906040712")
+makeKeibaDataset("201906020304")
