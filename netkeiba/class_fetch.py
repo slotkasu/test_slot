@@ -28,7 +28,10 @@ def makeKeibaDataset(date):
 		return 1
 
 	Horseinfo = []#馬情報（前のほうのやつ）
-
+	#テンプレートのtemp
+	temp_horse=["馬名","着順","オッズ","枠番","馬番","中週","体重","体重増減","牡","牝","セ","馬齢","斤量"]
+	temp_past=["札幌","函館","福島","新潟","東京","中山","中京","京都","阪神","小倉","人気","芝ダ","距離","タイム","良","稍","重","不","頭数","馬番","人気","斤量","通過順1","通過順2","通過順3","通過順4","3ハロン","体重","体重増減","着差"]
+	
 
 	for horseList in horseLists:
 		# print(horseList)
@@ -63,7 +66,8 @@ def makeKeibaDataset(date):
 		temp = horseList.find("span", class_="Barei").get_text().strip()
 		# print(temp)
 		sei, rei = getSexNum(temp[:1]),temp[1:2]
-		temp_info_list.append(sei)
+		temp_info_list = temp_info_list + sei
+		
 		temp_info_list.append(rei)
 
 		#斤量
@@ -83,13 +87,13 @@ def makeKeibaDataset(date):
 			if past.get("class")[0] == "Rest":
 				#休養中の例外
 				#過去レースの情報数：18個
-				for i in range(18):
+				for i in range(len(temp_past)):
 					temp_past_list.append("0")
 				continue
 
 			elif not re.search(r'\d',past.find("div", class_="Data01").find(class_="Num").text):
 				#除外された場合
-				for i in range(18):
+				for i in range(len(temp_past)):
 					temp_past_list.append("0")
 				continue
 
@@ -97,7 +101,7 @@ def makeKeibaDataset(date):
 				#競馬場に関する情報
 				baba_past=past.find("div",class_="Data01")
 				#競馬場
-				temp_past_list.append(getRaceNum(baba_past.span.text.split(" ")[-1]))
+				temp_past_list = temp_past_list + getRaceNum(baba_past.span.text.split(" ")[-1])
 				#人気
 				temp_past_list.append(baba_past.find(class_="Num").text)
 				
@@ -122,7 +126,7 @@ def makeKeibaDataset(date):
 				else:
 					temp_past_list.append("0")
 				#馬場状態
-				temp_past_list.append(getStateNum(detail_past.strong.text))
+				temp_past_list = temp_past_list + (getStateNum(detail_past.strong.text))
 
 				#データ03
 				data03_past=past.find("div",class_="Data03")
@@ -205,9 +209,7 @@ def makeKeibaDataset(date):
 	RaceInfo=[i for i in RaceInfo if not "中止" in i]
 	#print(RaceInfo)
 
-	#テンプレートのtemp
-	temp_horse=["馬名","着順","オッズ","枠番","馬番","中週","体重","体重増減","性別","馬齢","斤量"]
-	temp_past=["競馬場","人気","芝ダ","距離","タイム","馬場状態","頭数","馬番","人気","斤量","通過順1","通過順2","通過順3","通過順4","3ハロン","体重","体重増減","着差"]
+
 	for i in range(5):
 		temp_horse.extend(temp_past)
 
@@ -219,4 +221,4 @@ def makeKeibaDataset(date):
 	print("書き込み完了。お疲れさまでした（朧）")
 	return 0
 
-makeKeibaDataset("201905010405")
+makeKeibaDataset("201906040712")

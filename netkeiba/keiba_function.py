@@ -4,10 +4,20 @@ from bs4 import BeautifulSoup
 #レース名を引数に番号を返す
 def getRaceNum(raceName):
 	race=["札幌","函館","福島","新潟","東京","中山","中京","京都","阪神","小倉"]
+	#どこかに1を挿入したいので要素を1つ少なくする
+	ls = ["0" for i in race]
+	ls.pop(0)
+	#raceに存在しない競馬場を弾く（香港、ドバイ等）
 	if raceName in race:
-		return str(race.index(raceName)+1)
+		#イメージ 
+		# 0 0 0 0 0 0 0 0 0
+		#　↓
+		# 0 0 0 0 1 0 0 0 0 0
+		ls.insert(race.index(raceName),"1")
+		return ls
 	else:
-		return "-1"
+		ls.append("0")
+		return ls
 
 #芝ダを引数に番号を返す
 def getShibadaNum(shibadaName):
@@ -19,19 +29,30 @@ def getShibadaNum(shibadaName):
 
 #性別を引数に番号を返す
 def getSexNum(sexName):
+	#getracenumと同じ
 	sex=["牡","牝","セ"]
+	ls = ["0" for i in sex]
+	ls.pop(0)
 	if sexName in sex:
-		return str(sex.index(sexName))
+		ls.insert(sex.index(sexName),"1")
+		return ls
+	#不正な値を弾く
 	else:
-		return "-1"
+		ls.append("0")
+		return ls
 
 #馬場状態を引数に番号を返す
 def getStateNum(stateName):
 	state=["良","稍","重","不"]
+	ls = ["0" for i in state]
+	ls.pop(0)
 	if stateName in state:
-		return str(state.index(stateName))
+		ls.insert(state.index(stateName),"1")
+		return ls
+	#不正な値を弾く
 	else:
-		return "-1"
+		ls.append("0")
+		return ls
 
 
 
