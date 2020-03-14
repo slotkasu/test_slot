@@ -115,7 +115,7 @@ model = keras.models.load_model("keiba_model.h5", compile=False)
 #NNの出力　0=複勝確率 1＝着外(4着以降)確率
 predict=model.predict(X_test)
 
-print("---------------------------------------")
+print("--------------------------------------------------------")
 print("絶対評価")
 #単純なNNの出力
 for idx, i in enumerate(predict):
@@ -126,12 +126,12 @@ pred_min=predict.min(axis=0, keepdims=True)
 pred_max=predict.max(axis=0, keepdims=True)
 predict=(predict-pred_min) / (pred_max - pred_min)
 
-print("---------------------------------------")
+print("--------------------------------------------------------")
 
 print("レース内相対評価")
 #レース内で正規化し、相対評価に変更
 for idx, i in enumerate(predict):
-    print(str(idx+1)+"番 複勝確率：{:.3f}".format(i[0]),"着外確率：{:.3f}".format(i[1]),"予想オッズ：{:.3f}".format((1+0.001)/(i[0]+0.001)))
+    print(str(idx+1)+"番 複勝確率：{:.3f}".format(i[0]),"着外確率：{:.3f}".format(i[1]),"予想オッズ：{:.3f}".format(1+(1-0.2)/(i[0]+0.001)))
 
 print(title)
 
