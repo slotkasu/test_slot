@@ -12,12 +12,14 @@ from keiba_function import getRaceNum, getSexNum, getShibadaNum, getStateNum, ge
 from datetime import timedelta
 
 
+
 def makeKeibaDataset(date):
 	url = "https://race.netkeiba.com/race/shutuba_past.html?race_id="+date+"&rf=shutuba_submenu"
 
 	html = requests.get(url)
 	html.encoding =html.apparent_encoding
 	soup = BeautifulSoup(html.content,'lxml',from_encoding="euc-jp")
+	title=soup.find("title").text
 	#trタグのHorseListクラスからtr_[0-9]{2}のものだけを抽出
 	horseLists = soup.find_all("tr",class_="HorseList",id=re.compile(r"tr_[0-9]+"))
 	if len(horseLists) == 0:
@@ -229,6 +231,4 @@ def makeKeibaDataset(date):
 
 	writer.writerows(RaceInfo)
 	print("書き込み完了。お疲れさまでした（朧）")
-	return 0
-
-
+	return title

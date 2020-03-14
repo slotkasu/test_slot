@@ -42,9 +42,14 @@ if gpus:
     # Virtual devices must be set before GPUs have been initialized
     print(e)
 
+
+#####################################################################################
+#    ここからメイン
+#####################################################################################
+
 #レースのurlを入れると予想までやってくれます
 race_name = "202007010505"
-makeKeibaDataset(race_name)
+title=makeKeibaDataset(race_name)
 
 
 X=[]
@@ -126,8 +131,9 @@ print("---------------------------------------")
 print("レース内相対評価")
 #レース内で正規化し、相対評価に変更
 for idx, i in enumerate(predict):
-    print(str(idx+1)+"番 複勝確率：{:.3f}".format(i[0]),"着外確率：{:.3f}".format(i[1]))
+    print(str(idx+1)+"番 複勝確率：{:.3f}".format(i[0]),"着外確率：{:.3f}".format(i[1]),"予想オッズ：{:.3f}".format((1+0.001)/(i[0]+0.001)))
 
+print(title)
 
 # predict_classes = model.predict_classes(X_test)
 # for idx,i in enumerate(predict_classes):
