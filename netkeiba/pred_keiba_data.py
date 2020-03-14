@@ -106,11 +106,17 @@ X_test=(X_test-X_min) / (X_max - X_min)
 
 model = keras.models.load_model("keiba_model.h5", compile=False)
 
-predict_classes = model.predict_classes(X_test)
-for idx,i in enumerate(predict_classes):
-    if i == 0:
-        print(str(idx+1)+":買い")
-    if i == 1:
-        print(str(idx+1)+":買うな")
+
+predict=model.predict(X_test)
+for idx, i in enumerate(predict):
+    print(str(idx)+"番 複勝確率：{:.3f}".format(i[0]),"着外確率：{:.3f}".format(i[1]))
+
+
+# predict_classes = model.predict_classes(X_test)
+# for idx,i in enumerate(predict_classes):
+#     if i == 0:
+#         print(str(idx+1)+":買い")
+#     if i == 1:
+#         print(str(idx+1)+":買うな")
 
 model.save("keiba_model.h5",include_optimizer=False)
