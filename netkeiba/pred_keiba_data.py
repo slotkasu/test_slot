@@ -48,7 +48,7 @@ if gpus:
 #####################################################################################
 
 #レースのurlを入れると予想までやってくれます
-race_name = "202007010505"
+race_name = "202009010505"
 title=makeKeibaDataset(race_name)
 
 
@@ -119,7 +119,11 @@ print("--------------------------------------------------------")
 print("絶対評価")
 #単純なNNの出力
 for idx, i in enumerate(predict):
-    print(str(idx+1)+"番 複勝確率：{:.3f}".format(i[0]),"着外確率：{:.3f}".format(i[1]))
+    print(str(idx+1)+"番 複勝確率：{:.3f}".format(i[0]),"着外確率：{:.3f}".format(i[1]),end=" ")
+    if np.argmax(i)==0:
+        print("買い")
+    else:
+        print("不買")
 
 #複勝確率を正規化する。
 pred_min=predict.min(axis=0, keepdims=True)
