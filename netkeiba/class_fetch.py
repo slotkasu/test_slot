@@ -202,8 +202,13 @@ def makeKeibaDataset(date):
 	#レース結果のデータと結合させる。
 	RaceInfo=getRaceResult(date)
 	
-	for i in range(len(RaceInfo)):
-		RaceInfo[i].extend(Horseinfo[i])
+	#当日の開催なら結果がないので処理を分岐させる
+	if len(RaceInfo) == 0:
+		RaceInfo = Horseinfo
+		del temp_horse[:3]
+	else:
+		for i in range(len(RaceInfo)):
+			RaceInfo[i].extend(Horseinfo[i])
 	#print(RaceInfo)
 	#csv書き込み
 	RaceInfo=[i for i in RaceInfo if not "中止" in i]
@@ -221,5 +226,4 @@ def makeKeibaDataset(date):
 	print("書き込み完了。お疲れさまでした（朧）")
 	return 0
 
-makeKeibaDataset("201906040712")
-makeKeibaDataset("201906020304")
+

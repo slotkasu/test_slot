@@ -12,3 +12,4 @@ netkeiba/keiba/~$data_style.xlsx
 netkeiba/__pycache__/class_fetch.cpython-37.pyc
 *.pyc
 netkeiba/.vscode/settings.json
+*.pyc

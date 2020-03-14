@@ -2,7 +2,6 @@ import sys
 import requests
 import re
 from bs4 import BeautifulSoup
-import warnings
 import csv
 import pprint
 import time
@@ -32,6 +31,7 @@ for course in course_list:
         for date in date_list:
             for race in race_list:
                 print(year+course+kaisai+date+race)
+				
                 kekka = makeKeibaDataset(year+course+kaisai+date+race)
                 if kekka == -1:
                     break

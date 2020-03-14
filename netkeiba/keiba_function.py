@@ -63,7 +63,10 @@ def getRaceResult(day):
 	html.encoding = html.apparent_encoding
 	soup = BeautifulSoup(html.content,'html.parser')
 	name = soup.find_all("tr", class_="HorseList")
-
+	
+	if len(name) == 0:
+		print("imasuka~")
+		return []
 	results = []
 
 	for na in name:
