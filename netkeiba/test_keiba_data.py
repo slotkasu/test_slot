@@ -56,10 +56,12 @@ for path in paths:
         if flag==0:
             flag=1
             continue
-        #馬名、着順、オッズ
-        Y.append(i[:3])
-        #情報
-        X.append(i[3:])
+
+        if len(i[3:]) == 160:
+            #馬名、着順、オッズ
+            Y.append(i[:3])
+            X.append(list(map(float,i[3:])))
+
 #3位以内は1、4位以降は0にする
 temp=[]
 for i in Y:
