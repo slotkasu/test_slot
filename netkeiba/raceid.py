@@ -14,7 +14,7 @@ year = '2018'
 date = datetime.datetime.now()
 #競馬場	開催	日目	レース
 
-course_list = [str(i+7).zfill(2) for i in range(4)]
+course_list = [str(i+8).zfill(2) for i in range(3)]
 kaisai_list = [str(i+1).zfill(2) for i in range(4)]
 date_list = [str(i+1).zfill(2) for i in range(9)]
 race_list = [str(i+1).zfill(2) for i in range(12)]
