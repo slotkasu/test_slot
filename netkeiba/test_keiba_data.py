@@ -111,4 +111,13 @@ print(cmx)
 print_cmx(true_classes, predict_classes)
 
 
-model.save("keiba_model.h5",include_optimizer=False)
+# model.save("keiba_model.h5",include_optimizer=False)
+
+for i in [0, 3, 6, 8, 11, 13, 15]:
+    # weights 結果をplot
+    w1 = model.layers[i].get_weights()[0]
+    plt.imshow(w1, cmap='coolwarm', interpolation='nearest')
+    plt.colorbar()
+    plt.figure()
+    plt.plot((w1**2).mean(axis=1), 'o-')
+    plt.show()

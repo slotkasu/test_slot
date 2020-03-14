@@ -249,7 +249,7 @@ def makeKeibaDataset(date):
 		for i in range(len(RaceInfo)):
 			RaceInfo[i].extend(Horseinfo[i])
 		#訓練データとして保存
-		file_name='keiba/datasets/'+date+'out.csv'
+		file_name='keiba/datasets2/'+date+'out.csv'
 	#print(RaceInfo)
 	#csv書き込み
 	RaceInfo=[i for i in RaceInfo if not "中止" in i]
