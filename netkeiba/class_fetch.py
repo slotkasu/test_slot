@@ -31,7 +31,7 @@ def makeKeibaDataset(date, train_mode=1):
 	Horseinfo = []#馬情報（前のほうのやつ）
 	#テンプレートのtemp
 	temp_horse = ["馬名","着順","オッズ","当日芝","当日ダ","当日距離","本日良","本日稍","本日重","本日不","枠番","馬番","中週","体重","体重増減","牡","牝","セ","馬齢","斤量"]
-	temp_past = ["札幌","函館","福島","新潟","東京","中山","中京","京都","阪神","小倉","人気","芝","ダ","距離","タイム","良","稍","重","不","頭数","馬番","人気","斤量","通過順1","通過順2","通過順3","通過順4","3ハロン","体重","体重増減","着差"]
+	temp_past = ["札幌","函館","福島","新潟","東京","中山","中京","京都","阪神","小倉","着順","芝","ダ","距離","タイム","良","稍","重","不","頭数","馬番","人気","斤量","通過順1","通過順2","通過順3","通過順4","3ハロン","体重","体重増減","着差"]
 
 	#-------------------------本レースの情報---------------------------
 	#racedata01に欲しい物が全部入っています
@@ -41,6 +41,8 @@ def makeKeibaDataset(date, train_mode=1):
 	#spanタグに全部あります　全部で3要素です
 	data = baseinfo.find("span")
 	#芝ダート
+	if data.text.strip()[0] == "障":
+		return 2
 	header = header + getShibadaNum(data.text.strip()[0])
 	#距離
 	header.append((re.search(r'\d+',data.text).group()))
@@ -133,7 +135,7 @@ def makeKeibaDataset(date, train_mode=1):
 				#競馬場の詳細情報
 				detail_past=past.find("div",class_="Data05")
 				#芝ダ
-				if getShibadaNum(detail_past.text[0]) != "-1":
+				if detail_past.text[0] != "障":
 					temp_past_list = temp_past_list + getShibadaNum(detail_past.text[0])
 				else:
 					print(detail_past.text)

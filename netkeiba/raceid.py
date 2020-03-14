@@ -14,19 +14,18 @@ year = '2019'
 date = datetime.datetime.now()
 #競馬場	開催	日目	レース
 
-course_list = [str(i+5).zfill(2) for i in range(6)]
+course_list = [str(i+7).zfill(2) for i in range(4)]
 kaisai_list = [str(i+1).zfill(2) for i in range(4)]
 date_list = [str(i+1).zfill(2) for i in range(9)]
 race_list = [str(i+1).zfill(2) for i in range(12)]
 
 for course in course_list:
-    for kaisai in kaisai_list:
-        for date in date_list:
-            for race in race_list:
-                print(year+course+kaisai+date+race)
-                kekka = makeKeibaDataset(year+course+kaisai+date+race)
-                if kekka == 3:
-                    break
-
-                time.sleep(1)
+	for kaisai in kaisai_list:
+		for date in date_list:
+			for race in race_list:
+				print(year+course+kaisai+date+race)
+				kekka = makeKeibaDataset(year+course+kaisai+date+race)
+				if kekka == 3:
+					break
+				time.sleep(1)
 
