@@ -55,11 +55,24 @@ def makeKeibaDataset(date):
 		#体重は484kg(-4)のような形で与えられるので、kgを境に分割
 		#増減のほうは括弧を削って格納
 		weight = horseList.find("div", class_="Weight").get_text().strip().split("kg")
-		temp_info_list.append(weight[0])
-		horse_weight_diff=re.findall(r'\((.*)\)',weight[1])[0]
-		if re.search(r'\d',horse_weight_diff):
-			temp_info_list.append(horse_weight_diff)
+		# temp_info_list.append(weight[0])
+		# horse_weight_diff=re.findall(r'\((.*)\)',weight[1])[0]
+		# if re.search(r'\d',horse_weight_diff):
+		# 	temp_info_list.append(horse_weight_diff)
+		# else:
+		# 	temp_info_list.append("0")
+		if len(weight)==2:
+			#体重
+			temp_info_list.append(re.search(r'\d+',weight[0]).group())
+			#体重増減
+			horse_weight_diff=re.findall(r'\((.*)\)',weight[1])[0]
+			if re.search(r'\d',horse_weight_diff):
+				temp_info_list.append(horse_weight_diff)
+			else:
+				temp_info_list.append("0")
+		#分割出来なかった場合は0を2つ代入
 		else:
+			temp_info_list.append("0")
 			temp_info_list.append("0")
 
 		#性別,馬齢
