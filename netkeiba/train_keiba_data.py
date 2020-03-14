@@ -96,9 +96,9 @@ for i in device_lib.list_local_devices():
 
 #ディープラーニングモデル
 model = Sequential()
-model.add(Dense(128, activation='relu', input_shape=(X.shape[1],)))
+model.add(Dense(300, activation='relu', input_shape=(X.shape[1],)))
 model.add(Dropout(0.2))
-model.add(Dense(128, activation='relu'))
+model.add(Dense(300, activation='relu'))
 model.add(Dropout(0.2))
 model.add(Dense(Y.shape[1], activation='softmax'))
 
