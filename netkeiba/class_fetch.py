@@ -1,4 +1,3 @@
-
 import sys
 import requests
 import re
@@ -35,6 +34,26 @@ def makeKeibaDataset(date):
 	temp_past=["札幌","函館","福島","新潟","東京","中山","中京","京都","阪神","小倉","人気","芝ダ","距離","タイム","良","稍","重","不","頭数","馬番","人気","斤量","通過順1","通過順2","通過順3","通過順4","3ハロン","体重","体重増減","着差"]
 	
 
+	#-------------------------本レースの情報---------------------------
+	#これを各要素の先頭につける
+	# race_information = []
+	# #タグ抜き
+	# base_info = soup.find("div",class_ = "RaceData01")
+	# for i in base_info:
+	# 	#芝1800　みたいなデータが入る
+	# 	temp = i.find("span",class_="Turf").text
+	# 	if len(temp) != 0:
+	# 		#芝ダ
+	# 		race_information.append(temp[:1])
+	# 		#距離
+	# 		race_information.append(temp[2:])
+	# 	#馬場状態
+	# 	temp = i.find("span", class_ = "Item03").text
+	# 	if len(temp) != 0:
+	# 		race_information.append(getStateNum(temp))
+
+	#######
+
 	for horseList in horseLists:
 		# print(horseList)
 		temp_info_list = []
@@ -55,12 +74,7 @@ def makeKeibaDataset(date):
 		#体重は484kg(-4)のような形で与えられるので、kgを境に分割
 		#増減のほうは括弧を削って格納
 		weight = horseList.find("div", class_="Weight").get_text().strip().split("kg")
-		# temp_info_list.append(weight[0])
-		# horse_weight_diff=re.findall(r'\((.*)\)',weight[1])[0]
-		# if re.search(r'\d',horse_weight_diff):
-		# 	temp_info_list.append(horse_weight_diff)
-		# else:
-		# 	temp_info_list.append("0")
+
 		if len(weight)==2:
 			#体重
 			temp_info_list.append(re.search(r'\d+',weight[0]).group())
@@ -222,8 +236,14 @@ def makeKeibaDataset(date):
 	#当日の開催なら結果がないので処理を分岐させる
 	if len(RaceInfo) == 0:
 		RaceInfo = Horseinfo
+		
 		del temp_horse[:3]
 		#テストデータとして保存
+		#print(RaceInfo)
+		#結果の代わりにレースの基本情報を入れる
+		# for i in RaceInfo:
+		# 	i[0:0] = race_information
+		
 		file_name='keiba/datasets/'+date+'test.csv'
 	else:
 		for i in range(len(RaceInfo)):
@@ -245,3 +265,5 @@ def makeKeibaDataset(date):
 	writer.writerows(RaceInfo)
 	print("書き込み完了。お疲れさまでした（朧）")
 	return title
+
+
