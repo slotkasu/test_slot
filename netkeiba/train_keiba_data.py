@@ -156,6 +156,8 @@ print(history.history.keys())
 #学習精度とバリデーションの制度をplot
 plt.plot(range(1, epochs+1), history.history['accuracy'], label="training")
 plt.plot(range(1, epochs+1), history.history['val_accuracy'], label="validation")
+plt.plot(range(1, epochs+1), history.history['loss'], label="train_loss")
+plt.plot(range(1, epochs+1), history.history['val_loss'], label="valid_loss")
 plt.xlabel('Epochs')
 plt.ylabel('Accuracy')
 plt.legend()
