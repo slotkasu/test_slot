@@ -42,11 +42,8 @@ if gpus:
     print(e)
 
 
-
 X=[]
 Y=[]
-
-
 paths = glob.glob("keiba\\datasets\\*out.csv")
 for path in paths:
     csv_file = open(path, "r", newline="" )
@@ -62,29 +59,13 @@ for path in paths:
             Y.append(i[:3])
             X.append(list(map(float,i[3:])))
 
-#3位以内は1、4位以降は0にする
 temp=[]
 for i in Y:
     if int(i[1])<=3:
         temp.append(0)
-    # elif int(i[1])<=6:
-    #     temp.append(1)
-    # elif int(i[1])<=9:
-    #     temp.append(2)
-    # elif int(i[1])<=11:
-    #     temp.append(3)
     else:
         temp.append(1)
 Y=temp
-
-
-# cnt=0
-# t_cnt=0
-# for i in Y:
-#     t_cnt+=1
-#     if i == 3:
-#         cnt+=1
-# print(cnt,t_cnt)
 
 X=np.array(X, dtype="float32")
 Y=np.array(Y, dtype="int")
@@ -96,19 +77,35 @@ Y=to_categorical(Y)
 #データを全て正規化（0～1）の間に収める
 X_min=X.min(axis=0, keepdims=True)
 X_max=X.max(axis=0, keepdims=True)
-X=(X-X_min) / (X_max - X_min)
+
+X_test=[]
+
+paths = glob.glob("keiba\\datasets\\202006020503test.csv")
+for path in paths:
+    csv_file = open(path, "r", newline="" )
+    temp_list = csv.reader(csv_file, delimiter=",")
+    flag=0
+    for i in temp_list:
+        if flag==0:
+            flag=1
+            continue
+        X_test.append(list(map(float,i)))
 
 
-#訓練データと試験データ
-X_train, X_test, Y_train, Y_test = train_test_split(X, Y,train_size=0.8)
+X_test=np.array(X_test, dtype="float32")
+
+
+#データを全て正規化（0～1）の間に収める
+X_test=(X_test-X_min) / (X_max - X_min)
+
 
 model = keras.models.load_model("keiba_model.h5", compile=False)
 
 predict_classes = model.predict_classes(X_test)
-true_classes = np.argmax(Y_test, 1)
-cmx = confusion_matrix(true_classes, predict_classes)
-print(cmx)
-print_cmx(true_classes, predict_classes)
-
+for idx,i in enumerate(predict_classes):
+    if i == 0:
+        print(str(idx+1)+":買い")
+    if i == 1:
+        print(str(idx+1)+":買うな")
 
 model.save("keiba_model.h5",include_optimizer=False)

@@ -202,24 +202,29 @@ def makeKeibaDataset(date):
 	#レース結果のデータと結合させる。
 	RaceInfo=getRaceResult(date)
 	
+	file_name=""
+
 	#当日の開催なら結果がないので処理を分岐させる
 	if len(RaceInfo) == 0:
 		RaceInfo = Horseinfo
 		del temp_horse[:3]
+		#テストデータとして保存
+		file_name='keiba/datasets/'+date+'test.csv'
 	else:
 		for i in range(len(RaceInfo)):
 			RaceInfo[i].extend(Horseinfo[i])
+		#訓練データとして保存
+		file_name='keiba/datasets/'+date+'out.csv'
 	#print(RaceInfo)
 	#csv書き込み
 	RaceInfo=[i for i in RaceInfo if not "中止" in i]
 	#print(RaceInfo)
 
-
 	for i in range(5):
 		temp_horse.extend(temp_past)
 
 	RaceInfo.insert(0,temp_horse)
-	f = open('keiba/datasets/'+date+'out.csv','w',newline = "")
+	f = open(file_name,'w',newline = "")
 	writer = csv.writer(f)
 
 	writer.writerows(RaceInfo)

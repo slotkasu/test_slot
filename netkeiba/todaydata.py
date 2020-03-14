@@ -1,4 +1,4 @@
 from class_fetch import makeKeibaDataset
 
 #urlは手打ちでよろ
-makeKeibaDataset("202006020502")
+makeKeibaDataset("202006020503")
