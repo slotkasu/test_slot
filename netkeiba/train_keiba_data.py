@@ -144,10 +144,10 @@ model.compile(loss='categorical_crossentropy',
 			  optimizer=optimizers.SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True),
 			  metrics=['accuracy'])
 
-epochs=500
+epochs=10
 
 history = model.fit(X_train, Y_train,
-					batch_size=1024,
+					batch_size=512,
 					epochs=epochs,
 					verbose=1,
 					validation_data=(X_test, Y_test))
@@ -157,6 +157,8 @@ print(history.history.keys())
 #学習精度とバリデーションの制度をplot
 plt.plot(range(1, epochs+1), history.history['accuracy'], label="training")
 plt.plot(range(1, epochs+1), history.history['val_accuracy'], label="validation")
+plt.plot(range(1, epochs+1), history.history['loss'], label="train_loss")
+plt.plot(range(1, epochs+1), history.history['val_loss'], label="valid_loss")
 plt.xlabel('Epochs')
 plt.ylabel('Accuracy')
 plt.legend()
