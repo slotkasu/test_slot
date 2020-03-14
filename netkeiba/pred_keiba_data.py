@@ -42,6 +42,10 @@ if gpus:
     # Virtual devices must be set before GPUs have been initialized
     print(e)
 
+#レースのurlを入れると予想までやってくれます
+race_name = "202007010505"
+makeKeibaDataset(race_name)
+
 
 X=[]
 Y=[]
@@ -81,9 +85,6 @@ X_max=X.max(axis=0, keepdims=True)
 
 X_test=[]
 
-#レースのurlを入れると予想までやってくれます
-race_name = "202007010505"
-makeKeibaDataset(race_name)
 
 paths = glob.glob("keiba\\datasets\\"+race_name+"test.csv")
 for path in paths:
@@ -106,8 +107,24 @@ X_test=(X_test-X_min) / (X_max - X_min)
 
 model = keras.models.load_model("keiba_model.h5", compile=False)
 
-
+#NNの出力　0=複勝確率 1＝着外(4着以降)確率
 predict=model.predict(X_test)
+
+print("---------------------------------------")
+print("絶対評価")
+#単純なNNの出力
+for idx, i in enumerate(predict):
+    print(str(idx+1)+"番 複勝確率：{:.3f}".format(i[0]),"着外確率：{:.3f}".format(i[1]))
+
+#複勝確率を正規化する。
+pred_min=predict.min(axis=0, keepdims=True)
+pred_max=predict.max(axis=0, keepdims=True)
+predict=(predict-pred_min) / (pred_max - pred_min)
+
+print("---------------------------------------")
+
+print("レース内相対評価")
+#レース内で正規化し、相対評価に変更
 for idx, i in enumerate(predict):
     print(str(idx+1)+"番 複勝確率：{:.3f}".format(i[0]),"着外確率：{:.3f}".format(i[1]))
 
