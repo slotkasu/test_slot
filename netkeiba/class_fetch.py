@@ -53,10 +53,12 @@ def makeKeibaDataset(date, train_mode=1):
 	#######
 
 	for horseList in horseLists:
-		# print(horseList)
 		temp_info_list = []
 		#馬名
-		#temp_info_list.append(horseList.find("div", class_="Horse02").get_text().strip())
+		uma_name = horseList.find("div", class_="Horse02").get_text().strip()
+		if uma_name == "グレートシール":
+			print("fuck")
+			return uma_name
 		#枠番
 		temp_info_list.append(horseList.find("td", class_=re.compile(r"Waku\d")).get_text())
 		#馬番
@@ -91,7 +93,6 @@ def makeKeibaDataset(date, train_mode=1):
 		#性別、年齢、毛色が1つの要素で取れる ex.牡4芦
 		#前から1文字目が性別、2文字目が年齢なので、それを取る
 		temp = horseList.find("span", class_="Barei").get_text().strip()
-		# print(temp)
 		sei, rei = getSexNum(temp[:1]),temp[1:2]
 		temp_info_list = temp_info_list + sei
 		
@@ -110,11 +111,12 @@ def makeKeibaDataset(date, train_mode=1):
 		#PastとRestの情報をhorseListから取得
 		pasts=horseList.find_all("td",class_=["Past", "Rest"])
 		for past in pasts:
-			
 			if past.get("class")[0] == "Rest":
+				
 				#休養中の例外
-				#過去レースの情報数：18個
+				#過去レースの情報数
 				for i in range(len(temp_past)):
+
 					temp_past_list.append("0")
 				continue
 
@@ -249,10 +251,8 @@ def makeKeibaDataset(date, train_mode=1):
 			RaceInfo[i].extend(Horseinfo[i])
 		#訓練データとして保存
 		file_name='keiba/datasets2/'+date[0:4]+"/"+date+'out.csv'
-	#print(RaceInfo)
 	#csv書き込み
 	RaceInfo=[i for i in RaceInfo if not "中止" in i]
-	#print(RaceInfo)
 
 	for i in range(5):
 		temp_horse.extend(temp_past)
@@ -267,5 +267,3 @@ def makeKeibaDataset(date, train_mode=1):
 	#print("書き込み完了。お疲れさまでした（朧）")
 	return title
 
-
-makeKeibaDataset("201808030406")
