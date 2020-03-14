@@ -61,7 +61,7 @@ if type(title) == type(0):
 
 X=[]
 Y=[]
-paths = glob.glob("keiba\\datasets\\*out.csv")
+paths = glob.glob("keiba\\datasets2\\2018\\*out.csv")
 for path in paths:
     csv_file = open(path, "r", newline="" )
     temp_list = csv.reader(csv_file, delimiter=",")
@@ -97,7 +97,7 @@ X_max=X.max(axis=0, keepdims=True)
 
 X_test=[]
 
-
+#テスト用
 paths = glob.glob("keiba\\datasets\\"+race_name+"test.csv")
 for path in paths:
     csv_file = open(path, "r", newline="" )
