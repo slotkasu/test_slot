@@ -11,6 +11,5 @@ netkeiba/__pycache__/class_fetch.cpython-37.pyc
 netkeiba/.vscode/settings.json
 *.pyc
 *.pyc
-netkeiba/keiba/datasets2/*.csv
-netkeiba/keiba/datasets/*.csv
-
+netkeiba/keiba/datasets2/
+netkeiba/keiba/datasets/
