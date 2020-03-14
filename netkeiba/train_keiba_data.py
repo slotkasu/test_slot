@@ -110,6 +110,8 @@ if gpus:
     # Virtual devices must be set before GPUs have been initialized
     print(e)
 
+
+#ディープラーニングモデル
 model = Sequential()
 model.add(Dense(128, activation='relu', input_shape=(X.shape[1],)))
 model.add(Dropout(0.2))
@@ -123,11 +125,24 @@ model.compile(loss='categorical_crossentropy',
               optimizer=optimizers.SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True),
               metrics=['accuracy'])
 
+epochs=1000
+
 history = model.fit(X_train, Y_train,
                     batch_size=32,
-                    epochs=30,
+                    epochs=epochs,
                     verbose=1,
                     validation_data=(X_test, Y_test))
+
+print(history.history.keys())
+
+#学習精度とバリデーションの制度をplot
+plt.plot(range(1, epochs+1), history.history['accuracy'], label="training")
+plt.plot(range(1, epochs+1), history.history['val_accuracy'], label="validation")
+plt.xlabel('Epochs')
+plt.ylabel('Accuracy')
+plt.legend()
+plt.show()
+
 score = model.evaluate(X_test, Y_test, verbose=0)
 
 predict_classes = model.predict_classes(X_test)

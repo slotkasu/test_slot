@@ -34,7 +34,7 @@ if gpus:
     tf.config.experimental.set_virtual_device_configuration(
         gpus[0],
         #GPUの最大使用率を4MBに制限　8GBのままではオーバーフローする。
-        [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=4096)])
+        [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=512)])
     logical_gpus = tf.config.experimental.list_logical_devices('GPU')
     print(len(gpus), "Physical GPUs,", len(logical_gpus), "Logical GPUs")
   except RuntimeError as e:
@@ -102,7 +102,7 @@ X=(X-X_min) / (X_max - X_min)
 #訓練データと試験データ
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y,train_size=0.8)
 
-model = keras.models.load_model("keiba_model.h5", compile=False)
+model = keras.models.load_model("keiba_model_sigsig.h5", compile=False)
 
 predict_classes = model.predict_classes(X_test)
 true_classes = np.argmax(Y_test, 1)
