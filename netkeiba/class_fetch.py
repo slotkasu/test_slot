@@ -12,7 +12,7 @@ from datetime import timedelta
 
 
 
-def makeKeibaDataset(date):
+def makeKeibaDataset(date, train_mode=1):
 	url = "https://race.netkeiba.com/race/shutuba_past.html?race_id="+date+"&rf=shutuba_submenu"
 
 	html = requests.get(url)
@@ -23,7 +23,7 @@ def makeKeibaDataset(date):
 	horseLists = soup.find_all("tr",class_="HorseList",id=re.compile(r"tr_[0-9]+"))
 	if len(horseLists) == 0:
 		print("サイトが存在しないためスキップします。")
-		return -1
+		return 3
 	if soup.find("tr",class_="HorseList Cancel"):
 		print("除外馬が存在するためスキップします。")
 		return 1
@@ -143,7 +143,7 @@ def makeKeibaDataset(date):
 					print(detail_past.text)
 
 					print("GAI")
-					return
+					return 2
 				#距離
 				temp_past_list.append(re.search(r'\d+',detail_past.text).group())
 				#時間部分だけ取り出す
@@ -234,7 +234,8 @@ def makeKeibaDataset(date):
 	file_name=""
 
 	#当日の開催なら結果がないので処理を分岐させる
-	if len(RaceInfo) == 0:
+	#もしくは、テストモードで実行している場合は、処理を分岐させる。
+	if len(RaceInfo) == 0 or train_mode == 0:
 		RaceInfo = Horseinfo
 		
 		del temp_horse[:3]

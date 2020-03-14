@@ -53,8 +53,11 @@ if gpus:
 #  01  02   03   04   05  06  07   08   09   10
 race_name = 202007010512
 race_name =  str(race_name)
-title=makeKeibaDataset(race_name)
+title=makeKeibaDataset(race_name, train_mode=0)
 
+if type(title) == type(0):
+    print("無理やわ。")
+    exit()
 
 X=[]
 Y=[]
@@ -123,8 +126,7 @@ print("--------------------------------------------------------")
 print("絶対評価")
 #単純なNNの出力
 for idx, i in enumerate(predict):
-    print(str(idx+1)+"番 複勝確率：{:.3f}".format(i[0]),end=" ")
-    print(str(idx+1).zfill(2)+"番 複勝確率：{:.3f}".format(i[0]),"着外確率：{:.3f}".format(i[1]),end=" ")
+    print(str(idx+1).zfill(2)+"番 複勝確率：{:.3f}".format(i[0]),end=" ")
     if np.argmax(i)==0:
         print("買い")
     else:
@@ -137,17 +139,16 @@ predict=(predict-pred_min) / (pred_max - pred_min)
 
 print("--------------------------------------------------------")
 
-uma_ban=[np.array([i]) for i in range(len(predict))]
-uma_ban=np.asarray(uma_ban)
-predict=predict+uma_ban
+#馬番ごとリストに変換
+predict=[[idx,i] for idx, i in enumerate(predict)]
 
+#複勝確率（正規化後）でソートする。
+predict.sort(key=lambda x: x[1][1])
 
 print("レース内相対評価")
 #レース内で正規化し、相対評価に変更
-for i in enumerate(predict):
-    print(str(i[0])+"番 複勝確率：{:.3f}".format(i[1][0]),"予想オッズ：{:.3f}".format(1+(1-0.2)/(i[1][0]+0.001)))
-for idx, i in enumerate(predict):
-    print(str(idx+1).zfill(2)+"番 複勝確率：{:.3f}".format(i[0]),"着外確率：{:.3f}".format(i[1]),"予想オッズ：{:.3f}".format(1+(1-0.2)/(i[0]+0.001)))
+for i in predict:
+    print(str(i[0]+1).zfill(2)+"番 複勝確率：{:.3f}".format(i[1][0]),"予想オッズ：{:.3f}".format(1+(1-0.2)/(i[1][0]+0.001)))
 
 print(title)
 
