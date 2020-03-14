@@ -109,7 +109,7 @@ model = keras.models.load_model("keiba_model.h5", compile=False)
 
 predict=model.predict(X_test)
 for idx, i in enumerate(predict):
-    print(str(idx)+"番 複勝確率：{:.3f}".format(i[0]),"着外確率：{:.3f}".format(i[1]))
+    print(str(idx+1)+"番 複勝確率：{:.3f}".format(i[0]),"着外確率：{:.3f}".format(i[1]))
 
 
 # predict_classes = model.predict_classes(X_test)
