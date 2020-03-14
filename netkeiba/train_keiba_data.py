@@ -16,6 +16,7 @@ import seaborn as sn
 from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
 from imblearn.over_sampling import SMOTE
+from tensorflow.python.client import device_lib
 
  
 def print_cmx(y_true, y_pred):
