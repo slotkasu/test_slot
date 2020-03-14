@@ -30,10 +30,10 @@ def print_cmx(y_true, y_pred):
 	plt.show()
 
 
-X=[]
-Y=[]
+X_train=[]
+Y_train=[]
 
-
+#trainデータを読み込み
 paths = glob.glob("keiba\\datasets2\\2018\\*")
 for path in paths:
 	#print(path)
@@ -47,35 +47,65 @@ for path in paths:
 		#情報
 		if len(i[3:]) == 172:
 			#馬名、着順、オッズ
-			Y.append(i[:3])
-			X.append(list(map(float,i[3:])))
-
+			Y_train.append(i[:3])
+			X_train.append(list(map(float,i[3:])))
 
 #3位以内は1、4位以降は0にする
 temp=[]
-for i in Y:
+for i in Y_train:
 	if int(i[1])<=3:
 		temp.append(0)
 	else:
 		temp.append(1)
-Y=temp
+Y_train=temp
 
-X=np.array(X, dtype="float32")
-Y=np.array(Y, dtype="int")
+X_train=np.array(X_train, dtype="float32")
+Y_train=np.array(Y_train, dtype="int")
 
 
 sm = SMOTE(random_state=11)
-X, Y = sm.fit_sample(X,Y)
-Y=to_categorical(Y)
+X_train, Y_train = sm.fit_sample(X_train,Y_train)
+Y_train=to_categorical(Y_train)
 
 #データを全て正規化（0～1）の間に収める
-X_min=X.min(axis=0, keepdims=True)
-X_max=X.max(axis=0, keepdims=True)
+X_min=X_train.min(axis=0, keepdims=True)
+X_max=X_train.max(axis=0, keepdims=True)
 X=(X-X_min) / (X_max - X_min)
 
+X_test=[]
+Y_test=[]
 
-#訓練データと試験データ
-X_train, X_test, Y_train, Y_test = train_test_split(X, Y,train_size=0.8)
+
+#testデータを読み込み
+paths = glob.glob("keiba\\datasets2\\2019\\*")
+for path in paths:
+	#print(path)
+	csv_file = open(path, "r", newline="" )
+	temp_list = csv.reader(csv_file, delimiter=",")
+	flag=0
+	for i in temp_list:
+		if flag==0:
+			flag=1
+			continue
+		#情報
+		if len(i[3:]) == 172:
+			#馬名、着順、オッズ
+			Y_test.append(i[:3])
+			X_test.append(list(map(float,i[3:])))
+
+#3位以内は1、4位以降は0にする
+temp=[]
+for i in Y_test:
+	if int(i[1])<=3:
+		temp.append(0)
+	else:
+		temp.append(1)
+Y_test=temp
+
+X_test=np.array(X_test, dtype="float32")
+Y_test=np.array(Y_test, dtype="int")
+
+Y_test=to_categorical(Y_test)
 
 for i in device_lib.list_local_devices():
 	if i.device_type == "GPU":

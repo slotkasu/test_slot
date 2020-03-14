@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 from imblearn.over_sampling import SMOTE
 from tensorflow.python.client import device_lib
 
- 
+
 def print_cmx(y_true, y_pred):
     labels = sorted(list(set(y_true)))
     cmx_data = confusion_matrix(y_true, y_pred, labels=labels)
@@ -43,8 +43,6 @@ for i in device_lib.list_local_devices():
             except RuntimeError as e:
                 # Virtual devices must be set before GPUs have been initialized
                 print(e)
-
-
 
 X=[]
 Y=[]
@@ -73,15 +71,6 @@ for i in Y:
     else:
         temp.append(1)
 Y=temp
-
-
-# cnt=0
-# t_cnt=0
-# for i in Y:
-#     t_cnt+=1
-#     if i == 3:
-#         cnt+=1
-# print(cnt,t_cnt)
 
 X=np.array(X, dtype="float32")
 Y=np.array(Y, dtype="int")

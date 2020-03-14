@@ -176,8 +176,9 @@ def makeKeibaDataset(date, train_mode=1):
 				data06_past=past.find("div",class_="Data06")
 				#スペース区切り
 				data06_past=data06_past.text.split()
+				
 				#通過順がある場合
-				if len(data06_past) == 3:
+				if re.search(r'^\d',data06_past[0]):
 					#通過順を"-"でスプリット
 					through_past=data06_past[0].split("-")
 					#通過順を全て入れる
@@ -267,3 +268,4 @@ def makeKeibaDataset(date, train_mode=1):
 	return title
 
 
+makeKeibaDataset("201807010110")
