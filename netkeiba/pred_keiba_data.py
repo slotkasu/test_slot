@@ -114,4 +114,4 @@ for idx, i in enumerate(predict):
 #     if i == 1:
 #         print(str(idx+1)+":買うな")
 
-model.save("keiba_model.h5",include_optimizer=False)
+# model.save("keiba_model.h5",include_optimizer=False)
