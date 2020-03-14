@@ -13,7 +13,6 @@ from keras.backend.tensorflow_backend import set_session
 from sklearn.metrics import confusion_matrix
 import pandas as pd
 import seaborn as sn
-from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
 from imblearn.over_sampling import SMOTE
 from tensorflow.python.client import device_lib
@@ -144,10 +143,10 @@ model.compile(loss='categorical_crossentropy',
 			  optimizer=optimizers.SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True),
 			  metrics=['accuracy'])
 
-epochs=500
+epochs=50
 
 history = model.fit(X_train, Y_train,
-					batch_size=1024,
+					batch_size=800,
 					epochs=epochs,
 					verbose=1,
 					validation_data=(X_test, Y_test))
