@@ -15,6 +15,7 @@ import seaborn as sn
 from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
 from imblearn.over_sampling import SMOTE
+from class_fetch import makeKeibaDataset
 
  
 def print_cmx(y_true, y_pred):
@@ -80,7 +81,11 @@ X_max=X.max(axis=0, keepdims=True)
 
 X_test=[]
 
-paths = glob.glob("keiba\\datasets\\202006020503test.csv")
+#レースのurlを入れると予想までやってくれます
+race_name = "202007010505"
+makeKeibaDataset(race_name)
+
+paths = glob.glob("keiba\\datasets\\"+race_name+"test.csv")
 for path in paths:
     csv_file = open(path, "r", newline="" )
     temp_list = csv.reader(csv_file, delimiter=",")
