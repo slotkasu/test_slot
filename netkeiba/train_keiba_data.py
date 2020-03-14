@@ -103,7 +103,12 @@ for i in Y_test:
 Y_test=temp
 
 X_test=np.array(X_test, dtype="float32")
-Y_test=np.array(Y_test, dtype="int")
+Y_test=np.array(Y_test, dtype="int")7
+
+sm = SMOTE(random_state=11)
+X_test, Y_test = sm.fit_sample(X_test,Y_test)
+Y_test=to_categorical(Y_test)
+
 
 Y_test=to_categorical(Y_test)
 
@@ -130,9 +135,9 @@ for i in device_lib.list_local_devices():
 
 #ディープラーニングモデル
 model = Sequential()
-model.add(Dense(300, activation='relu', input_shape=(X_train.shape[1],)))
+model.add(Dense(128, activation='relu', input_shape=(X_train.shape[1],)))
 model.add(Dropout(0.2))
-model.add(Dense(300, activation='relu'))
+model.add(Dense(128, activation='relu'))
 model.add(Dropout(0.2))
 model.add(Dense(Y_train.shape[1], activation='softmax'))
 
@@ -142,10 +147,10 @@ model.compile(loss='categorical_crossentropy',
 			  optimizer=optimizers.SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True),
 			  metrics=['accuracy'])
 
-epochs=1000
+epochs=500
 
 history = model.fit(X_train, Y_train,
-					batch_size=256,
+					batch_size=1024,
 					epochs=epochs,
 					verbose=1,
 					validation_data=(X_test, Y_test))
