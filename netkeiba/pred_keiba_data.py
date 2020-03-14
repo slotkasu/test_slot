@@ -42,9 +42,14 @@ if gpus:
     # Virtual devices must be set before GPUs have been initialized
     print(e)
 
+
+#####################################################################################
+#    ここからメイン
+#####################################################################################
+
 #レースのurlを入れると予想までやってくれます
-race_name = "202007010505"
-makeKeibaDataset(race_name)
+race_name = "202009010505"
+title=makeKeibaDataset(race_name)
 
 
 X=[]
@@ -110,24 +115,29 @@ model = keras.models.load_model("keiba_model.h5", compile=False)
 #NNの出力　0=複勝確率 1＝着外(4着以降)確率
 predict=model.predict(X_test)
 
-print("---------------------------------------")
+print("--------------------------------------------------------")
 print("絶対評価")
 #単純なNNの出力
 for idx, i in enumerate(predict):
-    print(str(idx+1)+"番 複勝確率：{:.3f}".format(i[0]),"着外確率：{:.3f}".format(i[1]))
+    print(str(idx+1)+"番 複勝確率：{:.3f}".format(i[0]),"着外確率：{:.3f}".format(i[1]),end=" ")
+    if np.argmax(i)==0:
+        print("買い")
+    else:
+        print("不買")
 
 #複勝確率を正規化する。
 pred_min=predict.min(axis=0, keepdims=True)
 pred_max=predict.max(axis=0, keepdims=True)
 predict=(predict-pred_min) / (pred_max - pred_min)
 
-print("---------------------------------------")
+print("--------------------------------------------------------")
 
 print("レース内相対評価")
 #レース内で正規化し、相対評価に変更
 for idx, i in enumerate(predict):
-    print(str(idx+1)+"番 複勝確率：{:.3f}".format(i[0]),"着外確率：{:.3f}".format(i[1]))
+    print(str(idx+1)+"番 複勝確率：{:.3f}".format(i[0]),"着外確率：{:.3f}".format(i[1]),"予想オッズ：{:.3f}".format(1+(1-0.2)/(i[0]+0.001)))
 
+print(title)
 
 # predict_classes = model.predict_classes(X_test)
 # for idx,i in enumerate(predict_classes):

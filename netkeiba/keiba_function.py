@@ -65,7 +65,7 @@ def getRaceResult(day):
 	name = soup.find_all("tr", class_="HorseList")
 	
 	if len(name) == 0:
-		print("imasuka~")
+		print("テストデータです。")
 		return []
 	results = []
 
