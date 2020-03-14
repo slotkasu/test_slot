@@ -20,13 +20,12 @@ date_list = [str(i+1).zfill(2) for i in range(9)]
 race_list = [str(i+1).zfill(2) for i in range(12)]
 
 for course in course_list:
-    for kaisai in kaisai_list:
-        for date in date_list:
-            for race in race_list:
-                print(year+course+kaisai+date+race)
-                kekka = makeKeibaDataset(year+course+kaisai+date+race)
-                if kekka == 3:
-                    break
-
-                time.sleep(1)
+	for kaisai in kaisai_list:
+		for date in date_list:
+			for race in race_list:
+				print(year+course+kaisai+date+race)
+				kekka = makeKeibaDataset(year+course+kaisai+date+race)
+				if kekka == 3:
+					break
+				time.sleep(1)
 
