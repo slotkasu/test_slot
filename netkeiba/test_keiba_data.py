@@ -50,7 +50,7 @@ X=[]
 Y=[]
 
 
-paths = glob.glob("keiba\\datasets2\\*out.csv")
+paths = glob.glob("keiba\\datasets2\\2018\\*out.csv")
 for path in paths:
     csv_file = open(path, "r", newline="" )
     temp_list = csv.reader(csv_file, delimiter=",")

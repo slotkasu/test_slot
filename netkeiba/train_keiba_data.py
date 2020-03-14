@@ -34,7 +34,7 @@ X=[]
 Y=[]
 
 
-paths = glob.glob("keiba\\datasets2\\*")
+paths = glob.glob("keiba\\datasets2\\2018\\*")
 for path in paths:
 	#print(path)
 	csv_file = open(path, "r", newline="" )
@@ -111,7 +111,7 @@ model.compile(loss='categorical_crossentropy',
 epochs=1000
 
 history = model.fit(X_train, Y_train,
-					batch_size=1024,
+					batch_size=256,
 					epochs=epochs,
 					verbose=1,
 					validation_data=(X_test, Y_test))
