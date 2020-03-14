@@ -48,7 +48,11 @@ if gpus:
 #####################################################################################
 
 #レースのurlを入れると予想までやってくれます
-race_name = "202006020506"
+##
+#札幌 函館 福島 新潟 東京 中山 中京 京都 阪神 小倉
+#  01  02   03   04   05  06  07   08   09   10
+race_name = 202007010512
+race_name =  str(race_name)
 title=makeKeibaDataset(race_name)
 
 
@@ -120,6 +124,7 @@ print("絶対評価")
 #単純なNNの出力
 for idx, i in enumerate(predict):
     print(str(idx+1)+"番 複勝確率：{:.3f}".format(i[0]),end=" ")
+    print(str(idx+1).zfill(2)+"番 複勝確率：{:.3f}".format(i[0]),"着外確率：{:.3f}".format(i[1]),end=" ")
     if np.argmax(i)==0:
         print("買い")
     else:
@@ -141,6 +146,8 @@ print("レース内相対評価")
 #レース内で正規化し、相対評価に変更
 for i in enumerate(predict):
     print(str(i[0])+"番 複勝確率：{:.3f}".format(i[1][0]),"予想オッズ：{:.3f}".format(1+(1-0.2)/(i[1][0]+0.001)))
+for idx, i in enumerate(predict):
+    print(str(idx+1).zfill(2)+"番 複勝確率：{:.3f}".format(i[0]),"着外確率：{:.3f}".format(i[1]),"予想オッズ：{:.3f}".format(1+(1-0.2)/(i[0]+0.001)))
 
 print(title)
 
