@@ -268,4 +268,4 @@ def makeKeibaDataset(date, train_mode=1):
 	return title
 
 
-makeKeibaDataset("201807010110")
+makeKeibaDataset("201808030406")
