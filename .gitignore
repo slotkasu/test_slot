@@ -7,9 +7,6 @@ pachinko/data/out20200303 - コピー.csv
 netkeiba/__pycache__/results.cpython-37.pyc
 pachinko/data/out20200220.csv
 netkeiba/keiba/~$data_style.xlsx
-*.pyc
-*.pyc
 netkeiba/__pycache__/class_fetch.cpython-37.pyc
-*.pyc
 netkeiba/.vscode/settings.json
 *.pyc
