@@ -37,8 +37,4 @@ for course in course_list:
                     break
 
                 time.sleep(1)
-    
-# for month in month_list:
-#     for cource in cource_list:
-#         for kaisai in kaisai_list:
-#             for race in race_list:
+

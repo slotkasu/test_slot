@@ -18,7 +18,7 @@ def makeKeibaDataset(date, train_mode=1):
 	html = requests.get(url)
 	html.encoding =html.apparent_encoding
 	soup = BeautifulSoup(html.content,'lxml',from_encoding="euc-jp")
-	title=soup.find("title").text
+	title = soup.find("title").text
 	#trタグのHorseListクラスからtr_[0-9]{2}のものだけを抽出
 	horseLists = soup.find_all("tr",class_="HorseList",id=re.compile(r"tr_[0-9]+"))
 	if len(horseLists) == 0:
@@ -30,28 +30,24 @@ def makeKeibaDataset(date, train_mode=1):
 
 	Horseinfo = []#馬情報（前のほうのやつ）
 	#テンプレートのtemp
-	temp_horse=["馬名","着順","オッズ","枠番","馬番","中週","体重","体重増減","牡","牝","セ","馬齢","斤量"]
-	temp_past=["札幌","函館","福島","新潟","東京","中山","中京","京都","阪神","小倉","人気","芝ダ","距離","タイム","良","稍","重","不","頭数","馬番","人気","斤量","通過順1","通過順2","通過順3","通過順4","3ハロン","体重","体重増減","着差"]
-	
+	temp_horse = ["馬名","着順","オッズ","当日芝","当日ダ","当日距離","本日良","本日稍","本日重","本日不","枠番","馬番","中週","体重","体重増減","牡","牝","セ","馬齢","斤量"]
+	temp_past = ["札幌","函館","福島","新潟","東京","中山","中京","京都","阪神","小倉","人気","芝","芝","距離","タイム","良","稍","重","不","頭数","馬番","人気","斤量","通過順1","通過順2","通過順3","通過順4","3ハロン","体重","体重増減","着差"]
 
 	#-------------------------本レースの情報---------------------------
-	#これを各要素の先頭につける
-	# race_information = []
-	# #タグ抜き
-	# base_info = soup.find("div",class_ = "RaceData01")
-	# for i in base_info:
-	# 	#芝1800　みたいなデータが入る
-	# 	temp = i.find("span",class_="Turf").text
-	# 	if len(temp) != 0:
-	# 		#芝ダ
-	# 		race_information.append(temp[:1])
-	# 		#距離
-	# 		race_information.append(temp[2:])
-	# 	#馬場状態
-	# 	temp = i.find("span", class_ = "Item03").text
-	# 	if len(temp) != 0:
-	# 		race_information.append(getStateNum(temp))
-
+	#racedata01に欲しい物が全部入っています
+	baseinfo = soup.find("div",class_ = "RaceData01")
+	#appendする用のリストになります
+	header = []
+	#spanタグに全部あります　全部で3要素です
+	data = baseinfo.find("span")
+	#芝ダート
+	header = header + getShibadaNum(data.text.strip()[0])
+	#距離
+	header.append((re.search(r'\d+',data.text).group()))
+	# #馬場状態
+	temp = baseinfo.find("span", class_ = re.compile('Item\d+'))
+	header= header + getStateNum(temp.text[-1:])
+	
 	#######
 
 	for horseList in horseLists:
@@ -138,7 +134,7 @@ def makeKeibaDataset(date, train_mode=1):
 				detail_past=past.find("div",class_="Data05")
 				#芝ダ
 				if getShibadaNum(detail_past.text[0]) != "-1":
-					temp_past_list.append(getShibadaNum(detail_past.text[0]))
+					temp_past_list = temp_past_list + getShibadaNum(detail_past.text[0])
 				else:
 					print(detail_past.text)
 
@@ -237,17 +233,16 @@ def makeKeibaDataset(date, train_mode=1):
 	#もしくは、テストモードで実行している場合は、処理を分岐させる。
 	if len(RaceInfo) == 0 or train_mode == 0:
 		RaceInfo = Horseinfo
-		
 		del temp_horse[:3]
-		#テストデータとして保存
-		#print(RaceInfo)
+
 		#結果の代わりにレースの基本情報を入れる
-		# for i in RaceInfo:
-		# 	i[0:0] = race_information
+		for i in RaceInfo:
+			i.insert(0,header)
 		
 		file_name='keiba/datasets/'+date+'test.csv'
 	else:
 		for i in range(len(RaceInfo)):
+			RaceInfo[i].extend(header)
 			RaceInfo[i].extend(Horseinfo[i])
 		#訓練データとして保存
 		file_name='keiba/datasets2/'+date+'out.csv'
@@ -262,9 +257,9 @@ def makeKeibaDataset(date, train_mode=1):
 	RaceInfo.insert(0,temp_horse)
 	f = open(file_name,'w',newline = "")
 	writer = csv.writer(f)
-
+	print(len(RaceInfo))
 	writer.writerows(RaceInfo)
-	print("書き込み完了。お疲れさまでした（朧）")
+	#print("書き込み完了。お疲れさまでした（朧）")
 	return title
 
 

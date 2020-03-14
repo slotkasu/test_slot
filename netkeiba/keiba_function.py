@@ -22,11 +22,14 @@ def getRaceNum(raceName):
 #芝ダを引数に番号を返す
 def getShibadaNum(shibadaName):
 	shibada=["芝","ダ"]
+	ls = ["0" for i in shibada]
+	ls.pop(0)
 	if shibadaName in shibada:
-		return str(shibada.index(shibadaName))
+		ls.insert(shibada.index(shibadaName),"1")
+		return ls
 	else:
-		return "-1"
-
+		ls.append("0")
+		return ls
 #性別を引数に番号を返す
 def getSexNum(sexName):
 	#getracenumと同じ
