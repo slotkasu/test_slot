@@ -103,7 +103,7 @@ for i in Y_test:
 Y_test=temp
 
 X_test=np.array(X_test, dtype="float32")
-Y_test=np.array(Y_test, dtype="int")7
+Y_test=np.array(Y_test, dtype="int")
 
 sm = SMOTE(random_state=11)
 X_test, Y_test = sm.fit_sample(X_test,Y_test)
