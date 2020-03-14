@@ -14,13 +14,13 @@ year = '2018'
 date = datetime.datetime.now()
 #競馬場	開催	日目	レース
 
-course_list = [str(i+8).zfill(2) for i in range(1)]
+course_list = [str(i+8).zfill(2) for i in range(2)]
 kaisai_list = [str(i+1).zfill(2) for i in range(4)]
 date_list = [str(i+1).zfill(2) for i in range(9)]
 race_list = [str(i+1).zfill(2) for i in range(12)]
 
 #この番号からはじめる
-skip = 201801040401
+skip = 201808040202
 
 for course in course_list:
 	for kaisai in kaisai_list:
