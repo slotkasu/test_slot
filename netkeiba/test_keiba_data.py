@@ -15,6 +15,7 @@ import seaborn as sn
 from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
 from imblearn.over_sampling import SMOTE
+from tensorflow.python.client import device_lib
 
  
 def print_cmx(y_true, y_pred):
@@ -27,19 +28,21 @@ def print_cmx(y_true, y_pred):
     sn.heatmap(df_cmx, annot=True, fmt='g' ,square = True)
     plt.show()
 
-gpus = tf.config.experimental.list_physical_devices('GPU')
-if gpus:
-  # Restrict TensorFlow to only allocate 1GB of memory on the first GPU
-  try:
-    tf.config.experimental.set_virtual_device_configuration(
-        gpus[0],
-        #GPUの最大使用率を4MBに制限　8GBのままではオーバーフローする。
-        [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=512)])
-    logical_gpus = tf.config.experimental.list_logical_devices('GPU')
-    print(len(gpus), "Physical GPUs,", len(logical_gpus), "Logical GPUs")
-  except RuntimeError as e:
-    # Virtual devices must be set before GPUs have been initialized
-    print(e)
+for i in device_lib.list_local_devices():
+    if i.device_type == "GPU":
+        gpus = tf.config.experimental.list_physical_devices('GPU')
+        if gpus:
+        # Restrict TensorFlow to only allocate 1GB of memory on the first GPU
+            try:
+                tf.config.experimental.set_virtual_device_configuration(
+                    gpus[0],
+                    #GPUの最大使用率を4MBに制限　8GBのままではオーバーフローする。
+                    [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=512)])
+                logical_gpus = tf.config.experimental.list_logical_devices('GPU')
+                print(len(gpus), "Physical GPUs,", len(logical_gpus), "Logical GPUs")
+            except RuntimeError as e:
+                # Virtual devices must be set before GPUs have been initialized
+                print(e)
 
 
 
