@@ -159,11 +159,13 @@ def makeKeibaDataset(date, train_mode=1):
 
 				#データ03
 				data03_past=past.find("div",class_="Data03")
-				
 				#スペース区切りでsplit
 				data03_past=data03_past.text.split()
 				#頭数
-				temp_past_list.append(re.match(r'([0-9]+)',data03_past[0]).group())
+				if re.search(r'([0-9]+)',data03_past[0]):
+					temp_past_list.append(re.match(r'([0-9]+)',data03_past[0]).group())
+				else:
+					temp_past_list.append("0")
 				#馬番
 				temp_past_list.append(re.match(r'([0-9]+)',data03_past[1]).group())
 				#人気
@@ -267,3 +269,4 @@ def makeKeibaDataset(date, train_mode=1):
 	#print("書き込み完了。お疲れさまでした（朧）")
 	return title
 
+makeKeibaDataset("201808030411")
