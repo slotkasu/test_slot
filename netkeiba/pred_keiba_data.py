@@ -51,7 +51,7 @@ if gpus:
 ##
 #札幌 函館 福島 新潟 東京 中山 中京 京都 阪神 小倉
 #  01  02   03   04   05  06  07   08   09   10
-race_name = 202007010512
+race_name = 202006020512
 race_name =  str(race_name)
 title=makeKeibaDataset(race_name)
 
