@@ -108,16 +108,23 @@ predict_classes = model.predict_classes(X_test)
 true_classes = np.argmax(Y_test, 1)
 cmx = confusion_matrix(true_classes, predict_classes)
 print(cmx)
-print_cmx(true_classes, predict_classes)
+#print_cmx(true_classes, predict_classes)
 
 
 # model.save("keiba_model.h5",include_optimizer=False)
 
-for i in [0, 3, 6, 8, 11, 13, 15]:
+for i in [0]:
     # weights 結果をplot
     w1 = model.layers[i].get_weights()[0]
-    plt.imshow(w1, cmap='coolwarm', interpolation='nearest')
-    plt.colorbar()
-    plt.figure()
-    plt.plot((w1**2).mean(axis=1), 'o-')
+    #plt.imshow(w1, cmap='coolwarm', interpolation='nearest')
+    # plt.colorbar()
+    # plt.figure()
+    yoko=[i for i in range(len((w1**2).mean(axis=1)))]
+    # plt.plot((w1**2).mean(axis=1), 'o-')
+    plt.bar(yoko,(w1**2).mean(axis=1))
     plt.show()
+
+    test=(w1**2).mean(axis=1)
+f=open("test.csv","w")
+for i in test:
+    f.write(str(i)+",")
