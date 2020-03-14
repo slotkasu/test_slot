@@ -47,7 +47,7 @@ X=[]
 Y=[]
 
 
-paths = glob.glob("keiba\\datasets\\*out.csv")
+paths = glob.glob("keiba\\datasets2\\*out.csv")
 for path in paths:
     csv_file = open(path, "r", newline="" )
     temp_list = csv.reader(csv_file, delimiter=",")
@@ -57,7 +57,7 @@ for path in paths:
             flag=1
             continue
 
-        if len(i[3:]) == 160:
+        if len(i[3:]) == 172:
             #馬名、着順、オッズ
             Y.append(i[:3])
             X.append(list(map(float,i[3:])))
@@ -67,12 +67,6 @@ temp=[]
 for i in Y:
     if int(i[1])<=3:
         temp.append(0)
-    # elif int(i[1])<=6:
-    #     temp.append(1)
-    # elif int(i[1])<=9:
-    #     temp.append(2)
-    # elif int(i[1])<=11:
-    #     temp.append(3)
     else:
         temp.append(1)
 Y=temp
@@ -102,7 +96,7 @@ X=(X-X_min) / (X_max - X_min)
 #訓練データと試験データ
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y,train_size=0.8)
 
-model = keras.models.load_model("keiba_model_sigsig.h5", compile=False)
+model = keras.models.load_model("keiba_model.h5", compile=False)
 
 predict_classes = model.predict_classes(X_test)
 true_classes = np.argmax(Y_test, 1)
