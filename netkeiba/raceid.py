@@ -14,13 +14,13 @@ year = '2018'
 date = datetime.datetime.now()
 #競馬場	開催	日目	レース
 
-course_list = [str(i+10).zfill(2) for i in range(1)]
+course_list = [str(i+1).zfill(2) for i in range(10)]
 kaisai_list = [str(i+1).zfill(2) for i in range(4)]
 date_list = [str(i+1).zfill(2) for i in range(9)]
 race_list = [str(i+1).zfill(2) for i in range(12)]
 
 #この番号からはじめる
-skip = 201801040401
+skip = year + "08040202"
 
 for course in course_list:
 	for kaisai in kaisai_list:
@@ -28,7 +28,7 @@ for course in course_list:
 			for race in race_list:
 				temp = year+course+kaisai+date+race
 				print(temp)
-				if int(temp) < skip:
+				if int(temp) < int(skip):
 					continue
 				else:
 					kekka = makeKeibaDataset(year+course+kaisai+date+race)

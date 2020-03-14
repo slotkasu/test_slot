@@ -70,7 +70,7 @@ Y_train=to_categorical(Y_train)
 #データを全て正規化（0～1）の間に収める
 X_min=X_train.min(axis=0, keepdims=True)
 X_max=X_train.max(axis=0, keepdims=True)
-X=(X-X_min) / (X_max - X_min)
+X_train=(X_train-X_min) / (X_max - X_min)
 
 X_test=[]
 Y_test=[]
@@ -107,6 +107,10 @@ Y_test=np.array(Y_test, dtype="int")
 
 Y_test=to_categorical(Y_test)
 
+X_min=X_test.min(axis=0, keepdims=True)
+X_max=X_test.max(axis=0, keepdims=True)
+X_test=(X_test-X_min) / (X_max - X_min)
+
 for i in device_lib.list_local_devices():
 	if i.device_type == "GPU":
 		gpus = tf.config.experimental.list_physical_devices('GPU')
@@ -126,11 +130,11 @@ for i in device_lib.list_local_devices():
 
 #ディープラーニングモデル
 model = Sequential()
-model.add(Dense(300, activation='relu', input_shape=(X.shape[1],)))
+model.add(Dense(300, activation='relu', input_shape=(X_train.shape[1],)))
 model.add(Dropout(0.2))
 model.add(Dense(300, activation='relu'))
 model.add(Dropout(0.2))
-model.add(Dense(Y.shape[1], activation='softmax'))
+model.add(Dense(Y_train.shape[1], activation='softmax'))
 
 model.summary()
 
