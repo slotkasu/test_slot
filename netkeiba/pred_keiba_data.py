@@ -82,7 +82,7 @@ X_max=X.max(axis=0, keepdims=True)
 X_test=[]
 
 #レースのurlを入れると予想までやってくれます
-race_name = "202007010504"
+race_name = "202007010505"
 makeKeibaDataset(race_name)
 
 paths = glob.glob("keiba\\datasets\\"+race_name+"test.csv")
