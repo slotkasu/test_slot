@@ -77,19 +77,21 @@ X=(X-X_min) / (X_max - X_min)
 #訓練データと試験データ
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y,train_size=0.8)
 
-# gpus = tf.config.experimental.list_physical_devices('GPU')
-# if gpus:
-#   # Restrict TensorFlow to only allocate 1GB of memory on the first GPU
-#   try:
-# 	tf.config.experimental.set_virtual_device_configuration(
-# 		gpus[0],
-# 		#GPUの最大使用率を4MBに制限　8GBのままではオーバーフローする。
-# 		[tf.config.experimental.VirtualDeviceConfiguration(memory_limit=4096)])
-# 	logical_gpus = tf.config.experimental.list_logical_devices('GPU')
-# 	print(len(gpus), "Physical GPUs,", len(logical_gpus), "Logical GPUs")
-#   except RuntimeError as e:
-# 	# Virtual devices must be set before GPUs have been initialized
-# 	print(e)
+for i in device_lib.list_local_devices():
+    if i.device_type == "GPU":
+        gpus = tf.config.experimental.list_physical_devices('GPU')
+        if gpus:
+        # Restrict TensorFlow to only allocate 1GB of memory on the first GPU
+            try:
+                tf.config.experimental.set_virtual_device_configuration(
+                    gpus[0],
+                    #GPUの最大使用率を4MBに制限　8GBのままではオーバーフローする。
+                    [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=512)])
+                logical_gpus = tf.config.experimental.list_logical_devices('GPU')
+                print(len(gpus), "Physical GPUs,", len(logical_gpus), "Logical GPUs")
+            except RuntimeError as e:
+                # Virtual devices must be set before GPUs have been initialized
+                print(e)
 
 
 #ディープラーニングモデル
