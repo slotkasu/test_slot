@@ -45,7 +45,7 @@ def makeKeibaDataset(date, train_mode=1):
 	#距離
 	header.append((re.search(r'\d+',data.text).group()))
 	# #馬場状態
-	temp = baseinfo.find("span", class_ = re.compile('Item\d+'))
+	temp = baseinfo.find("span", class_ = re.compile(r'Item\d+'))
 	header= header + getStateNum(temp.text[-1:])
 	
 	#######
@@ -257,7 +257,9 @@ def makeKeibaDataset(date, train_mode=1):
 	RaceInfo.insert(0,temp_horse)
 	f = open(file_name,'w',newline = "")
 	writer = csv.writer(f)
-	print(len(RaceInfo))
+	#print(len(RaceInfo[1]))
+	if len(RaceInfo[1]) != 175:
+		print("not 175")
 	writer.writerows(RaceInfo)
 	#print("書き込み完了。お疲れさまでした（朧）")
 	return title

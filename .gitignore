@@ -12,3 +12,5 @@ netkeiba/.vscode/settings.json
 *.pyc
 *.pyc
 netkeiba/keiba/datasets2/*.csv
+netkeiba/keiba/datasets/*.csv
+
