@@ -109,10 +109,10 @@ model.compile(loss='categorical_crossentropy',
 epochs=1000
 
 history = model.fit(X_train, Y_train,
-					batch_size=1024,
-					epochs=epochs,
-					verbose=1,
-					validation_data=(X_test, Y_test))
+                    batch_size=128,
+                    epochs=epochs,
+                    verbose=1,
+                    validation_data=(X_test, Y_test))
 
 print(history.history.keys())
 
