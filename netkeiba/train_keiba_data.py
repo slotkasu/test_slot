@@ -29,26 +29,22 @@ def print_cmx(y_true, y_pred):
     plt.show()
 
 
-
-years=["2019"]
-months=["01","02","03","04","05","06","07","08","09","10","11","12"]
-
 X=[]
 Y=[]
 
-for year in years:
-    paths = glob.glob("keiba\\datasets\\*")
-    for path in paths:
-        csv_file = open(path, "r", newline="" )
-        temp_list = csv.reader(csv_file, delimiter=",")
-        flag=0
-        for i in temp_list:
-            if flag==0:
-                flag=1
-                continue
+
+paths = glob.glob("keiba\\datasets2\\*")
+for path in paths:
+    csv_file = open(path, "r", newline="" )
+    temp_list = csv.reader(csv_file, delimiter=",")
+    flag=0
+    for i in temp_list:
+        if flag==0:
+            flag=1
+            continue
             
             #情報
-            if len(i[3:]) == 160:
+            if len(i[3:]) == 175:
                 #馬名、着順、オッズ
                 Y.append(i[:3])
                 X.append(list(map(float,i[3:])))
@@ -60,24 +56,9 @@ temp=[]
 for i in Y:
     if int(i[1])<=3:
         temp.append(0)
-    # elif int(i[1])<=6:
-    #     temp.append(1)
-    # elif int(i[1])<=9:
-    #     temp.append(2)
-    # elif int(i[1])<=11:
-    #     temp.append(3)
     else:
         temp.append(1)
 Y=temp
-
-
-# cnt=0
-# t_cnt=0
-# for i in Y:
-#     t_cnt+=1
-#     if i == 3:
-#         cnt+=1
-# print(cnt,t_cnt)
 
 X=np.array(X, dtype="float32")
 Y=np.array(Y, dtype="int")
