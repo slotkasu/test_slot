@@ -109,9 +109,6 @@ sm = SMOTE(random_state=11)
 X_test, Y_test = sm.fit_sample(X_test,Y_test)
 Y_test=to_categorical(Y_test)
 
-
-Y_test=to_categorical(Y_test)
-
 X_min=X_test.min(axis=0, keepdims=True)
 X_max=X_test.max(axis=0, keepdims=True)
 X_test=(X_test-X_min) / (X_max - X_min)
