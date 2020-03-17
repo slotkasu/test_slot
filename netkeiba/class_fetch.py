@@ -248,19 +248,20 @@ def makeKeibaDataset(date, train_mode=1):
 
 		
 		#レースの基本情報だけ入れる
-		for i in RaceResult:
-			#複勝オッズを挿入
-			i[0]=FukuOdds
+		for idx,i in enumerate(RaceResult):
 			#リストの先頭に当日情報を挿入
-			i[0]=TodaysInfo
+			i[0:0]=TodaysInfo
+			#複勝オッズを挿入
+			i[0:0]=FukuOdds[idx]
 		file_name='keiba/datasets/'+date+'test.csv'
 	else:
 		
 		for i in range(len(RaceResult)):
+			
+			#最新の複勝オッズ
+			RaceResult[i].extend(FukuOdds[i])
 			#当日データ
 			RaceResult[i].extend(TodaysInfo)
-			#最新の複勝オッズ
-			RaceResult[i].extend(FukuOdds)
 			#各馬の情報
 			RaceResult[i].extend(Horseinfo[i])
 		#訓練データとして保存
@@ -275,7 +276,9 @@ def makeKeibaDataset(date, train_mode=1):
 	f = open(file_name,'w',newline = "")
 	writer = csv.writer(f)
 	#print(len(RaceResult[1]))
-	if len(RaceResult[1]) != 177:
+
+	#trainモード:177が正　testモード：174が正
+	if len(RaceResult[1])-train_mode*3 != 174:
 		print("not 177")
 	writer.writerows(RaceResult)
 	#print("書き込み完了。お疲れさまでした（朧）")
