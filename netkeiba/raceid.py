@@ -19,8 +19,8 @@ kaisai_list = [str(i+1).zfill(2) for i in range(4)]
 date_list = [str(i+1).zfill(2) for i in range(9)]
 race_list = [str(i+1).zfill(2) for i in range(12)]
 
-#この番号からはじめる
-skip = year + "08040202"
+#この番号からはじめる　8桁
+skip = year + "00000000"
 
 for course in course_list:
 	for kaisai in kaisai_list:
@@ -33,6 +33,5 @@ for course in course_list:
 				else:
 					kekka = makeKeibaDataset(year+course+kaisai+date+race)
 					if kekka == 3:
-						time.sleep(1)
 						break
 				

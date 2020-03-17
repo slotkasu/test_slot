@@ -1,5 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+import time
 
 #レース名を引数に番号を返す
 def getRaceNum(raceName):
@@ -59,7 +62,7 @@ def getStateNum(stateName):
 
 
 
-#馬名、着順、オッズをリストで返す
+#馬名、着順、単勝オッズ、複勝オッズ二つをリストで返す
 def getRaceResult(day):
 	url = "https://race.netkeiba.com/race/result.html?race_id="+day+"&rf=race_submenu"
 	html = requests.get(url)
@@ -98,6 +101,48 @@ def getRaceResult(day):
 
 	return results
 
+######複勝オッズを取得######
+def getFuku(day):
+	# ブラウザのオプションを格納する変数をもらってきます。
+	options = Options()
+
+	# Headlessモードを有効にする（コメントアウトするとブラウザが実際に立ち上がります）
+	options.set_headless(True)
+	options.add_argument("--log-level=3")
+
+	# ブラウザを起動する
+	driver = webdriver.Chrome(chrome_options=options)
+
+	driver.get("https://race.netkeiba.com/odds/index.html?type=b1&race_id="+day+"&rf=shutuba_submenu")
+	# time.sleep(0.5)
+	# HTMLを文字コードをUTF-8に変換してから取得します。
+	html = driver.page_source.encode('utf-8')
+
+	# BeautifulSoupで扱えるようにパースします
+	soup = BeautifulSoup(html, "html.parser")
+
+	#複勝のテーブルを取得
+	odds=soup.find("div", id="odds_fuku_block")
+	odds=odds.find_all("tr")
+
+	#結果格納用リスト
+	results=[]
+
+	#各馬に対して複勝オッズを取得
+	for i in odds:
+		#たまにNoneが存在するため、その場合はスキップ
+		if not i == None:
+			#各馬の複勝オッズのみを取得
+			odd=i.find("td",class_="Odds Popular")
+
+			#たまにNoneが存在するため、その場合はスキップ
+			if not odd == None:
+				#最低オッズを取得
+				min_odds=odd.string.split()[0]
+				#最高オッズを取得
+				max_odds=odd.string.split()[2]
+				results.append([min_odds, max_odds])
+	return results
 
 #2:00.0みたいなやつを秒数にする
 def TtoF(time_origin):#stringでください
