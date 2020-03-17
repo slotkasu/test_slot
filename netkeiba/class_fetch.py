@@ -10,8 +10,6 @@ import datetime
 from keiba_function import getRaceNum, getSexNum, getShibadaNum, getStateNum, getRaceResult, TtoF
 from datetime import timedelta
 
-
-
 def makeKeibaDataset(date, train_mode=1):
 	url = "https://race.netkeiba.com/race/shutuba_past.html?race_id="+date+"&rf=shutuba_submenu"
 
@@ -103,7 +101,7 @@ def makeKeibaDataset(date, train_mode=1):
 		#取ってきたやつからspanタグの要素を抽出(2個ある)
 		#2個めの要素が斤量なのでそれをもらう
 		kin = horseList.find("td", class_="Jockey")
-		span = kin.find_all("span")					
+		span = kin.find_all("span")
 		temp_info_list.append(span[1].get_text())
 	
 		#ここからPast
@@ -175,12 +173,12 @@ def makeKeibaDataset(date, train_mode=1):
 					temp_past_list.append("0")
 				#斤量
 				temp_past_list.append(re.match(r'([0-9]+)',data03_past[4]).group())
-				
+
 				#データ06
 				data06_past=past.find("div",class_="Data06")
 				#スペース区切り
 				data06_past=data06_past.text.split()
-				
+
 				#通過順がある場合
 				if re.search(r'^\d',data06_past[0]):
 					#通過順を"-"でスプリット
@@ -216,13 +214,13 @@ def makeKeibaDataset(date, train_mode=1):
 						temp_past_list.append(horse_weight_diff)
 					else:
 						temp_past_list.append("0")
-				
+
 				#体重と体重増減のデータが無い場合の考慮
 				#0で埋めておく
 				else:
 					temp_past_list.append("0")
 					temp_past_list.append("0")
-				
+
 				#着差用データ
 				data07_past_text=past.find("div",class_="Data07").text
 				#着差
@@ -230,7 +228,7 @@ def makeKeibaDataset(date, train_mode=1):
 
 		#現在と過去の情報を結合させる。
 		Horseinfo.append(temp_info_list+temp_past_list)
-	
+
 	#レース結果のデータと結合させる。
 	RaceInfo=getRaceResult(date)
 	
@@ -239,13 +237,13 @@ def makeKeibaDataset(date, train_mode=1):
 	#当日の開催なら結果がないので処理を分岐させる
 	#もしくは、テストモードで実行している場合は、処理を分岐させる。
 	if len(RaceInfo) == 0 or train_mode == 0:
+		
 		RaceInfo = Horseinfo
 		del temp_horse[:3]
-
 		#結果の代わりにレースの基本情報を入れる
 		for i in RaceInfo:
-			i.insert(0,header)
-		
+			#リストの先頭にヘッダを挿入
+			i[0:0]=header
 		file_name='keiba/datasets/'+date+'test.csv'
 	else:
 		for i in range(len(RaceInfo)):
@@ -268,5 +266,3 @@ def makeKeibaDataset(date, train_mode=1):
 	writer.writerows(RaceInfo)
 	#print("書き込み完了。お疲れさまでした（朧）")
 	return title
-
-makeKeibaDataset("201808030411")
