@@ -44,10 +44,10 @@ for path in paths:
 			flag=1
 			continue
 		#情報
-		if len(i[3:]) == 172:
+		if len(i[5:]) == 172:
 			#馬名、着順、オッズ
-			Y_train.append(i[:3])
-			X_train.append(list(map(float,i[3:])))
+			Y_train.append(i[:5])
+			X_train.append(list(map(float,i[5:])))
 
 #3位以内は1、4位以降は0にする
 temp=[]
@@ -87,10 +87,10 @@ for path in paths:
 			flag=1
 			continue
 		#情報
-		if len(i[3:]) == 172:
+		if len(i[5:]) == 172:
 			#馬名、着順、オッズ
-			Y_test.append(i[:3])
-			X_test.append(list(map(float,i[3:])))
+			Y_test.append(i[:5])
+			X_test.append(list(map(float,i[5:])))
 
 #3位以内は1、4位以降は0にする
 temp=[]

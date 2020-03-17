@@ -17,6 +17,7 @@ import matplotlib.pyplot as plt
 from imblearn.over_sampling import SMOTE
 from tensorflow.python.client import device_lib
 
+#学習済みNNを解析する　あとで変える
 
 def print_cmx(y_true, y_pred):
     labels = sorted(list(set(y_true)))
