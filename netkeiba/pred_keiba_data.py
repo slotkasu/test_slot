@@ -51,7 +51,7 @@ if gpus:
 ##
 #札幌 函館 福島 新潟 東京 中山 中京 京都 阪神 小倉
 #  01  02   03   04   05  06  07   08   09   10
-race_name = 202009010607
+race_name = 202009010604
 race_name =  str(race_name)
 title=makeKeibaDataset(race_name, train_mode=0)
 
@@ -74,13 +74,15 @@ for path in paths:
 			flag=1
 			continue
 
-		if len(i[3:]) == 172:
+		if len(i[5:]) == 172:
 			#馬名、着順、オッズ
-			Y.append(i[:3])
-			X.append(list(map(float,i[3:])))
+			Y.append(i[:5])
+			X.append(list(map(float,i[5:])))
 
 temp=[]
+
 for i in Y:
+	#3着以内
 	if int(i[1])<=3:
 		temp.append(0)
 	else:
@@ -110,7 +112,7 @@ for path in paths:
 		if flag==0:
 			flag=1
 			continue
-		X_test.append(list(map(float,i)))
+		X_test.append(list(map(float,i[2:])))
 
 
 X_test=np.array(X_test, dtype="float32")
