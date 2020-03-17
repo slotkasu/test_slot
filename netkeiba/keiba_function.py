@@ -137,7 +137,7 @@ def getFuku(date):
 
 			#たまにNoneが存在するため、その場合はスキップ
 			if not odd == None:
-				if odd.string.split() != 3:
+				if len(odd.string.split()) != 3:
 					results.append(["0", "0"])
 					f=open("badlist.txt","a")
 					f.write(date+"\n")
