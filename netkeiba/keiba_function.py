@@ -63,8 +63,8 @@ def getStateNum(stateName):
 
 
 #馬名、着順、単勝オッズ、複勝オッズ二つをリストで返す
-def getRaceResult(day):
-	url = "https://race.netkeiba.com/race/result.html?race_id="+day+"&rf=race_submenu"
+def getRaceResult(date):
+	url = "https://race.netkeiba.com/race/result.html?race_id="+date+"&rf=race_submenu"
 	html = requests.get(url)
 	html.encoding = html.apparent_encoding
 	soup = BeautifulSoup(html.content,'html.parser')
@@ -102,7 +102,7 @@ def getRaceResult(day):
 	return results
 
 ######複勝オッズを取得######
-def getFuku(day):
+def getFuku(date):
 	# ブラウザのオプションを格納する変数をもらってきます。
 	options = Options()
 
@@ -113,7 +113,7 @@ def getFuku(day):
 	# ブラウザを起動する
 	driver = webdriver.Chrome(chrome_options=options)
 
-	driver.get("https://race.netkeiba.com/odds/index.html?type=b1&race_id="+day+"&rf=shutuba_submenu")
+	driver.get("https://race.netkeiba.com/odds/index.html?type=b1&race_id="+date+"&rf=shutuba_submenu")
 	# time.sleep(0.5)
 	# HTMLを文字コードをUTF-8に変換してから取得します。
 	html = driver.page_source.encode('utf-8')

@@ -7,7 +7,7 @@ import csv
 import pprint
 import time
 import datetime
-from keiba_function import getRaceNum, getSexNum, getShibadaNum, getStateNum, getRaceResult, TtoF
+from keiba_function import getRaceNum, getSexNum, getShibadaNum, getStateNum, getRaceResult, TtoF, getFuku
 from datetime import timedelta
 
 def makeKeibaDataset(date, train_mode=1):
@@ -28,25 +28,25 @@ def makeKeibaDataset(date, train_mode=1):
 
 	Horseinfo = []#馬情報（前のほうのやつ）
 	#テンプレートのtemp
-	temp_horse = ["馬名","着順","オッズ","当日芝","当日ダ","当日距離","本日良","本日稍","本日重","本日不","枠番","馬番","中週","体重","体重増減","牡","牝","セ","馬齢","斤量"]
+	temp_horse = ["馬名","着順","単オッズ","複オッズ小","複オッズ大","当日芝","当日ダ","当日距離","本日良","本日稍","本日重","本日不","枠番","馬番","中週","体重","体重増減","牡","牝","セ","馬齢","斤量"]
 	temp_past = ["札幌","函館","福島","新潟","東京","中山","中京","京都","阪神","小倉","着順","芝","ダ","距離","タイム","良","稍","重","不","頭数","馬番","人気","斤量","通過順1","通過順2","通過順3","通過順4","3ハロン","体重","体重増減","着差"]
 
 	#-------------------------本レースの情報---------------------------
 	#racedata01に欲しい物が全部入っています
 	baseinfo = soup.find("div",class_ = "RaceData01")
 	#appendする用のリストになります
-	header = []
+	TodaysInfo = []
 	#spanタグに全部あります　全部で3要素です
 	data = baseinfo.find("span")
 	#芝ダート
 	if data.text.strip()[0] == "障":
 		return 2
-	header = header + getShibadaNum(data.text.strip()[0])
+	TodaysInfo = TodaysInfo + getShibadaNum(data.text.strip()[0])
 	#距離
-	header.append((re.search(r'\d+',data.text).group()))
+	TodaysInfo.append((re.search(r'\d+',data.text).group()))
 	# #馬場状態
 	temp = baseinfo.find("span", class_ = re.compile(r'Item\d+'))
-	header= header + getStateNum(temp.text[-1:])
+	TodaysInfo= TodaysInfo + getStateNum(temp.text[-1:])
 	
 	#######
 
@@ -230,39 +230,53 @@ def makeKeibaDataset(date, train_mode=1):
 		Horseinfo.append(temp_info_list+temp_past_list)
 
 	#レース結果のデータと結合させる。
-	RaceInfo=getRaceResult(date)
+	RaceResult=getRaceResult(date)
 	
 	file_name=""
 
+	#複勝オッズを取得
+	FukuOdds=getFuku(date)
+
 	#当日の開催なら結果がないので処理を分岐させる
 	#もしくは、テストモードで実行している場合は、処理を分岐させる。
-	if len(RaceInfo) == 0 or train_mode == 0:
+	if len(RaceResult) == 0 or train_mode == 0:
 		
-		RaceInfo = Horseinfo
+		RaceResult = Horseinfo
+
+		#テンプレートから三つ目までを削除
 		del temp_horse[:3]
-		#結果の代わりにレースの基本情報を入れる
-		for i in RaceInfo:
-			#リストの先頭にヘッダを挿入
-			i[0:0]=header
+
+		
+		#レースの基本情報だけ入れる
+		for i in RaceResult:
+			#複勝オッズを挿入
+			i[0]=FukuOdds
+			#リストの先頭に当日情報を挿入
+			i[0]=TodaysInfo
 		file_name='keiba/datasets/'+date+'test.csv'
 	else:
-		for i in range(len(RaceInfo)):
-			RaceInfo[i].extend(header)
-			RaceInfo[i].extend(Horseinfo[i])
+		
+		for i in range(len(RaceResult)):
+			#当日データ
+			RaceResult[i].extend(TodaysInfo)
+			#最新の複勝オッズ
+			RaceResult[i].extend(FukuOdds)
+			#各馬の情報
+			RaceResult[i].extend(Horseinfo[i])
 		#訓練データとして保存
 		file_name='keiba/datasets2/'+date[0:4]+"/"+date+'out.csv'
 	#csv書き込み
-	RaceInfo=[i for i in RaceInfo if not "中止" in i]
+	RaceResult=[i for i in RaceResult if not "中止" in i]
 
 	for i in range(5):
 		temp_horse.extend(temp_past)
 
-	RaceInfo.insert(0,temp_horse)
+	RaceResult.insert(0,temp_horse)
 	f = open(file_name,'w',newline = "")
 	writer = csv.writer(f)
-	#print(len(RaceInfo[1]))
-	if len(RaceInfo[1]) != 175:
-		print("not 175")
-	writer.writerows(RaceInfo)
+	#print(len(RaceResult[1]))
+	if len(RaceResult[1]) != 177:
+		print("not 177")
+	writer.writerows(RaceResult)
 	#print("書き込み完了。お疲れさまでした（朧）")
 	return title
