@@ -137,6 +137,13 @@ def getFuku(date):
 
 			#たまにNoneが存在するため、その場合はスキップ
 			if not odd == None:
+				if odd.string.split() != 3:
+					results.append(["0", "0"])
+					f=open("badlist.txt","a")
+					f.write(date+"\n")
+					f.close()
+					continue
+
 				#最低オッズを取得
 				min_odds=odd.string.split()[0]
 				#最高オッズを取得

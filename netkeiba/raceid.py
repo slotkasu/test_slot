@@ -21,7 +21,7 @@ date_list = [str(i+1).zfill(2) for i in range(9)]
 race_list = [str(i+1).zfill(2) for i in range(6)]
 
 #この番号からはじめる　8桁
-skip = year + "00000000"
+skip = year + "01010401"
 
 for course in course_list:
 	for kaisai in kaisai_list:
