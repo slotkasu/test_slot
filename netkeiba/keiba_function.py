@@ -123,6 +123,10 @@ def getFuku(date):
 
 	#複勝のテーブルを取得
 	odds=soup.find("div", id="odds_fuku_block")
+	if odds ==None:
+		f=open("toobad.txt","a")
+		f.write(date+"\n")
+		f.close()
 	odds=odds.find_all("tr")
 
 	#結果格納用リスト
