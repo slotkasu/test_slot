@@ -120,10 +120,13 @@ def getFuku(date):
 
 	# BeautifulSoupで扱えるようにパースします
 	soup = BeautifulSoup(html, "html.parser")
-
 	#複勝のテーブルを取得
 	odds=soup.find("div", id="odds_fuku_block")
-	odds=odds.find_all("tr")
+	#副賞のやつがないときは、呼び出し元で処理させる　class_fetch --> l.240らへん
+	if odds == None:
+		return 0
+	else:
+		odds=odds.find_all("tr")
 
 	#結果格納用リスト
 	results=[]
