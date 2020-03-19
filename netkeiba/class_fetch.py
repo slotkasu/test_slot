@@ -236,6 +236,9 @@ def makeKeibaDataset(date, train_mode=1):
 
 	#複勝オッズを取得
 	FukuOdds=getFuku(date)
+	#エラー処理
+	if FukuOdds == 0:
+		FukuOdds = [["0","0"] for i in range(len(Horseinfo))]
 
 	#当日の開催なら結果がないので処理を分岐させる
 	#もしくは、テストモードで実行している場合は、処理を分岐させる。
@@ -283,3 +286,6 @@ def makeKeibaDataset(date, train_mode=1):
 	writer.writerows(RaceResult)
 	#print("書き込み完了。お疲れさまでした（朧）")
 	return title
+
+
+makeKeibaDataset("201805010512")
