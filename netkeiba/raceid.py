@@ -17,11 +17,12 @@ date = datetime.datetime.now()
 course_list = [str(i+1).zfill(2) for i in range(10)]
 kaisai_list = [str(i+1).zfill(2) for i in range(4)]
 date_list = [str(i+1).zfill(2) for i in range(9)]
-# race_list = [str(i+7).zfill(2) for i in range(12)]
-race_list = [str(i+1).zfill(2) for i in range(6)]
+race_list = [str(i+7).zfill(2) for i in range(6)]
+#race_list = [str(i+1).zfill(2) for i in range(6)]
 
 #この番号からはじめる　8桁
-skip = year + "01010401"
+
+skip = year + "05010512" #"00000000"
 
 for course in course_list:
 	for kaisai in kaisai_list:

@@ -16,7 +16,7 @@ from datetime import timedelta
 
 #取ってくる日付の指定 default = -1
 #2日前がほしい→-2　7日前がほしい→-7
-calendar_i = -13
+calendar_i = -11
 
 def getCalendar(i):
 	now = datetime.date.today()-datetime.timedelta(days = -i)
