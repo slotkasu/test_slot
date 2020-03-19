@@ -9,7 +9,7 @@ import datetime
 from datetime import timedelta
 from class_fetch import makeKeibaDataset
 
-year = '2018'
+year = '2019'
 
 date = datetime.datetime.now()
 #競馬場	開催	日目	レース
@@ -17,12 +17,12 @@ date = datetime.datetime.now()
 course_list = [str(i+1).zfill(2) for i in range(10)]
 kaisai_list = [str(i+1).zfill(2) for i in range(4)]
 date_list = [str(i+1).zfill(2) for i in range(9)]
-race_list = [str(i+7).zfill(2) for i in range(6)]
-#race_list = [str(i+1).zfill(2) for i in range(6)]
+# race_list = [str(i+7).zfill(2) for i in range(6)]
+race_list = [str(i+1).zfill(2) for i in range(6)]
 
 #この番号からはじめる　8桁
 
-skip = year + "05010512" #"00000000"
+skip = year + "00000000" #"00000000"
 
 for course in course_list:
 	for kaisai in kaisai_list:
