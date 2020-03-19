@@ -58,12 +58,15 @@ for i in Y_train:
 		temp.append(1)
 Y_train=temp
 
+
 X_train=np.array(X_train, dtype="float32")
 Y_train=np.array(Y_train, dtype="int")
 
-
+#データを増やす
 sm = SMOTE(random_state=11)
 X_train, Y_train = sm.fit_sample(X_train,Y_train)
+
+#ワンホットベクトルに変えるよ
 Y_train=to_categorical(Y_train)
 
 #データを全て正規化（0～1）の間に収める
