@@ -62,6 +62,8 @@ Y_train=temp
 X_train=np.array(X_train, dtype="float32")
 Y_train=np.array(Y_train, dtype="int")
 
+
+
 #データを増やす
 sm = SMOTE(random_state=11)
 X_train, Y_train = sm.fit_sample(X_train,Y_train)
@@ -106,6 +108,10 @@ Y_test=temp
 
 X_test=np.array(X_test, dtype="float32")
 Y_test=np.array(Y_test, dtype="int")
+
+
+print(X_test.shape)
+print(Y_test.shape)
 
 sm = SMOTE(random_state=11)
 X_test, Y_test = sm.fit_sample(X_test,Y_test)
