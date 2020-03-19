@@ -146,7 +146,7 @@ model.compile(loss='categorical_crossentropy',
 			  optimizer=optimizers.SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True),
 			  metrics=['accuracy'])
 
-epochs=500
+epochs=100
 
 history = model.fit(X_train, Y_train,
 					batch_size=800,
