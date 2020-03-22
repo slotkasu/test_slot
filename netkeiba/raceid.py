@@ -36,4 +36,3 @@ for course in course_list:
 					kekka = makeKeibaDataset(year+course+kaisai+date+race)
 					if kekka == 3:
 						break
-				
