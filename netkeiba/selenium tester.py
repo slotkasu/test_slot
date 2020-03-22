@@ -15,7 +15,7 @@ options.add_argument("--log-level=3")
 driver = webdriver.Chrome(chrome_options=options)
 
 # ブラウザでアクセスする
-date="201808030411"
+date="202009010711"
 
 driver.get("https://race.netkeiba.com/odds/index.html?type=b1&race_id="+date+"&rf=shutuba_submenu")
 # time.sleep(0.5)
