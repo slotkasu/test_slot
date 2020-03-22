@@ -51,7 +51,7 @@ for path in paths:
 		if len(i[5:]) == 172:
 			temp_c0=i[5:].count("0")
 			count0.append(temp_c0)
-			if temp_c0 >83:
+			if temp_c0 >100:
 				continue
 			#馬名、着順、オッズ
 			Y_train.append(i[:5])
@@ -66,9 +66,9 @@ print('中央値: {0:.2f}'.format(median))
 print('分散: {0:.2f}'.format(variance))
 print('標準偏差: {0:.2f}'.format(stdev))
 
-plt.hist(count0);
-plt.show()
-exit()
+# plt.hist(count0);
+# plt.show()
+# exit()
 
 
 
@@ -88,13 +88,13 @@ Y_train=np.array(Y_train, dtype="int")
 
 
 #データを増やす
-# sm = SMOTE()
-se = SMOTETomek(random_state=42)
+sm = SMOTE()
+se = SMOTEENN(random_state=42)
 len0 = len([i for i in Y_train if i == 0])
 len1 = len([i for i in Y_train if i == 1])
 print(len0,len1)
-# X_train, Y_train = sm.fit_sample(X_train,Y_train)
-X_train, Y_train = se.fit_resample(X_train,Y_train)
+X_train, Y_train = sm.fit_sample(X_train,Y_train)
+# X_train, Y_train = se.fit_resample(X_train,Y_train)
 len0 = len([i for i in Y_train if i == 0])
 len1 = len([i for i in Y_train if i == 1])
 print(len0,len1)
@@ -124,7 +124,7 @@ for path in paths:
 			continue
 		#情報
 		if len(i[5:]) == 172:
-			if i[5:].count("0") > 83:
+			if i[5:].count("0") > 100:
 				continue
 			#馬名、着順、オッズ
 			Y_test.append(i[:5])
@@ -142,7 +142,7 @@ Y_test=temp
 X_test=np.array(X_test, dtype="float32")
 Y_test=np.array(Y_test, dtype="int")
 
-
+print(len(Y_test))
 Y_test=to_categorical(Y_test)
 
 # X_min=X_test.min(axis=0, keepdims=True)
@@ -180,10 +180,10 @@ model.compile(loss='categorical_crossentropy',
 			  optimizer=optimizers.Adam(),
 			  metrics=['accuracy'])
 
-epochs=200
+epochs=50
 
 history = model.fit(X_train, Y_train,
-					batch_size=2048,
+					batch_size=512,
 					epochs=epochs,
 					verbose=1,
 					validation_data=(X_test, Y_test))
@@ -206,7 +206,7 @@ predict_classes = model.predict_classes(X_test)
 true_classes = np.argmax(Y_test, 1)
 cmx = confusion_matrix(true_classes, predict_classes)
 print(cmx)
-print_cmx(true_classes, predict_classes)
+# print_cmx(true_classes, predict_classes)
 
 print('Test loss:', score[0])
 print('Test accuracy:', score[1])
