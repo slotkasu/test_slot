@@ -71,7 +71,10 @@ def makeKeibaDataset(date, train_mode=1):
 		#体重、体重増減
 		#体重は484kg(-4)のような形で与えられるので、kgを境に分割
 		#増減のほうは括弧を削って格納
-		weight = horseList.find("div", class_="Weight").get_text().strip().split("kg")
+		if horseList.find("div", class_="Weight")==None:
+			weight=[]
+		else:
+			weight = horseList.find("div", class_="Weight").get_text().strip().split("kg")
 
 		if len(weight)==2:
 			#体重

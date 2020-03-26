@@ -14,8 +14,10 @@ from sklearn.metrics import confusion_matrix
 import pandas as pd
 import seaborn as sn
 import matplotlib.pyplot as plt
-from imblearn.over_sampling import SMOTE
+from imblearn.over_sampling import SVMSMOTE, SMOTE
+from imblearn.combine import SMOTEENN, SMOTETomek
 from tensorflow.python.client import device_lib
+from statistics import mean, median,variance,stdev
 
  
 def print_cmx(y_true, y_pred):
@@ -32,8 +34,10 @@ def print_cmx(y_true, y_pred):
 X_train=[]
 Y_train=[]
 
+count0=[]
 #trainデータを読み込み
 paths = glob.glob("keiba\\datasets2\\2018\\*")
+paths=paths+glob.glob("keiba\\datasets2\\2017\\*")
 for path in paths:
 	#print(path)
 	csv_file = open(path, "r", newline="" )
@@ -45,9 +49,28 @@ for path in paths:
 			continue
 		#情報
 		if len(i[5:]) == 172:
+			temp_c0=i[5:].count("0")
+			count0.append(temp_c0)
+			if temp_c0 >100:
+				continue
 			#馬名、着順、オッズ
 			Y_train.append(i[:5])
 			X_train.append(list(map(float,i[5:])))
+
+m = mean(count0)
+median = median(count0)
+variance = variance(count0)
+stdev = stdev(count0)
+print('平均: {0:.2f}'.format(m))
+print('中央値: {0:.2f}'.format(median))
+print('分散: {0:.2f}'.format(variance))
+print('標準偏差: {0:.2f}'.format(stdev))
+
+# plt.hist(count0);
+# plt.show()
+# exit()
+
+
 
 #3位以内は1、4位以降は0にする
 temp=[]
@@ -65,8 +88,16 @@ Y_train=np.array(Y_train, dtype="int")
 
 
 #データを増やす
-sm = SMOTE(random_state=11)
+sm = SMOTE()
+se = SMOTEENN(random_state=42)
+len0 = len([i for i in Y_train if i == 0])
+len1 = len([i for i in Y_train if i == 1])
+print(len0,len1)
 X_train, Y_train = sm.fit_sample(X_train,Y_train)
+# X_train, Y_train = se.fit_resample(X_train,Y_train)
+len0 = len([i for i in Y_train if i == 0])
+len1 = len([i for i in Y_train if i == 1])
+print(len0,len1)
 
 #ワンホットベクトルに変えるよ
 Y_train=to_categorical(Y_train)
@@ -93,6 +124,8 @@ for path in paths:
 			continue
 		#情報
 		if len(i[5:]) == 172:
+			if i[5:].count("0") > 100:
+				continue
 			#馬名、着順、オッズ
 			Y_test.append(i[:5])
 			X_test.append(list(map(float,i[5:])))
@@ -109,16 +142,11 @@ Y_test=temp
 X_test=np.array(X_test, dtype="float32")
 Y_test=np.array(Y_test, dtype="int")
 
-
-print(X_test.shape)
-print(Y_test.shape)
-
-sm = SMOTE(random_state=11)
-X_test, Y_test = sm.fit_sample(X_test,Y_test)
+print(len(Y_test))
 Y_test=to_categorical(Y_test)
 
-X_min=X_test.min(axis=0, keepdims=True)
-X_max=X_test.max(axis=0, keepdims=True)
+# X_min=X_test.min(axis=0, keepdims=True)
+# X_max=X_test.max(axis=0, keepdims=True)
 X_test=(X_test-X_min) / (X_max - X_min)
 
 for i in device_lib.list_local_devices():
@@ -140,22 +168,22 @@ for i in device_lib.list_local_devices():
 
 #ディープラーニングモデル
 model = Sequential()
-model.add(Dense(128, activation='relu', input_shape=(X_train.shape[1],)))
+model.add(Dense(128, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001), input_shape=(X_train.shape[1],),))
 model.add(Dropout(0.2))
-model.add(Dense(128, activation='relu'))
+model.add(Dense(128, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001)))
 model.add(Dropout(0.2))
 model.add(Dense(Y_train.shape[1], activation='softmax'))
 
 model.summary()
 
 model.compile(loss='categorical_crossentropy',
-			  optimizer=optimizers.SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True),
+			  optimizer=optimizers.Adam(),
 			  metrics=['accuracy'])
 
-epochs=100
+epochs=50
 
 history = model.fit(X_train, Y_train,
-					batch_size=800,
+					batch_size=512,
 					epochs=epochs,
 					verbose=1,
 					validation_data=(X_test, Y_test))
@@ -165,8 +193,8 @@ print(history.history.keys())
 #学習精度とバリデーションの制度をplot
 plt.plot(range(1, epochs+1), history.history['accuracy'], label="training")
 plt.plot(range(1, epochs+1), history.history['val_accuracy'], label="validation")
-plt.plot(range(1, epochs+1), history.history['loss'], label="train_loss")
-plt.plot(range(1, epochs+1), history.history['val_loss'], label="valid_loss")
+# plt.plot(range(1, epochs+1), history.history['loss'], label="train_loss")
+# plt.plot(range(1, epochs+1), history.history['val_loss'], label="valid_loss")
 plt.xlabel('Epochs')
 plt.ylabel('Accuracy')
 plt.legend()
@@ -178,7 +206,7 @@ predict_classes = model.predict_classes(X_test)
 true_classes = np.argmax(Y_test, 1)
 cmx = confusion_matrix(true_classes, predict_classes)
 print(cmx)
-print_cmx(true_classes, predict_classes)
+# print_cmx(true_classes, predict_classes)
 
 print('Test loss:', score[0])
 print('Test accuracy:', score[1])

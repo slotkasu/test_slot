@@ -1,6 +1,7 @@
 import tensorflow as tf
 import csv
 import glob
+import os
 import numpy as np
 from sklearn.model_selection import train_test_split
 import keras
@@ -51,15 +52,19 @@ if gpus:
 ##
 #札幌 函館 福島 新潟 東京 中山 中京 京都 阪神 小倉
 #  01  02   03   04   05  06  07   08   09   10
-race_name = 202009010604
+race_name = 201801010603
 race_name =  str(race_name)
-title=makeKeibaDataset(race_name, train_mode=0)
+test_file="keiba\\datasets\\"+race_name+"test.csv"
+
+if not os.path.isfile(test_file):
+	title=makeKeibaDataset(race_name, train_mode=0)
+	if type(title) == type(0):
+		print("無理やわ。")
+		exit()
 
 #####################################################################################
 
-if type(title) == type(0):
-	print("無理やわ。")
-	exit()
+
 
 X=[]
 Y=[]
@@ -155,7 +160,7 @@ print("レース内相対評価")
 for i in predict:
 	print(str(i[0]+1).zfill(2)+"番 複勝確率：{:.3f}".format(i[1][0]),"予想オッズ：{:.3f}".format(1+(1-0.2)/(i[1][0]+0.001)))
 
-print(title)
+# print(title)
 
 # predict_classes = model.predict_classes(X_test)
 # for idx,i in enumerate(predict_classes):

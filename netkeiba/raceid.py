@@ -9,7 +9,7 @@ import datetime
 from datetime import timedelta
 from class_fetch import makeKeibaDataset
 
-year = '2019'
+year = '2017'
 
 date = datetime.datetime.now()
 #競馬場	開催	日目	レース
