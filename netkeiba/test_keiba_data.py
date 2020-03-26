@@ -49,7 +49,8 @@ X=[]
 Y=[]
 
 
-paths = glob.glob("keiba\\datasets2\\2018\\*out.csv")
+paths = glob.glob("keiba\\datasets2\\2018\\*")
+paths=paths+glob.glob("keiba\\datasets2\\2017\\*")
 for path in paths:
     csv_file = open(path, "r", newline="" )
     temp_list = csv.reader(csv_file, delimiter=",")
@@ -59,10 +60,13 @@ for path in paths:
             flag=1
             continue
 
-        if len(i[3:]) == 172:
+        if len(i[5:]) == 172:
+            temp_c0=i[5:].count("0")
+            if temp_c0 >100:
+                continue
             #馬名、着順、オッズ
-            Y.append(i[:3])
-            X.append(list(map(float,i[3:])))
+            Y.append(i[:5])
+            X.append(list(map(float,i[5:])))
 
 #3位以内は1、4位以降は0にする
 temp=[]
@@ -76,7 +80,7 @@ Y=temp
 X=np.array(X, dtype="float32")
 Y=np.array(Y, dtype="int")
 
-sm = SMOTE(random_state=11)
+sm = SMOTE(random_state=42)
 X, Y = sm.fit_sample(X,Y)
 Y=to_categorical(Y)
 

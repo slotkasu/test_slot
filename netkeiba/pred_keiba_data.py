@@ -52,7 +52,7 @@ if gpus:
 ##
 #札幌 函館 福島 新潟 東京 中山 中京 京都 阪神 小倉
 #  01  02   03   04   05  06  07   08   09   10
-race_name = 201801010603
+race_name = 202006020810
 race_name =  str(race_name)
 test_file="keiba\\datasets\\"+race_name+"test.csv"
 
@@ -68,7 +68,8 @@ if not os.path.isfile(test_file):
 
 X=[]
 Y=[]
-paths = glob.glob("keiba\\datasets2\\2018\\*out.csv")
+paths = glob.glob("keiba\\datasets2\\2018\\*")
+paths=paths+glob.glob("keiba\\datasets2\\2017\\*")
 for path in paths:
 	csv_file = open(path, "r", newline="" )
 	temp_list = csv.reader(csv_file, delimiter=",")
@@ -80,6 +81,9 @@ for path in paths:
 			continue
 
 		if len(i[5:]) == 172:
+			temp_c0=i[5:].count("0")
+			if temp_c0 >100:
+				continue
 			#馬名、着順、オッズ
 			Y.append(i[:5])
 			X.append(list(map(float,i[5:])))
@@ -117,7 +121,10 @@ for path in paths:
 		if flag==0:
 			flag=1
 			continue
-		X_test.append(list(map(float,i[2:])))
+		if len(i[5:]) == 172:
+			if i[5:].count("0") > 100:
+				continue
+			X_test.append(list(map(float,i[2:])))
 
 
 X_test=np.array(X_test, dtype="float32")

@@ -2,6 +2,7 @@ import tensorflow as tf
 import csv
 import glob
 import os
+import re
 import subprocess
 import numpy as np
 from sklearn.model_selection import train_test_split
@@ -71,7 +72,6 @@ print('標準偏差: {0:.2f}'.format(stdev))
 # exit()
 
 
-
 #3位以内は1、4位以降は0にする
 temp=[]
 for i in Y_train:
@@ -93,8 +93,8 @@ se = SMOTEENN(random_state=42)
 len0 = len([i for i in Y_train if i == 0])
 len1 = len([i for i in Y_train if i == 1])
 print(len0,len1)
-X_train, Y_train = sm.fit_sample(X_train,Y_train)
-# X_train, Y_train = se.fit_resample(X_train,Y_train)
+# X_train, Y_train = sm.fit_sample(X_train,Y_train)
+X_train, Y_train = se.fit_resample(X_train,Y_train)
 len0 = len([i for i in Y_train if i == 0])
 len1 = len([i for i in Y_train if i == 1])
 print(len0,len1)
@@ -110,11 +110,12 @@ X_train=(X_train-X_min) / (X_max - X_min)
 X_test=[]
 Y_test=[]
 
+test_paths=[]
 
 #testデータを読み込み
 paths = glob.glob("keiba\\datasets2\\2019\\*")
 for path in paths:
-	#print(path)
+	
 	csv_file = open(path, "r", newline="" )
 	temp_list = csv.reader(csv_file, delimiter=",")
 	flag=0
@@ -126,6 +127,13 @@ for path in paths:
 		if len(i[5:]) == 172:
 			if i[5:].count("0") > 100:
 				continue
+			race_id=path.split("\\")[-1]
+			race_id=re.search(r'\d+',race_id).group()
+			# print(race_id)
+			# print(race_id[6:10])
+			# if not race_id[6:10] == "0101":
+			# 	continue
+			test_paths.append(race_id)
 			#馬名、着順、オッズ
 			Y_test.append(i[:5])
 			X_test.append(list(map(float,i[5:])))
@@ -137,6 +145,11 @@ for i in Y_test:
 		temp.append(0)
 	else:
 		temp.append(1)
+
+
+odds=[i[3] for i in Y_test]
+# print(odds)
+
 Y_test=temp
 
 X_test=np.array(X_test, dtype="float32")
@@ -168,7 +181,7 @@ for i in device_lib.list_local_devices():
 
 #ディープラーニングモデル
 model = Sequential()
-model.add(Dense(128, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001), input_shape=(X_train.shape[1],),))
+model.add(Dense(300, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001), input_shape=(X_train.shape[1],),))
 model.add(Dropout(0.2))
 model.add(Dense(128, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001)))
 model.add(Dropout(0.2))
@@ -180,7 +193,7 @@ model.compile(loss='categorical_crossentropy',
 			  optimizer=optimizers.Adam(),
 			  metrics=['accuracy'])
 
-epochs=50
+epochs=100
 
 history = model.fit(X_train, Y_train,
 					batch_size=512,
@@ -207,6 +220,48 @@ true_classes = np.argmax(Y_test, 1)
 cmx = confusion_matrix(true_classes, predict_classes)
 print(cmx)
 # print_cmx(true_classes, predict_classes)
+
+true_positive = cmx[0][0]/(cmx[0][0]+cmx[0][1])
+# print(true_positive)
+
+money=0
+atari=0
+hazure=0
+total=0
+atari_list=[]
+money_list=[]
+
+for i in range(len(predict_classes)):
+	#買うとき
+	if predict_classes[i] == 0  and float(odds[i])>1.5:
+		money-=100
+		print(test_paths[i])
+		#当たった時
+		if Y_test[i][0] == float(1):
+			print("あたり"+str(odds[i]))
+			money += float(odds[i]) * 100
+			atari+=1
+			atari_list.append(float(odds[i]))
+			money_list.append(money)
+		#外れた時
+		else:
+			print("はずれ"+str(odds[i]))
+			hazure+=1
+	total+=1
+
+#あたりと予想した馬で、当たっていた馬のオッズのヒストグラムを表示
+# plt.hist(atari_list, range=(0, 10));
+# plt.show()
+
+#所持金の推移
+index=[i+1 for i in range(len(money_list))]
+plt.plot(index, money_list)
+plt.show()
+
+odds_ave= sum(atari_list) / len(atari_list)
+print("平均オッズ:"+str(odds_ave))
+print("儲け"+str(money))
+print(atari, hazure, total)
 
 print('Test loss:', score[0])
 print('Test accuracy:', score[1])
