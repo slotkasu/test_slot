@@ -110,7 +110,7 @@ def getPredResult(race_name):
 	#単純なNNの出力
 	for idx, i in enumerate(predict):
 		print(str(idx+1).zfill(2)+"番 複勝確率：{:.3f}".format(i[0]),end=" ")
-		if np.argmax(i)==0:
+		if i>0.5:
 			print("買い")
 		else:
 			print("不買")
@@ -126,7 +126,7 @@ def getPredResult(race_name):
 	predict=[[idx,i] for idx, i in enumerate(predict)]
 
 	#複勝確率（正規化後）でソートする。
-	predict.sort(key=lambda x: x[1][1])
+	predict.sort(key=lambda x: x[1])
 
 	print("レース内相対評価")
 	#レース内で正規化し、相対評価に変更
