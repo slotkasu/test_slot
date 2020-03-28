@@ -7,10 +7,10 @@ import csv
 import pprint
 import time
 import datetime
-from .keiba_function import getRaceNum, getSexNum, getShibadaNum, getStateNum, getRaceResult, TtoF, getFuku
+from keiba_function import getRaceNum, getSexNum, getShibadaNum, getStateNum, getRaceResult, TtoF, getFuku
 from datetime import timedelta
 
-def makeKeibaDataset(date, train_mode=1):
+def makeKeibaDataset(date, train_mode=1, driver=None):
 	url = "https://race.netkeiba.com/race/shutuba_past.html?race_id="+date+"&rf=shutuba_submenu"
 
 	html = requests.get(url)
@@ -238,7 +238,7 @@ def makeKeibaDataset(date, train_mode=1):
 	file_name=""
 
 	#複勝オッズを取得
-	FukuOdds=getFuku(date)
+	FukuOdds=getFuku(date,driver)
 	#エラー処理
 	if FukuOdds == 0:
 		FukuOdds = [["0","0"] for i in range(len(Horseinfo))]

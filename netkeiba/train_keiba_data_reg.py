@@ -204,10 +204,10 @@ model.summary()
 sgd = optimizers.SGD(lr=0.01, decay=1e-4, momentum=0.9, nesterov=True)
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-epochs=30
+epochs=1000
 
 history = model.fit(X_train, Y_train,
-					batch_size=32,
+					batch_size=512,
 					epochs=epochs,
 					verbose=1,
 					validation_data=(X_test, Y_test))

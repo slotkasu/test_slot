@@ -8,6 +8,8 @@ import time
 import datetime
 from datetime import timedelta
 from class_fetch import makeKeibaDataset
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 
 year = '2020'
 
@@ -20,19 +22,31 @@ date_list = [str(i+1).zfill(2) for i in range(9)]
 race_list = [str(i+7).zfill(2) for i in range(6)]
 # race_list = [str(i+1).zfill(2) for i in range(6)]
 
-#この番号からはじめる　8桁
 
-skip = year + "06020811" #"00000000"
 
-for course in course_list:
-	for kaisai in kaisai_list:
-		for date in date_list:
-			for race in race_list:
-				temp = year+course+kaisai+date+race
-				print(temp)
-				if int(temp) < int(skip):
-					continue
-				else:
-					kekka = makeKeibaDataset(year+course+kaisai+date+race)
-					if kekka == 3:
-						break
+options = Options()
+
+# Headlessモードを有効にする（コメントアウトするとブラウザが実際に立ち上がります）
+options.set_headless(True)
+options.add_argument("--log-level=3")
+
+driver = webdriver.Chrome(chrome_options=options)
+
+years=['2016','2015','2014','2013','2012','2011','2010']
+for year in years:
+
+	#この番号からはじめる　8桁
+	skip = year + "00000000" #"00000000"
+
+	for course in course_list:
+		for kaisai in kaisai_list:
+			for date in date_list:
+				for race in race_list:
+					temp = year+course+kaisai+date+race
+					print(temp)
+					if int(temp) < int(skip):
+						continue
+					else:
+						kekka = makeKeibaDataset(year+course+kaisai+date+race,driver=driver)
+						if kekka == 3:
+							break

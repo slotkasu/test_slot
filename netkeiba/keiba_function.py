@@ -102,16 +102,17 @@ def getRaceResult(date):
 	return results
 
 ######複勝オッズを取得######
-def getFuku(date):
-	# ブラウザのオプションを格納する変数をもらってきます。
-	options = Options()
-
-	# Headlessモードを有効にする（コメントアウトするとブラウザが実際に立ち上がります）
-	options.set_headless(True)
-	options.add_argument("--log-level=3")
-
+def getFuku(date,driver):
+	
 	# ブラウザを起動する
-	driver = webdriver.Chrome(chrome_options=options)
+	if driver is None:
+		# ブラウザのオプションを格納する変数をもらってきます。
+		options = Options()
+
+		# Headlessモードを有効にする（コメントアウトするとブラウザが実際に立ち上がります）
+		options.set_headless(True)
+		options.add_argument("--log-level=3")
+		driver = webdriver.Chrome(chrome_options=options)
 
 	driver.get("https://race.netkeiba.com/odds/index.html?type=b1&race_id="+date+"&rf=shutuba_submenu")
 	# time.sleep(0.5)
