@@ -100,7 +100,7 @@ def getPredResult(race_name):
 	X_test=(X_test-X_min) / (X_max - X_min)
 
 	#回帰バージョンのモデル
-	model = keras.models.load_model("keiba_model_reg.h5", compile=False)
+	model = tf.keras.models.load_model("keiba_model_reg.h5", compile=False,)
 
 	#NNの出力　0=複勝確率 1＝着外(4着以降)確率
 	predict=model.predict(X_test)
