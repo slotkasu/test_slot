@@ -2,10 +2,8 @@ from django.shortcuts import render
 from django.views import View  
 from .models import SampleDB
 from .aaa import testing #importが効くかを確かめた
-import sys
-sys.path.append("../../") #無理くりpathをあわせる
-#本来はここで../../netkeiba~~~と書きたかった
-from netkeiba.pred_keiba_data_reg import getPredResult
+
+from .pred_keiba_data_reg import getPredResult
 
 class SampleView(View):  
 	def get(self, request, *args, **kwargs):  
