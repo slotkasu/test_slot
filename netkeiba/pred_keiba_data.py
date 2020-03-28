@@ -17,6 +17,7 @@ from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
 from imblearn.over_sampling import SMOTE
 from class_fetch import makeKeibaDataset
+import pickle
 
 
 def print_cmx(y_true, y_pred):
@@ -52,7 +53,7 @@ if gpus:
 ##
 #札幌 函館 福島 新潟 東京 中山 中京 京都 阪神 小倉
 #  01  02   03   04   05  06  07   08   09   10
-race_name = 202006020810
+race_name = 202009020107
 race_name =  str(race_name)
 test_file="keiba\\datasets\\"+race_name+"test.csv"
 
@@ -64,46 +65,9 @@ if not os.path.isfile(test_file):
 
 #####################################################################################
 
-
-
-X=[]
-Y=[]
-paths = glob.glob("keiba\\datasets2\\2018\\*")
-paths=paths+glob.glob("keiba\\datasets2\\2017\\*")
-for path in paths:
-	csv_file = open(path, "r", newline="" )
-	temp_list = csv.reader(csv_file, delimiter=",")
-	flag=0
-	
-	for i in temp_list:
-		if flag==0:
-			flag=1
-			continue
-
-		if len(i[5:]) == 172:
-			temp_c0=i[5:].count("0")
-			if temp_c0 >100:
-				continue
-			#馬名、着順、オッズ
-			Y.append(i[:5])
-			X.append(list(map(float,i[5:])))
-
-temp=[]
-
-for i in Y:
-	#3着以内
-	if int(i[1])<=3:
-		temp.append(0)
-	else:
-		temp.append(1)
-Y=temp
-
-X=np.array(X, dtype="float32")
-Y=np.array(Y, dtype="int")
-
-sm = SMOTE(random_state=11)
-X, Y = sm.fit_sample(X,Y)
-Y=to_categorical(Y)
+#X_trainを正規化のためだけに読み込み
+fx = open('X_train.txt', 'rb')
+X=pickle.load(fx)
 
 #データを全て正規化（0～1）の間に収める
 X_min=X.min(axis=0, keepdims=True)
@@ -121,8 +85,9 @@ for path in paths:
 		if flag==0:
 			flag=1
 			continue
-		if len(i[5:]) == 172:
-			if i[5:].count("0") > 100:
+		if len(i[2:]) == 172:
+			temp_c0=i[5:].count("0")
+			if temp_c0 >84:
 				continue
 			X_test.append(list(map(float,i[2:])))
 

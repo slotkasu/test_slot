@@ -4,6 +4,7 @@ import glob
 import os
 import re
 import subprocess
+import random
 import numpy as np
 from sklearn.model_selection import train_test_split
 from keras.models import Sequential
@@ -15,11 +16,13 @@ from sklearn.metrics import confusion_matrix
 import pandas as pd
 import seaborn as sn
 import matplotlib.pyplot as plt
+from imblearn.under_sampling import RandomUnderSampler
 from imblearn.over_sampling import SVMSMOTE, SMOTE
 from imblearn.combine import SMOTEENN, SMOTETomek
 from tensorflow.python.client import device_lib
 from statistics import mean, median,variance,stdev
-
+from operator import itemgetter
+import pickle
  
 def print_cmx(y_true, y_pred):
 	labels = sorted(list(set(y_true)))
@@ -31,80 +34,113 @@ def print_cmx(y_true, y_pred):
 	sn.heatmap(df_cmx, annot=True, fmt='g' ,square = True)
 	plt.show()
 
+data_create=1
 
-X_train=[]
-Y_train=[]
+if not os.path.isfile("X_train.txt") or data_create:
+	X_train=[]
+	Y_train=[]
 
-count0=[]
-#trainデータを読み込み
-paths = glob.glob("keiba\\datasets2\\2018\\*")
-paths=paths+glob.glob("keiba\\datasets2\\2017\\*")
-for path in paths:
-	#print(path)
-	csv_file = open(path, "r", newline="" )
-	temp_list = csv.reader(csv_file, delimiter=",")
-	flag=0
-	for i in temp_list:
-		if flag==0:
-			flag=1
+	count0=[]
+	#trainデータを読み込み
+	paths = glob.glob("keiba\\datasets2\\2018\\*")
+	paths=paths+glob.glob("keiba\\datasets2\\2017\\*")
+	for path in paths:
+		#print(path)
+		temp_list = []
+		with open(path,"r") as f:
+			reader = csv.reader(f)
+			for row in reader:
+				temp_list.append(row)
+		
+		# csv_file = open(path, "r", newline="" )
+		# temp_list = csv.reader(csv_file, delimiter=",")
+
+		temp_list=temp_list[1:]
+		temp_list=sorted(temp_list, key=lambda i:int(i[1]))
+		temp_list_top3=temp_list[:3]
+		temp_list_others=temp_list[3:]
+
+		#3着ではない馬が3頭未満の場合、そのレースは除外
+		if len(temp_list_others) < 3:
 			continue
-		#情報
-		if len(i[5:]) == 172:
-			temp_c0=i[5:].count("0")
-			count0.append(temp_c0)
-			if temp_c0 >100:
-				continue
-			#馬名、着順、オッズ
-			Y_train.append(i[:5])
-			X_train.append(list(map(float,i[5:])))
+		temp_list_others=random.sample(temp_list_others,3)
+		temp_list=temp_list_top3+temp_list_others
+		for i in temp_list:
+			#情報
+			if len(i[5:]) == 172:
+				temp_c0=i[5:].count("0")
+				count0.append(temp_c0)
+				#馬名、着順、オッズ
+				Y_train.append(i[:5])
+				X_train.append(list(map(float,i[5:])))
 
-m = mean(count0)
-median = median(count0)
-variance = variance(count0)
-stdev = stdev(count0)
-print('平均: {0:.2f}'.format(m))
-print('中央値: {0:.2f}'.format(median))
-print('分散: {0:.2f}'.format(variance))
-print('標準偏差: {0:.2f}'.format(stdev))
+	m = mean(count0)
+	median = median(count0)
+	variance = variance(count0)
+	stdev = stdev(count0)
+	print('平均: {0:.2f}'.format(m))
+	print('中央値: {0:.2f}'.format(median))
+	print('分散: {0:.2f}'.format(variance))
+	print('標準偏差: {0:.2f}'.format(stdev))
 
-# plt.hist(count0);
-# plt.show()
-# exit()
-
-
-#3位以内は1、4位以降は0にする
-temp=[]
-for i in Y_train:
-	if int(i[1])<=3:
-		temp.append(0)
-	else:
-		temp.append(1)
-Y_train=temp
+	# plt.hist(count0);
+	# plt.show()
+	# exit()
 
 
-X_train=np.array(X_train, dtype="float32")
-Y_train=np.array(Y_train, dtype="int")
+	#3位以内は1、4位以降は0にする
+	temp=[]
+	for i in Y_train:
+		if int(i[1])<=3:
+			temp.append(0)
+		else:
+			temp.append(1)
+	Y_train=temp
 
 
+	X_train=np.array(X_train, dtype="float32")
+	Y_train=np.array(Y_train, dtype="int")
 
-#データを増やす
-sm = SMOTE()
-se = SMOTEENN(random_state=42)
-len0 = len([i for i in Y_train if i == 0])
-len1 = len([i for i in Y_train if i == 1])
-print(len0,len1)
-# X_train, Y_train = sm.fit_sample(X_train,Y_train)
-X_train, Y_train = se.fit_resample(X_train,Y_train)
-len0 = len([i for i in Y_train if i == 0])
-len1 = len([i for i in Y_train if i == 1])
-print(len0,len1)
+	#データを減らす
+	# sampler = RandomUnderSampler(random_state=42)
+	# X_train, Y_train = sampler.fit_resample(X_train, Y_train)
+	# len0 = len([i for i in Y_train if i == 0])
+	# len1 = len([i for i in Y_train if i == 1])
+	# print(len0,len1)
 
-#ワンホットベクトルに変えるよ
-Y_train=to_categorical(Y_train)
+	#データを増やす
+	# sm = SMOTE()
+	# se = SMOTEENN(random_state=42)
+	# len0 = len([i for i in Y_train if i == 0])
+	# len1 = len([i for i in Y_train if i == 1])
+	# print(len0,len1)
+	# # X_train, Y_train = sm.fit_sample(X_train,Y_train)
+	# X_train, Y_train = se.fit_resample(X_train,Y_train)
+	# len0 = len([i for i in Y_train if i == 0])
+	# len1 = len([i for i in Y_train if i == 1])
+	# print(len0,len1)
 
-#データを全て正規化（0～1）の間に収める
-X_min=X_train.min(axis=0, keepdims=True)
-X_max=X_train.max(axis=0, keepdims=True)
+	#ワンホットベクトルに変えるよ
+	Y_train=to_categorical(Y_train)
+
+	#データを全て正規化（0～1）の間に収める
+	X_min=X_train.min(axis=0, keepdims=True)
+	X_max=X_train.max(axis=0, keepdims=True)
+	
+	#X_trainとY_trainを保存しておく。
+	fx = open('X_train.txt', 'wb')
+	fy = open('Y_train.txt', 'wb')
+	pickle.dump(X_train, fx)
+	pickle.dump(Y_train, fy)
+
+else:
+	fx = open('X_train.txt', 'rb')
+	fy = open('Y_train.txt', 'rb')
+	X_train=pickle.load(fx)
+	Y_train=pickle.load(fy)
+	X_min=X_train.min(axis=0, keepdims=True)
+	X_max=X_train.max(axis=0, keepdims=True)
+
 X_train=(X_train-X_min) / (X_max - X_min)
 
 X_test=[]
@@ -125,8 +161,6 @@ for path in paths:
 			continue
 		#情報
 		if len(i[5:]) == 172:
-			if i[5:].count("0") > 100:
-				continue
 			race_id=path.split("\\")[-1]
 			race_id=re.search(r'\d+',race_id).group()
 			# print(race_id)
@@ -183,7 +217,7 @@ for i in device_lib.list_local_devices():
 model = Sequential()
 model.add(Dense(300, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001), input_shape=(X_train.shape[1],),))
 model.add(Dropout(0.2))
-model.add(Dense(128, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001)))
+model.add(Dense(128, activation='sigmoid', kernel_regularizer=tf.keras.regularizers.l2(0.001)))
 model.add(Dropout(0.2))
 model.add(Dense(Y_train.shape[1], activation='softmax'))
 
@@ -219,7 +253,7 @@ predict_classes = model.predict_classes(X_test)
 true_classes = np.argmax(Y_test, 1)
 cmx = confusion_matrix(true_classes, predict_classes)
 print(cmx)
-# print_cmx(true_classes, predict_classes)
+print_cmx(true_classes, predict_classes)
 
 true_positive = cmx[0][0]/(cmx[0][0]+cmx[0][1])
 # print(true_positive)
@@ -233,25 +267,25 @@ money_list=[]
 
 for i in range(len(predict_classes)):
 	#買うとき
-	if predict_classes[i] == 0  and float(odds[i])>1.5:
+	if predict_classes[i] == 0  and float(odds[i])>2.0:
 		money-=100
-		print(test_paths[i])
+		# print(test_paths[i])
 		#当たった時
 		if Y_test[i][0] == float(1):
-			print("あたり"+str(odds[i]))
+			# print("あたり"+str(odds[i]))
 			money += float(odds[i]) * 100
 			atari+=1
 			atari_list.append(float(odds[i]))
 			money_list.append(money)
 		#外れた時
 		else:
-			print("はずれ"+str(odds[i]))
+			# print("はずれ"+str(odds[i]))
 			hazure+=1
 	total+=1
 
 #あたりと予想した馬で、当たっていた馬のオッズのヒストグラムを表示
-# plt.hist(atari_list, range=(0, 10));
-# plt.show()
+plt.hist(atari_list, range=(0, 10));
+plt.show()
 
 #所持金の推移
 index=[i+1 for i in range(len(money_list))]
