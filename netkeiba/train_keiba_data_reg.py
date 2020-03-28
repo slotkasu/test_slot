@@ -104,13 +104,13 @@ if not os.path.isfile("X_train.txt") or data_create:
 	
 	#X_trainとY_trainを保存しておく。
 	fx = open('X_train.txt', 'wb')
-	fy = open('Y_train.txt', 'wb')
+	fy = open('Y_train_reg.txt', 'wb')
 	pickle.dump(X_train, fx)
 	pickle.dump(Y_train, fy)
 
 else:
 	fx = open('X_train.txt', 'rb')
-	fy = open('Y_train.txt', 'rb')
+	fy = open('Y_train_reg.txt', 'rb')
 	X_train=pickle.load(fx)
 	Y_train=pickle.load(fy)
 	X_min=X_train.min(axis=0, keepdims=True)
@@ -147,6 +147,9 @@ for path in paths:
 			Y_test.append(i[:5])
 			X_test.append(list(map(float,i[5:])))
 
+odds=[i[3] for i in Y_test]
+# print(odds)
+
 #3位以内は1、4位以降は0にする
 temp=[]
 for i in Y_test:
@@ -156,15 +159,14 @@ for i in Y_test:
 		temp.append(0)
 
 
-odds=[i[3] for i in Y_test]
-# print(odds)
-
 Y_test=temp
 
 X_test=np.array(X_test, dtype="float32")
 Y_test=np.array(Y_test, dtype="int")
 
-print(len(Y_test))
+Y_test=Y_test.T
+
+print("************************************************"+str(Y_test[0].shape))
 # Y_test=to_categorical(Y_test)
 
 # X_min=X_test.min(axis=0, keepdims=True)
@@ -193,15 +195,15 @@ model = Sequential()
 model.add(Dense(128, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001), input_shape=(X_train.shape[1],),))
 # model.add(BatchNormalization())
 model.add(Dropout(0.2))
-model.add(Dense(64, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001)))
+model.add(Dense(64, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001) ))
 # model.add(BatchNormalization())
 model.add(Dropout(0.2))
-model.add(Dense(1))
+model.add(Dense(1, activation='sigmoid'))
 
 model.summary()
 
 sgd = optimizers.SGD(lr=0.01, decay=1e-4, momentum=0.9, nesterov=True)
-model.compile(loss='mean_squared_error', optimizer=sgd, metrics=['accuracy'])
+model.compile(loss='binary_crossentropy', optimizer='nadam', metrics=['accuracy'])
 
 epochs=300
 
