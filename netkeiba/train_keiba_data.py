@@ -19,7 +19,7 @@ from imblearn.over_sampling import SVMSMOTE, SMOTE
 from imblearn.combine import SMOTEENN, SMOTETomek
 from tensorflow.python.client import device_lib
 from statistics import mean, median,variance,stdev
-
+import pickle
  
 def print_cmx(y_true, y_pred):
 	labels = sorted(list(set(y_true)))
@@ -31,80 +31,95 @@ def print_cmx(y_true, y_pred):
 	sn.heatmap(df_cmx, annot=True, fmt='g' ,square = True)
 	plt.show()
 
+if not os.path.isfile("X_train.txt"):
+	X_train=[]
+	Y_train=[]
 
-X_train=[]
-Y_train=[]
-
-count0=[]
-#trainデータを読み込み
-paths = glob.glob("keiba\\datasets2\\2018\\*")
-paths=paths+glob.glob("keiba\\datasets2\\2017\\*")
-for path in paths:
-	#print(path)
-	csv_file = open(path, "r", newline="" )
-	temp_list = csv.reader(csv_file, delimiter=",")
-	flag=0
-	for i in temp_list:
-		if flag==0:
-			flag=1
-			continue
-		#情報
-		if len(i[5:]) == 172:
-			temp_c0=i[5:].count("0")
-			count0.append(temp_c0)
-			if temp_c0 >100:
+	count0=[]
+	#trainデータを読み込み
+	paths = glob.glob("keiba\\datasets2\\2018\\*")
+	paths=paths+glob.glob("keiba\\datasets2\\2017\\*")
+	for path in paths:
+		#print(path)
+		csv_file = open(path, "r", newline="" )
+		temp_list = csv.reader(csv_file, delimiter=",")
+		flag=0
+		for i in temp_list:
+			if flag==0:
+				flag=1
 				continue
-			#馬名、着順、オッズ
-			Y_train.append(i[:5])
-			X_train.append(list(map(float,i[5:])))
+			#情報
+			if len(i[5:]) == 172:
+				temp_c0=i[5:].count("0")
+				count0.append(temp_c0)
+				if temp_c0 >100:
+					continue
+				#馬名、着順、オッズ
+				Y_train.append(i[:5])
+				X_train.append(list(map(float,i[5:])))
 
-m = mean(count0)
-median = median(count0)
-variance = variance(count0)
-stdev = stdev(count0)
-print('平均: {0:.2f}'.format(m))
-print('中央値: {0:.2f}'.format(median))
-print('分散: {0:.2f}'.format(variance))
-print('標準偏差: {0:.2f}'.format(stdev))
+	m = mean(count0)
+	median = median(count0)
+	variance = variance(count0)
+	stdev = stdev(count0)
+	print('平均: {0:.2f}'.format(m))
+	print('中央値: {0:.2f}'.format(median))
+	print('分散: {0:.2f}'.format(variance))
+	print('標準偏差: {0:.2f}'.format(stdev))
 
-# plt.hist(count0);
-# plt.show()
-# exit()
-
-
-#3位以内は1、4位以降は0にする
-temp=[]
-for i in Y_train:
-	if int(i[1])<=3:
-		temp.append(0)
-	else:
-		temp.append(1)
-Y_train=temp
+	# plt.hist(count0);
+	# plt.show()
+	# exit()
 
 
-X_train=np.array(X_train, dtype="float32")
-Y_train=np.array(Y_train, dtype="int")
+	#3位以内は1、4位以降は0にする
+	temp=[]
+	for i in Y_train:
+		if int(i[1])<=3:
+			temp.append(0)
+		else:
+			temp.append(1)
+	Y_train=temp
+
+
+	X_train=np.array(X_train, dtype="float32")
+	Y_train=np.array(Y_train, dtype="int")
 
 
 
-#データを増やす
-sm = SMOTE()
-se = SMOTEENN(random_state=42)
-len0 = len([i for i in Y_train if i == 0])
-len1 = len([i for i in Y_train if i == 1])
-print(len0,len1)
-# X_train, Y_train = sm.fit_sample(X_train,Y_train)
-X_train, Y_train = se.fit_resample(X_train,Y_train)
-len0 = len([i for i in Y_train if i == 0])
-len1 = len([i for i in Y_train if i == 1])
-print(len0,len1)
+	#データを増やす
+	sm = SMOTE()
+	se = SMOTEENN(random_state=42)
+	len0 = len([i for i in Y_train if i == 0])
+	len1 = len([i for i in Y_train if i == 1])
+	print(len0,len1)
+	# X_train, Y_train = sm.fit_sample(X_train,Y_train)
+	X_train, Y_train = se.fit_resample(X_train,Y_train)
+	len0 = len([i for i in Y_train if i == 0])
+	len1 = len([i for i in Y_train if i == 1])
+	print(len0,len1)
 
-#ワンホットベクトルに変えるよ
-Y_train=to_categorical(Y_train)
+	#ワンホットベクトルに変えるよ
+	Y_train=to_categorical(Y_train)
 
-#データを全て正規化（0～1）の間に収める
-X_min=X_train.min(axis=0, keepdims=True)
-X_max=X_train.max(axis=0, keepdims=True)
+	#データを全て正規化（0～1）の間に収める
+	X_min=X_train.min(axis=0, keepdims=True)
+	X_max=X_train.max(axis=0, keepdims=True)
+	
+	#X_trainとY_trainを保存しておく。
+	fx = open('X_train.txt', 'wb')
+	fy = open('Y_train.txt', 'wb')
+	pickle.dump(X_train, fx)
+	pickle.dump(Y_train, fy)
+
+else:
+	fx = open('X_train.txt', 'rb')
+	fy = open('Y_train.txt', 'rb')
+	X_train=pickle.load(fx)
+	Y_train=pickle.load(fy)
+	X_min=X_train.min(axis=0, keepdims=True)
+	X_max=X_train.max(axis=0, keepdims=True)
+
 X_train=(X_train-X_min) / (X_max - X_min)
 
 X_test=[]
@@ -233,25 +248,25 @@ money_list=[]
 
 for i in range(len(predict_classes)):
 	#買うとき
-	if predict_classes[i] == 0  and float(odds[i])>1.5:
+	if predict_classes[i] == 0  and float(odds[i])>2.0:
 		money-=100
-		print(test_paths[i])
+		# print(test_paths[i])
 		#当たった時
 		if Y_test[i][0] == float(1):
-			print("あたり"+str(odds[i]))
+			# print("あたり"+str(odds[i]))
 			money += float(odds[i]) * 100
 			atari+=1
 			atari_list.append(float(odds[i]))
 			money_list.append(money)
 		#外れた時
 		else:
-			print("はずれ"+str(odds[i]))
+			# print("はずれ"+str(odds[i]))
 			hazure+=1
 	total+=1
 
 #あたりと予想した馬で、当たっていた馬のオッズのヒストグラムを表示
-# plt.hist(atari_list, range=(0, 10));
-# plt.show()
+plt.hist(atari_list, range=(0, 10));
+plt.show()
 
 #所持金の推移
 index=[i+1 for i in range(len(money_list))]

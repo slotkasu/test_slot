@@ -52,7 +52,7 @@ if gpus:
 ##
 #札幌 函館 福島 新潟 東京 中山 中京 京都 阪神 小倉
 #  01  02   03   04   05  06  07   08   09   10
-race_name = 202006020810
+race_name = 202009020107
 race_name =  str(race_name)
 test_file="keiba\\datasets\\"+race_name+"test.csv"
 
@@ -121,8 +121,9 @@ for path in paths:
 		if flag==0:
 			flag=1
 			continue
-		if len(i[5:]) == 172:
-			if i[5:].count("0") > 100:
+		if len(i[2:]) == 172:
+			temp_c0=i[5:].count("0")
+			if temp_c0 >100:
 				continue
 			X_test.append(list(map(float,i[2:])))
 
