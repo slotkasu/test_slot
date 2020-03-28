@@ -7,7 +7,7 @@ import csv
 import pprint
 import time
 import datetime
-from keiba_function import getRaceNum, getSexNum, getShibadaNum, getStateNum, getRaceResult, TtoF, getFuku
+from .keiba_function import getRaceNum, getSexNum, getShibadaNum, getStateNum, getRaceResult, TtoF, getFuku
 from datetime import timedelta
 
 def makeKeibaDataset(date, train_mode=1):

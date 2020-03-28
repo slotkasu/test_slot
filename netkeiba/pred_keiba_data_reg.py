@@ -16,7 +16,7 @@ import seaborn as sn
 from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
 from imblearn.over_sampling import SMOTE
-from class_fetch import makeKeibaDataset
+from .class_fetch import makeKeibaDataset
 import pickle
 
 
