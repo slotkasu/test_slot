@@ -4,6 +4,7 @@ import glob
 import os
 import re
 import subprocess
+import random
 import numpy as np
 from sklearn.model_selection import train_test_split
 from keras.models import Sequential
@@ -15,10 +16,12 @@ from sklearn.metrics import confusion_matrix
 import pandas as pd
 import seaborn as sn
 import matplotlib.pyplot as plt
+from imblearn.under_sampling import RandomUnderSampler
 from imblearn.over_sampling import SVMSMOTE, SMOTE
 from imblearn.combine import SMOTEENN, SMOTETomek
 from tensorflow.python.client import device_lib
 from statistics import mean, median,variance,stdev
+from operator import itemgetter
 import pickle
  
 def print_cmx(y_true, y_pred):
@@ -31,7 +34,9 @@ def print_cmx(y_true, y_pred):
 	sn.heatmap(df_cmx, annot=True, fmt='g' ,square = True)
 	plt.show()
 
-if not os.path.isfile("X_train.txt"):
+data_create=1
+
+if not os.path.isfile("X_train.txt") or data_create:
 	X_train=[]
 	Y_train=[]
 
@@ -41,19 +46,30 @@ if not os.path.isfile("X_train.txt"):
 	paths=paths+glob.glob("keiba\\datasets2\\2017\\*")
 	for path in paths:
 		#print(path)
-		csv_file = open(path, "r", newline="" )
-		temp_list = csv.reader(csv_file, delimiter=",")
-		flag=0
+		temp_list = []
+		with open(path,"r") as f:
+			reader = csv.reader(f)
+			for row in reader:
+				temp_list.append(row)
+		
+		# csv_file = open(path, "r", newline="" )
+		# temp_list = csv.reader(csv_file, delimiter=",")
+
+		temp_list=temp_list[1:]
+		temp_list=sorted(temp_list, key=lambda i:int(i[1]))
+		temp_list_top3=temp_list[:3]
+		temp_list_others=temp_list[3:]
+
+		#3着ではない馬が3頭未満の場合、そのレースは除外
+		if len(temp_list_others) < 3:
+			continue
+		temp_list_others=random.sample(temp_list_others,3)
+		temp_list=temp_list_top3+temp_list_others
 		for i in temp_list:
-			if flag==0:
-				flag=1
-				continue
 			#情報
 			if len(i[5:]) == 172:
 				temp_c0=i[5:].count("0")
 				count0.append(temp_c0)
-				if temp_c0 >100:
-					continue
 				#馬名、着順、オッズ
 				Y_train.append(i[:5])
 				X_train.append(list(map(float,i[5:])))
@@ -85,19 +101,24 @@ if not os.path.isfile("X_train.txt"):
 	X_train=np.array(X_train, dtype="float32")
 	Y_train=np.array(Y_train, dtype="int")
 
-
+	#データを減らす
+	# sampler = RandomUnderSampler(random_state=42)
+	# X_train, Y_train = sampler.fit_resample(X_train, Y_train)
+	# len0 = len([i for i in Y_train if i == 0])
+	# len1 = len([i for i in Y_train if i == 1])
+	# print(len0,len1)
 
 	#データを増やす
-	sm = SMOTE()
-	se = SMOTEENN(random_state=42)
-	len0 = len([i for i in Y_train if i == 0])
-	len1 = len([i for i in Y_train if i == 1])
-	print(len0,len1)
-	# X_train, Y_train = sm.fit_sample(X_train,Y_train)
-	X_train, Y_train = se.fit_resample(X_train,Y_train)
-	len0 = len([i for i in Y_train if i == 0])
-	len1 = len([i for i in Y_train if i == 1])
-	print(len0,len1)
+	# sm = SMOTE()
+	# se = SMOTEENN(random_state=42)
+	# len0 = len([i for i in Y_train if i == 0])
+	# len1 = len([i for i in Y_train if i == 1])
+	# print(len0,len1)
+	# # X_train, Y_train = sm.fit_sample(X_train,Y_train)
+	# X_train, Y_train = se.fit_resample(X_train,Y_train)
+	# len0 = len([i for i in Y_train if i == 0])
+	# len1 = len([i for i in Y_train if i == 1])
+	# print(len0,len1)
 
 	#ワンホットベクトルに変えるよ
 	Y_train=to_categorical(Y_train)
@@ -140,8 +161,6 @@ for path in paths:
 			continue
 		#情報
 		if len(i[5:]) == 172:
-			if i[5:].count("0") > 100:
-				continue
 			race_id=path.split("\\")[-1]
 			race_id=re.search(r'\d+',race_id).group()
 			# print(race_id)
@@ -198,7 +217,7 @@ for i in device_lib.list_local_devices():
 model = Sequential()
 model.add(Dense(300, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001), input_shape=(X_train.shape[1],),))
 model.add(Dropout(0.2))
-model.add(Dense(128, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001)))
+model.add(Dense(128, activation='sigmoid', kernel_regularizer=tf.keras.regularizers.l2(0.001)))
 model.add(Dropout(0.2))
 model.add(Dense(Y_train.shape[1], activation='softmax'))
 
@@ -234,7 +253,7 @@ predict_classes = model.predict_classes(X_test)
 true_classes = np.argmax(Y_test, 1)
 cmx = confusion_matrix(true_classes, predict_classes)
 print(cmx)
-# print_cmx(true_classes, predict_classes)
+print_cmx(true_classes, predict_classes)
 
 true_positive = cmx[0][0]/(cmx[0][0]+cmx[0][1])
 # print(true_positive)
