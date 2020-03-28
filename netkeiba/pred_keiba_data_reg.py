@@ -107,11 +107,16 @@ def getPredResult(race_name):
 
 	print("--------------------------------------------------------")
 	print("絶対評価")
+
+	#買いのリスト
+	kai_list=[]
+
 	#単純なNNの出力
 	for idx, i in enumerate(predict):
 		print(str(idx+1).zfill(2)+"番 複勝確率：{:.3f}".format(i[0]),end=" ")
 		if i>0.5:
 			print("買い")
+			kai_list.append(idx+1)
 		else:
 			print("不買")
 
@@ -144,9 +149,11 @@ def getPredResult(race_name):
 
 	# model.save("keiba_model.h5",include_optimizer=False)
 
+	return kai_list
+
 
 def main():
-	getPredResult(202007010811)
+	print(getPredResult(202007010811))
 
 if __name__ == '__main__':
 	main()

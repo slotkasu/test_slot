@@ -166,7 +166,6 @@ Y_test=np.array(Y_test, dtype="int")
 
 Y_test=Y_test.T
 
-print("************************************************"+str(Y_test[0].shape))
 # Y_test=to_categorical(Y_test)
 
 # X_min=X_test.min(axis=0, keepdims=True)
@@ -203,12 +202,12 @@ model.add(Dense(1, activation='sigmoid'))
 model.summary()
 
 sgd = optimizers.SGD(lr=0.01, decay=1e-4, momentum=0.9, nesterov=True)
-model.compile(loss='binary_crossentropy', optimizer='nadam', metrics=['accuracy'])
+model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-epochs=300
+epochs=30
 
 history = model.fit(X_train, Y_train,
-					batch_size=1024,
+					batch_size=32,
 					epochs=epochs,
 					verbose=1,
 					validation_data=(X_test, Y_test))
