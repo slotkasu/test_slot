@@ -14,3 +14,4 @@ netkeiba/.vscode/settings.json
 netkeiba/keiba/datasets/
 *.pyc
 *.json
+*.pyc
