@@ -87,9 +87,6 @@ def getPredResult(race_name):
 				flag=1
 				continue
 			if len(i[2:]) == 172:
-				temp_c0=i[5:].count("0")
-				if temp_c0 >84:
-					continue
 				X_test.append(list(map(float,i[2:])))
 
 
@@ -100,18 +97,23 @@ def getPredResult(race_name):
 	X_test=(X_test-X_min) / (X_max - X_min)
 
 	#回帰バージョンのモデル
-	model = tf.keras.models.load_model("keiba_model_reg.h5", compile=False,)
+	model = tf.keras.models.load_model("keiba_model_reg.h5", compile=False)
 
 	#NNの出力　0=複勝確率 1＝着外(4着以降)確率
 	predict=model.predict(X_test)
 
 	print("--------------------------------------------------------")
 	print("絶対評価")
+
+	#買いのリスト
+	kai_list=[]
+
 	#単純なNNの出力
 	for idx, i in enumerate(predict):
 		print(str(idx+1).zfill(2)+"番 複勝確率：{:.3f}".format(i[0]),end=" ")
 		if i>0.5:
 			print("買い")
+			kai_list.append(str(idx+1))
 		else:
 			print("不買")
 
@@ -144,9 +146,11 @@ def getPredResult(race_name):
 
 	# model.save("keiba_model.h5",include_optimizer=False)
 
+	return '・'.join(kai_list)
+
 
 def main():
-	getPredResult(202007010811)
+	print(getPredResult(202007010811))
 
 if __name__ == '__main__':
 	main()

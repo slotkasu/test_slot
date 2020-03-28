@@ -87,9 +87,6 @@ def getPredResult(race_name):
 				flag=1
 				continue
 			if len(i[2:]) == 172:
-				temp_c0=i[5:].count("0")
-				if temp_c0 >84:
-					continue
 				X_test.append(list(map(float,i[2:])))
 
 
@@ -149,7 +146,8 @@ def getPredResult(race_name):
 
 	# model.save("keiba_model.h5",include_optimizer=False)
 
-	return kai_list
+	print(",".join(kai_list))
+	return ",".join(kai_list)
 
 
 def main():
