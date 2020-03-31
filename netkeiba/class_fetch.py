@@ -131,17 +131,14 @@ def makeKeibaDataset(date, train_mode=1, driver=None):
 				#競馬場に関する情報
 				baba_past=past.find("div",class_="Data01")
 				keiba_name= baba_past.span.text.split(" ")[-1]
-				# #エラーが多すぎるので海外の結果は除外します。
-				# #カタカナ
-				# re_katakana = re.compile(r'[\u30a1-\u30fc]+')
-				# print(keiba_name)
-				# for i in keiba_name:
-				# 	print(hex(ord(i)))
-				
-				# fuckin_katakana=re_katakana.match(keiba_name)
-				# if re_katakana.match(keiba_name):
-				# 	for i in range(len(temp_past)):
-				# 		temp_past_list.append("0")
+				#エラーが多すぎるので海外の結果は除外します。
+				#カタカナ
+
+				if re.search(r'[ァ-ヶ]+',keiba_name):
+					print(keiba_name)
+					for i in range(len(temp_past)):
+						temp_past_list.append("0")
+					continue
 				#競馬場
 				temp_past_list = temp_past_list + getRaceNum(keiba_name)
 				#人気
