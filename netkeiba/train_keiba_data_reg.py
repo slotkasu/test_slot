@@ -166,10 +166,6 @@ Y_test=np.array(Y_test, dtype="int")
 
 Y_test=Y_test.T
 
-# Y_test=to_categorical(Y_test)
-
-# X_min=X_test.min(axis=0, keepdims=True)
-# X_max=X_test.max(axis=0, keepdims=True)
 X_test=(X_test-X_min) / (X_max - X_min)
 
 for i in device_lib.list_local_devices():
@@ -191,17 +187,17 @@ for i in device_lib.list_local_devices():
 
 #ディープラーニングモデル
 model = Sequential()
-model.add(Dense(128, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001), input_shape=(X_train.shape[1],),))
+model.add(Dense(300, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001), input_shape=(X_train.shape[1],),))
 # model.add(BatchNormalization())
 model.add(Dropout(0.2))
-model.add(Dense(64, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001) ))
+model.add(Dense(300, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001) ))
 # model.add(BatchNormalization())
 model.add(Dropout(0.2))
-model.add(Dense(1, activation='sigmoid'))
+model.add(Dense(1)
 
 model.summary()
 
-sgd = optimizers.SGD(lr=0.01, decay=1e-4, momentum=0.9, nesterov=True)
+sgd = optimizers.SGD(lr=0.001, decay=1e-6, momentum=0.9, nesterov=True)
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 epochs=1000
@@ -264,9 +260,9 @@ for i in range(len(predict_classes)):
 			hazure+=1
 	total+=1
 
-#あたりと予想した馬で、当たっていた馬のオッズのヒストグラムを表示
-plt.hist(atari_list, range=(0, 10));
-plt.show()
+# #あたりと予想した馬で、当たっていた馬のオッズのヒストグラムを表示
+# plt.hist(atari_list, range=(0, 10));
+# plt.show()
 
 #所持金の推移
 index=[i+1 for i in range(len(money_list))]
