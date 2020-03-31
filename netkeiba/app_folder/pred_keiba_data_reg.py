@@ -145,8 +145,17 @@ def getPredResult(race_name):
 	#		 print(str(idx+1)+":買うな")
 
 	# model.save("keiba_model.h5",include_optimizer=False)
+	
+	kai_str=""
 
-	return '・'.join(kai_list)
+	#買い目のstring
+	if len(kai_list) == 0:
+		kai_str="買い目なし"
+	else:
+		kai_str='・'.join(kai_list)
+
+
+	return kai_str
 
 
 def main():
