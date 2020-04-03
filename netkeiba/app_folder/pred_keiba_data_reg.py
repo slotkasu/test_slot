@@ -128,11 +128,16 @@ def getPredResult(race_name):
 	predict=[[idx,i] for idx, i in enumerate(predict)]
 
 	#複勝確率（正規化後）でソートする。
-	predict.sort(key=lambda x: x[1])
+	predict.sort(key=lambda x: x[1],reverse=True)
+
+	kai_list_sorted=[]
 
 	print("レース内相対評価")
+
 	#レース内で正規化し、相対評価に変更
 	for i in predict:
+		if str(i[0]+1) in kai_list:
+			kai_list_sorted.append(str(i[0]+1))
 		print(str(i[0]+1).zfill(2)+"番 複勝確率：{:.3f}".format(i[1][0]),"予想オッズ：{:.3f}".format(1+(1-0.2)/(i[1][0]+0.001)))
 
 	# print(title)
@@ -145,8 +150,17 @@ def getPredResult(race_name):
 	#		 print(str(idx+1)+":買うな")
 
 	# model.save("keiba_model.h5",include_optimizer=False)
+	
+	kai_str=""
 
-	return '・'.join(kai_list)
+	#買い目のstring
+	if len(kai_list_sorted) == 0:
+		kai_str="買い目なし"
+	else:
+		kai_str='・'.join(kai_list_sorted)
+
+
+	return kai_str
 
 
 def main():
