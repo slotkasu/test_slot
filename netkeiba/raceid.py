@@ -32,11 +32,11 @@ options.add_argument("--log-level=3")
 
 driver = webdriver.Chrome(chrome_options=options)
 
-years=['2016','2015','2014','2013','2012','2011','2010']
+years=['2010']
 for year in years:
 
 	#この番号からはじめる　8桁
-	skip = year + "06030311" #"00000000"
+	skip = year + "06040810" #"00000000"
 
 	for course in course_list:
 		for kaisai in kaisai_list:

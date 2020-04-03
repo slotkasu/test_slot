@@ -134,7 +134,7 @@ def makeKeibaDataset(date, train_mode=1, driver=None):
 				#エラーが多すぎるので海外の結果は除外します。
 				#カタカナ
 
-				if re.search(r'[ァ-ヶ]+',keiba_name):
+				if re.search(r'[ァ-ヶ]+',keiba_name) or keiba_name == "香港":
 					print(keiba_name)
 					for i in range(len(temp_past)):
 						temp_past_list.append("0")
@@ -299,4 +299,4 @@ def makeKeibaDataset(date, train_mode=1, driver=None):
 	#print("書き込み完了。お疲れさまでした（朧）")
 	return title
 
-makeKeibaDataset("201606030311")
+makeKeibaDataset("201006040811")

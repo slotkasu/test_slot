@@ -27,7 +27,7 @@ import pickle
  
 
 #データを再作成する場合は、1にする。
-data_create=0
+data_create=1
 
 if not os.path.isfile("X_train.txt") or data_create:
 	X_train=[]
@@ -35,8 +35,10 @@ if not os.path.isfile("X_train.txt") or data_create:
 
 	count0=[]
 	#trainデータを読み込み
-	paths = glob.glob("keiba\\datasets2\\2018\\*")
-	paths=paths+glob.glob("keiba\\datasets2\\2017\\*")
+	paths=[]
+	years=["2018", "2017", "2016", "2015", "2014", "2013", "2012", "2011", "2010"]
+	for i in years:
+		paths=paths+glob.glob("keiba\\datasets2\\"+i+"\\*")
 	for path in paths:
 		#print(path)
 		temp_list = []
@@ -177,7 +179,7 @@ for i in device_lib.list_local_devices():
 				tf.config.experimental.set_virtual_device_configuration(
 					gpus[0],
 					#GPUの最大使用率を4MBに制限　8GBのままではオーバーフローする。
-					[tf.config.experimental.VirtualDeviceConfiguration(memory_limit=512)])
+					[tf.config.experimental.VirtualDeviceConfiguration(memory_limit=256)])
 				logical_gpus = tf.config.experimental.list_logical_devices('GPU')
 				print(len(gpus), "Physical GPUs,", len(logical_gpus), "Logical GPUs")
 			except RuntimeError as e:
@@ -187,23 +189,22 @@ for i in device_lib.list_local_devices():
 
 #ディープラーニングモデル
 model = Sequential()
-model.add(Dense(300, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001), input_shape=(X_train.shape[1],),))
+model.add(Dense(100, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001), input_shape=(X_train.shape[1],),))
 # model.add(BatchNormalization())
 model.add(Dropout(0.2))
-model.add(Dense(300, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001) ))
+model.add(Dense(100, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001) ))
 # model.add(BatchNormalization())
 model.add(Dropout(0.2))
-model.add(Dense(1)
-
+model.add(Dense(1))
 model.summary()
 
 sgd = optimizers.SGD(lr=0.001, decay=1e-6, momentum=0.9, nesterov=True)
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-epochs=1000
+epochs=100
 
 history = model.fit(X_train, Y_train,
-					batch_size=512,
+					batch_size=32,
 					epochs=epochs,
 					verbose=1,
 					validation_data=(X_test, Y_test))
