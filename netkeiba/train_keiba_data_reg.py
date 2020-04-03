@@ -179,7 +179,7 @@ for i in device_lib.list_local_devices():
 				tf.config.experimental.set_virtual_device_configuration(
 					gpus[0],
 					#GPUの最大使用率を4MBに制限　8GBのままではオーバーフローする。
-					[tf.config.experimental.VirtualDeviceConfiguration(memory_limit=256)])
+					[tf.config.experimental.VirtualDeviceConfiguration(memory_limit=512)])
 				logical_gpus = tf.config.experimental.list_logical_devices('GPU')
 				print(len(gpus), "Physical GPUs,", len(logical_gpus), "Logical GPUs")
 			except RuntimeError as e:
@@ -189,10 +189,10 @@ for i in device_lib.list_local_devices():
 
 #ディープラーニングモデル
 model = Sequential()
-model.add(Dense(100, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001), input_shape=(X_train.shape[1],),))
+model.add(Dense(300, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001), input_shape=(X_train.shape[1],),))
 # model.add(BatchNormalization())
 model.add(Dropout(0.2))
-model.add(Dense(100, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001) ))
+model.add(Dense(300, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001) ))
 # model.add(BatchNormalization())
 model.add(Dropout(0.2))
 model.add(Dense(1))
@@ -204,7 +204,7 @@ model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy']
 epochs=100
 
 history = model.fit(X_train, Y_train,
-					batch_size=32,
+					batch_size=512,
 					epochs=epochs,
 					verbose=1,
 					validation_data=(X_test, Y_test))

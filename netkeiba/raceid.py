@@ -36,7 +36,7 @@ years=['2010']
 for year in years:
 
 	#この番号からはじめる　8桁
-	skip = year + "06040810" #"00000000"
+	skip = year + "09010211" #"00000000"
 
 	for course in course_list:
 		for kaisai in kaisai_list:
