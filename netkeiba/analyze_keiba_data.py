@@ -56,10 +56,7 @@ if not os.path.isfile("X_train.txt") or data_create:
 		# temp_list = csv.reader(csv_file, delimiter=",")
 
 		temp_list=temp_list[1:]
-		if "失格" in temp_list:
-			print(temp_list)
-			print(path)
-			exit(100)
+
 		temp_list=sorted(temp_list, key=lambda i:int(i[1]))
 		temp_list_top3=temp_list[:3]
 		temp_list_others=temp_list[3:]
