@@ -39,15 +39,13 @@
       <div class="row flex-xl-nowrap">
 
         <!-- ↓↓サイドバー↓↓ -->
-        <div id="sidemenu" class="col-2 d-none d-md-block bg-light sidebar align-self-start">
+        <div id="sidemenu" class="col-2 d-none d-sm-block sm-light sidebar align-self-start">
           <div class="sidebar-sticky">
             <ul class="nav flex-column">
 
               <li class="nav-item">
                 <nav class="navbar navbar-light bg-light">
-                  <a class="navbar-brand" href="/#">
-                    <span class="top" data-feather=""></span>Topページ 
-				  </a>
+                  <a class="navbar-brand" href="/#"><span></span>Topページ</a>
 				  <a class="navbar-brand" href="/accounts/login" ><span></span>ログイン</a>
                 <a class="navbar-brand" href="/accounts/logout" >ログアウト</a>
                 </nav>
@@ -59,8 +57,11 @@
 
         <!-- ↓↓コンテンツ本体↓↓ -->
         <div class="col-10">
-          {% block contents %}
+			<div class="jumbotron">
+				{% block contents %}
           {% endblock %}
+			</div>
+          
         </div>
         <!-- ↑↑コンテンツ本体ここまで↑↑ -->
       </div>
@@ -75,7 +76,11 @@
 <script>feather.replace()</script>
 
 <style>
-	a{
-		color:red
+	body a .navbar-brand{
+		display:block;
+		background:red
+	}
+	#sidemenu{
+		width: 200px;
 	}
 </style>
