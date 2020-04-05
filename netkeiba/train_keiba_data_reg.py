@@ -26,15 +26,18 @@ from operator import itemgetter
 import pickle
 
 
-	#trainデータを読み込み
-	paths=[]
-	years=["2018", "2017", "2016", "2015", "2014", "2013", "2012", "2011", "2010"]
-	for i in years:
-		paths=paths+glob.glob("keiba\\datasets2\\"+i+"\\*")
-	for path in paths:
-		#print(path)
-		temp_list = []
-		with open(path,"r") as f:
-			reader = csv.reader(f)
-			for row in reader:
-				temp_list.append(row)
+#trainデータを読み込み
+paths=[]
+years=["2018", "2017", "2016", "2015", "2014", "2013", "2012", "2011", "2010"]
+importrant=[3,8,9,10,11,12,17,28,32,37,38,40,41,42,43,45,46,47,48,59,63,68,69,72,73,76,77,78,79,90,94,99,100,103,104,107,108,109,110,121,125,131,134,138,139,140,141,152,156,162,169,170,171,172]
+
+for i in years:
+	paths=paths+glob.glob("keiba\\datasets2\\"+i+"\\*")
+for path in paths:
+	#print(path)
+	temp_list = []
+	with open(path,"r") as f:
+		reader = csv.reader(f)
+		for row in reader:
+			print(row[important])
+			temp_list.append(row)
