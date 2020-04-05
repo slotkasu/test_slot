@@ -20,7 +20,7 @@ course_list = [str(i+1).zfill(2) for i in range(10)]
 kaisai_list = [str(i+1).zfill(2) for i in range(4)]
 date_list = [str(i+1).zfill(2) for i in range(9)]
 # race_list = [str(i+7).zfill(2) for i in range(6)]
-race_list = [str(i+1).zfill(2) for i in range(6)]
+race_list = [str(i+1).zfill(2) for i in range(12)]
 
 
 
@@ -32,11 +32,11 @@ options.add_argument("--log-level=3")
 
 driver = webdriver.Chrome(chrome_options=options)
 
-years=['2011']
+years=['2018']
 for year in years:
 
 	#この番号からはじめる　8桁
-	skip = year + "05020802" #"00000000"
+	skip = year + "04020812" #"00000000"
 
 	for course in course_list:
 		for kaisai in kaisai_list:

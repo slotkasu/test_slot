@@ -1,3 +1,4 @@
 {
-    "python.pythonPath": "C:\\Users\\Yuto\\Anaconda3\\envs\\keras\\python.exe"
+    "python.pythonPath": "C:\\Users\\Yuto\\Anaconda3\\envs\\keras\\python.exe",
+    "git.ignoreLimitWarning": true
 }
