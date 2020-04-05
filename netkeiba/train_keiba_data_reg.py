@@ -244,7 +244,7 @@ money_list=[]
 
 for i in range(len(predict_classes)):
 	#買うとき
-	if predict_classes[i] > 0.7 and float(odds[i]) > 2.0:
+	if predict_classes[i] > 0.5 and float(odds[i]) > 1.0:
 		money-=100
 		# print(test_paths[i])
 
