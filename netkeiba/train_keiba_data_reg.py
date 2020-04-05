@@ -124,11 +124,17 @@ X_test=[]
 Y_test=[]
 
 test_paths=[]
+X_race_test=[]
+Y_race_test=[]
+
+
 
 #testデータを読み込み
 paths = glob.glob("keiba\\datasets2\\2019\\*")
 for path in paths:
-	
+	X_race_tmp=[]
+	Y_race_tmp=[]
+
 	csv_file = open(path, "r", newline="" )
 	temp_list = csv.reader(csv_file, delimiter=",")
 	flag=0
@@ -148,6 +154,13 @@ for path in paths:
 			#馬名、着順、オッズ
 			Y_test.append(i[:5])
 			X_test.append(list(map(float,i[5:])))
+
+			#レースごとにデータを投入するための一時リスト
+			Y_race_tmp.append(i[:5])
+			X_race_tmp.append(list(map(float,i[5:])))
+	
+	X_race_test.append(X_race_tmp)
+	Y_race_test.append(Y_race_tmp)
 
 odds=[i[3] for i in Y_test]
 # print(odds)
@@ -280,5 +293,25 @@ print("回収", kaishu)
 
 print('Test loss:', score[0])
 print('Test accuracy:', score[1])
+
+money=0
+#レースごとに予想する。
+for idx, (X_i,Y_i) in enumerate(zip(X_race_test, Y_race_test)):
+	X_i= (X_i - X_min) / (X_max - X_min)
+	tmp_numpy=np.array(X_i)
+
+	#予測
+	predict_classes = model.predict(tmp_numpy)
+	#馬番、予測、実際の結果を一つのリストにする。
+	predict_classes = [[jdx+1, list(p_j)[0], Y_j] for jdx, (p_j, Y_j) in enumerate(zip(predict_classes,Y_i))]
+	#予測順に並べ替える
+	predict_classes.sort(key=lambda x: x[1],reverse=True)
+	money-=100
+	# print(predict_classes)
+	if int(predict_classes[0][2][1])<=3:
+		money+=int(float(predict_classes[0][2][3])*100)
+	print(money)
+
+
 
 model.save("keiba_model_reg.h5",include_optimizer=False)

@@ -298,3 +298,5 @@ def makeKeibaDataset(date, train_mode=1, driver=None):
 	writer.writerows(RaceResult)
 	#print("書き込み完了。お疲れさまでした（朧）")
 	return title
+
+makeKeibaDataset("201810010510")
