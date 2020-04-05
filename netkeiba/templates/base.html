@@ -2,15 +2,18 @@
 
 {% load bootstrap4 %}
 {% bootstrap_css %}
-{% bootstrap_javascript jquery='slim' %}
+
 {% load static %}
 
 <html lang="ja">
   <head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" type='text/css' href="{% static 'css/style.css'%}">
+	
+	<meta charset="utf-8">
+	
+	<i class="fas fa-horse-head"></i>
+	<link rel='icon' href='./templates/icon.ico' type='image/x-icon' sizes="16x16" />
     <link rel="stylesheet" href="https://cccabinet.jpn.org/bootstrap4/css/style.css">
-    <title> Django開発サンプル </title>
+    <title> 競馬予想くん </title>
 
     {% block extra_css %}{% endblock %}
 
@@ -36,18 +39,20 @@
 
     <!-- 「サイドバー」と「コンテンツ本体部分」 -->
     <div id="content" class="container-fluid">
-      <div class="row flex-xl-nowrap">
+      <div class="row flex-xl">
 
         <!-- ↓↓サイドバー↓↓ -->
-        <div id="sidemenu" class="col-2 d-none d-sm-block sm-light sidebar align-self-start">
-          <div class="sidebar-sticky">
-            <ul class="nav flex-column">
+        <div id="sidemenu" class="col-auto d-none d-md-block align-self-start justify-content-start">
+          <div class="sidebar-sticky bg-light">
+            <ul class="nav flex-left bg-light">
 
               <li class="nav-item">
-                <nav class="navbar navbar-light bg-light">
+                <nav class="navbar navbar-light bg-light flex-column">
                   <a class="navbar-brand" href="/#"><span></span>Topページ</a>
 				  <a class="navbar-brand" href="/accounts/login" ><span></span>ログイン</a>
-                <a class="navbar-brand" href="/accounts/logout" >ログアウト</a>
+				<a class="navbar-brand" href="/accounts/logout" >ログアウト</a>
+				<!-- <li class="navbar-brand">jfkldsjflk;jsalkfjskflasklfksalflk;sajf;lkjflk;sajf;klsajfk;lajflk;ajf;klajfsa</li> -->
+				
                 </nav>
               </li>         
             </ul>
@@ -56,7 +61,7 @@
         <!-- ↑↑サイドバーここまで↑↑ -->
 
         <!-- ↓↓コンテンツ本体↓↓ -->
-        <div class="col-10">
+        <div class="col-auto">
 			<div class="jumbotron">
 				{% block contents %}
           {% endblock %}
@@ -76,11 +81,7 @@
 <script>feather.replace()</script>
 
 <style>
-	body a .navbar-brand{
-		display:block;
-		background:red
-	}
-	#sidemenu{
-		width: 200px;
+	span{
+		text-align: left;
 	}
 </style>
