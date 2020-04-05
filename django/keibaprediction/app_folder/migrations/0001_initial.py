@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('sample1', models.IntegerField(blank=True, null=True, verbose_name='sample1')),
-                ('sample2', models.IntegerField(blank=True, null=True, verbose_name='sample2')),
+                ('sample2', models.CharField(max_length=255, blank=True, null=True, verbose_name='sample2')),
             ],
             options={
                 'verbose_name_plural': 'sample_table',

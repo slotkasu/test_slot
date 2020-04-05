@@ -1,7 +1,6 @@
 from django.shortcuts import render  
 from django.views import View  
 from .models import SampleDB
-from .aaa import testing #importが効くかを確かめた
 
 from .pred_keiba_data_reg import getPredResult
 
