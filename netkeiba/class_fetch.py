@@ -10,6 +10,7 @@ import datetime
 from keiba_function import getRaceNum, getSexNum, getShibadaNum, getStateNum, getRaceResult, TtoF, getFuku
 from datetime import timedelta
 
+
 def makeKeibaDataset(date, train_mode=1, driver=None):
 	url = "https://race.netkeiba.com/race/shutuba_past.html?race_id="+date+"&rf=shutuba_submenu"
 
@@ -280,7 +281,7 @@ def makeKeibaDataset(date, train_mode=1, driver=None):
 			#各馬の情報
 			RaceResult[i].extend(Horseinfo[i])
 		#訓練データとして保存
-		file_name='keiba/datasets2/'+date[0:4]+"/"+date+'out.csv'
+		file_name='keiba/datasets3/'+date[0:4]+"/"+date+'.csv'
 	#csv書き込み
 	RaceResult=[i for i in RaceResult if not "中止" in i]
 
@@ -295,6 +296,31 @@ def makeKeibaDataset(date, train_mode=1, driver=None):
 	#trainモード:177が正　testモード：174が正
 	if len(RaceResult[1])-train_mode*3 != 174:
 		print("not 177")
+	
+	
+	#重要部分のみ抜き取る処理
+	temp_list=[]
+	important=[2,7,8,9,10,11,16,27,31,36,37,39,40,41,42,44,45,46,47,58,62,67,68,71,72,75,76,77,78,89,93,98,99,102,103,106,107,108,109,120,124,130,133,137,138,139,140,151,155,161,168,169,170,171]
+	for row in RaceResult:
+		#trainのとき
+		if len(row) == 177:
+			#ラベル部分　オッズとか
+			row_pre=row[:5]
+			#それ以外
+			row_past=row[5:]
+
+		#testのとき
+		elif len(row) == 174:
+			#ラベル部分　オッズとか
+			row_pre=row[:3]
+			#それ以外
+			row_past=row[3:]
+
+		#ランダムフォレストのやつでええ感じと判断された特徴量たち
+		row_past = [i for idx, i in enumerate(row_past) if idx in important]
+		row=row_pre+row_past
+		temp_list.append(row)
+	RaceResult=temp_list
 	writer.writerows(RaceResult)
 	#print("書き込み完了。お疲れさまでした（朧）")
 	return title

@@ -16,7 +16,7 @@ import seaborn as sn
 from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
 from imblearn.over_sampling import SMOTE
-from .class_fetch import makeKeibaDataset
+from class_fetch import makeKeibaDataset
 import pickle
 
 
@@ -86,8 +86,7 @@ def getPredResult(race_name):
 			if flag==0:
 				flag=1
 				continue
-			if len(i[2:]) == 172:
-				X_test.append(list(map(float,i[2:])))
+			X_test.append(list(map(float,i[2:])))
 
 
 	X_test=np.array(X_test, dtype="float32")

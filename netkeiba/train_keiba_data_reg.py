@@ -98,7 +98,6 @@ if not os.path.isfile("X_train.txt") or data_create:
 			temp.append(0)
 	Y_train=temp
 
-
 	X_train=np.array(X_train, dtype="float32")
 	Y_train=np.array(Y_train, dtype="int")
 
@@ -229,16 +228,16 @@ model.add(Dropout(0.2))
 model.add(Dense(300, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001) ))
 # model.add(BatchNormalization())
 model.add(Dropout(0.2))
-model.add(Dense(1))
+model.add(Dense(1,activation='sigmoid'))
 model.summary()
 
 sgd = optimizers.SGD(lr=0.001, decay=1e-6, momentum=0.9, nesterov=True)
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-epochs=10
+epochs=100
 
 history = model.fit(X_train, Y_train,
-					batch_size=512,
+					batch_size=2048,
 					epochs=epochs,
 					verbose=1,
 					validation_data=(X_test, Y_test))
@@ -276,47 +275,49 @@ total=0
 atari_list=[]
 money_list=[]
 
-for i in range(len(predict_classes)):
-	#買うとき
-	if predict_classes[i] > 0.5 and float(odds[i]) > 1.0:
-		money-=100
-		# print(test_paths[i])
+# for i in range(len(predict_classes)):
+# 	#買うとき
+# 	if predict_classes[i] > 0.5 and float(odds[i]) > 1.0:
+# 		money-=100
+# 		# print(test_paths[i])
 
-		#当たった時
-		if Y_test[i] == float(1):
-			# print("あたり"+str(odds[i]))
-			money += float(odds[i]) * 100
-			atari+=1
-			atari_list.append(float(odds[i]))
-			money_list.append(money)
-		#外れた時
-		else:
-			# print("はずれ"+str(odds[i]))
-			hazure+=1
-	total+=1
+# 		#当たった時
+# 		if Y_test[i] == float(1):
+# 			# print("あたり"+str(odds[i]))
+# 			money += float(odds[i]) * 100
+# 			atari+=1
+# 			atari_list.append(float(odds[i]))
+# 			money_list.append(money)
+# 		#外れた時
+# 		else:
+# 			# print("はずれ"+str(odds[i]))
+# 			hazure+=1
+# 	total+=1
 
 # #あたりと予想した馬で、当たっていた馬のオッズのヒストグラムを表示
 # plt.hist(atari_list, range=(0, 10));
 # plt.show()
 
-#所持金の推移
-index=[i+1 for i in range(len(money_list))]
-plt.plot(index, money_list)
-plt.show()
+# #所持金の推移
+# index=[i+1 for i in range(len(money_list))]
+# plt.plot(index, money_list)
+# plt.show()
 
-odds_ave= sum(atari_list) / len(atari_list)
-print("平均オッズ:"+str(odds_ave))
-print("儲け"+str(money))
-print(atari, hazure, total)
-total=(atari+hazure)*100
-kaishu=(total+money)/total
-print("回収", kaishu)
+# odds_ave= sum(atari_list) / len(atari_list)
+# print("平均オッズ:"+str(odds_ave))
+# print("儲け"+str(money))
+# print(atari, hazure, total)
+# total=(atari+hazure)*100
+# kaishu=(total+money)/total
+# print("回収", kaishu)
 
 print('Test loss:', score[0])
 print('Test accuracy:', score[1])
 
 money=0
 #レースごとに予想する。
+atari=0
+hazure=0
 for idx, (X_i,Y_i) in enumerate(zip(X_race_test, Y_race_test)):
 	X_i= (X_i - X_min) / (X_max - X_min)
 	tmp_numpy=np.array(X_i)
@@ -330,8 +331,17 @@ for idx, (X_i,Y_i) in enumerate(zip(X_race_test, Y_race_test)):
 	money-=100
 	# print(predict_classes)
 	if int(predict_classes[0][2][1])<=3:
-		money+=int(float(predict_classes[0][2][3])*100)
+		print("あたり"+predict_classes[0][2][1]+" "+str(predict_classes[0][1])+" "+predict_classes[0][2][3]+" "+predict_classes[0][2][4])
+		fukusho=float(predict_classes[0][2][3])+(float(predict_classes[0][2][4])-float(predict_classes[0][2][3]))/3
+		money+=int(fukusho*100)
+		atari+=1
+	else:
+		print("はずれ"+predict_classes[0][2][1]+" "+str(predict_classes[0][1]))
+		hazure+=1
 	print(money)
+
+atari_rate=float(atari)/float(atari+hazure)
+print(atari_rate)
 
 
 

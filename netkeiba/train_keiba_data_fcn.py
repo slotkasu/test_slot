@@ -252,14 +252,14 @@ for i in range(len(predict_classes)):
 
 		#当たった時
 		if Y_test[i] == float(1):
-			# print("あたり"+str(odds[i]))
+			print("あたり"+str(odds[i]))
 			money += float(odds[i]) * 100
 			atari+=1
 			atari_list.append(float(odds[i]))
 			money_list.append(money)
 		#外れた時
 		else:
-			# print("はずれ"+str(odds[i]))
+			print("はずれ"+str(odds[i]))
 			hazure+=1
 	total+=1
 
