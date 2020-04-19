@@ -78,9 +78,14 @@ def forbun(request):
 def result(request):
 	raceid = request.POST['raceid']
 	print(raceid)
-	print(type(raceid))
-	temp = getPredResult(raceid)
-	print(temp)
-	Prediction.objects.create(raceid=raceid, ranking="")
-	time_now = dt.datetime.now()
-	return render(request,'blog/result.html',{'id':raceid,'now':time_now})
+	temp = Prediction.objects.get(raceid=raceid)
+	if temp:
+		ret = temp
+
+	else:
+		temp = getPredResult(raceid)
+		nowtime = dt.datetime.now()
+		Prediction.objects.create(raceid=raceid, ranking=temp, req_time=nowtime)
+		ret = Prediction.objects.get(raceid)
+
+	return render(request,'blog/result.html',{"atai":ret})

@@ -2,8 +2,15 @@
 
 {% block content %}
 	<div>
-		<tx>{{now}}</tx>
-		<tx>{{id}}</tx>
+		<tx id="raceid">レースID：{{atai.raceid}}</tx>
+		<br>
+		<tx id="buylist">買い目：{{atai.ranking}}</tx>
+		<br>
+		<tx id="predtime">
+			予想日：{{atai.req_time}}
+		</tx>
+
+		
 		
 	</div>
 {% endblock %}

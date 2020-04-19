@@ -1,13 +1,27 @@
 
-	h1{
-		background:yellow;
-		margin:-10 -10 -0 -10;
-		border-bottom:solid gray 5px;
-		font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-	}
-	body{
-		background:#dbfffd;
-	}
-	.date{
-		border-bottom: solid 5px #ff0000;
-	}
+h1{
+	background:yellow;
+	margin:-10 -10 -0 -10;
+	border-bottom:solid gray 5px;
+	font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+body{
+	background:#dbfffd;
+}
+.date{
+	border-bottom: solid 5px #ff0000;
+}
+
+#id{
+	font-size: 30px;
+	color:pink;
+}
+#buylist{
+	font-size: 80px;
+	color: red;
+
+}
+#predtime{
+	font-size:10px;
+	color:green;
+}

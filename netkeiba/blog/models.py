@@ -18,9 +18,9 @@ class Post(models.Model):
 		return self.title
 
 class Prediction(models.Model):
-	raceid = models.CharField(max_length=12)
+	raceid = models.CharField(max_length=12,unique=True)
 	ranking = models.CharField(max_length=100)
-	req_time = models.DateField()
+	req_time = models.DateTimeField()
 
 	def __str__(self):
 		return self.raceid
