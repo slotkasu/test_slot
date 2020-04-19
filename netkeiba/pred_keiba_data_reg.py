@@ -89,7 +89,6 @@ def getPredResult(race_name):
 			X_test.append(list(map(float,i[2:])))
 
 	X_test=np.array(X_test, dtype="float32")
-
 	#データを全て正規化（0～1）の間に収める
 	X_test=(X_test-X_min) / (X_max - X_min)
 
@@ -142,13 +141,13 @@ def getPredResult(race_name):
 	#		 print(str(idx+1)+":買うな")
 
 	# model.save("keiba_model.h5",include_optimizer=False)
-
+	print(kai_list)
 	print(",".join(kai_list))
 	return ",".join(kai_list)
 
 
 def main():
-	print(getPredResult(202007010811))
+	print(getPredResult(202006030810))
 
 if __name__ == '__main__':
 	main()

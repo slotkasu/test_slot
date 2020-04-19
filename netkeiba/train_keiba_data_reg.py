@@ -222,11 +222,11 @@ for i in device_lib.list_local_devices():
 
 #ディープラーニングモデル
 model = Sequential()
-model.add(Dense(300, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001), input_shape=(X_train.shape[1],),))
-# model.add(BatchNormalization())
+model.add(Dense(500, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001), input_shape=(X_train.shape[1],),))
+model.add(BatchNormalization())
 model.add(Dropout(0.2))
-model.add(Dense(300, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001) ))
-# model.add(BatchNormalization())
+model.add(Dense(500, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001) ))
+model.add(BatchNormalization())
 model.add(Dropout(0.2))
 model.add(Dense(1,activation='sigmoid'))
 model.summary()
