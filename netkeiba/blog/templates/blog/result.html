@@ -1,16 +1,21 @@
 {% extends 'blog/base.html' %}
-
+{%load static%}
 {% block content %}
-	<div>
-		<tx id="raceid">レースID：{{atai.raceid}}</tx>
-		<br>
-		<tx id="buylist">買い目：{{atai.ranking}}</tx>
-		<br>
-		<tx id="predtime">
-			予想日：{{atai.req_time}}
-		</tx>
+{% if warning %}
+<tx id="warn">{{warning}}</tx>
+{%else%}
+<div>
+	<tx id="raceid">
+		レースID：{{atai.raceid}}</tx>
+	<br>
+	<tx id="buylist">
+		買い目：{{atai.ranking}}</tx>
+	<br>
+	<tx id="predtime">
+		予想日：{{atai.req_time}}
+	</tx>
+</div>
+{%endif%}
 
-		
-		
-	</div>
+	
 {% endblock %}

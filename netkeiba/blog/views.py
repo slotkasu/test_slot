@@ -74,18 +74,32 @@ def forbun(request):
 	print(time_now)
 	return render(request,'blog/tesuto.html',{'list':ls, 'now':time_now})
 
-
+# 予想結果を返すくん
 def result(request):
-	raceid = request.POST['raceid']
-	print(raceid)
-	temp = Prediction.objects.get(raceid=raceid)
-	if temp:
-		ret = temp
-
+	
+	if request.method =="POST":
+		# リクエストからraceidを抜き出します
+		raceid = request.POST['raceid']
 	else:
+		return render(request,'blog/result.html',{"warning": "INVALID METHOD TO PREDICT."})
+	
+	# raceidが12桁かどうかを判定
+	if len(raceid)!=12:
+		return render(request,'blog/result.html',{"warning": "INVALID RACEID."})
+	# 既に予想してるかどうか
+	temp = Prediction.objects.filter(raceid=raceid)
+	# してた
+	if temp:
+		print("already exist")
+	# してない
+	else:
+		# 予想します
 		temp = getPredResult(raceid)
+		# 今の時間
 		nowtime = dt.datetime.now()
+		# 予想結果を保存
 		Prediction.objects.create(raceid=raceid, ranking=temp, req_time=nowtime)
-		ret = Prediction.objects.get(raceid)
 
+	# 戻り値
+	ret = Prediction.objects.get(raceid=raceid)
 	return render(request,'blog/result.html',{"atai":ret})

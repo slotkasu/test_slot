@@ -7,12 +7,15 @@ h1{
 }
 body{
 	background:#dbfffd;
+	/* background:red; */
 }
 .date{
 	border-bottom: solid 5px #ff0000;
 }
 
-#id{
+/* このへんをきかせる */
+
+#raceid{
 	font-size: 30px;
 	color:pink;
 }
@@ -24,4 +27,8 @@ body{
 #predtime{
 	font-size:10px;
 	color:green;
+}
+#warn{
+	font-size:100px;
+	color:red;
 }
