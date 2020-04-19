@@ -1,0 +1,36 @@
+{%load static%}
+<html>
+	<head>
+		<title>競馬予想くん</title>
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+		<link rel="stylesheet" type="text/css" href="{%static 'blog/app.css'%}">
+		<link rel="shortcut icon" type="icon" href="{%static 'blog/food_gyudon.png'%}">
+	</head>
+	<body>
+		<!-- ヘッダ -->
+		<div class="page-header">
+			<h1><a href="/">競馬予想くん</a></h1>
+			<img src="{% static 'blog/food_gyudon.png'%}" width="120" height="120" alt="牛丼の写真" title="うまそう">
+			<br>
+			<form action="{%url 'result'%}" class="keibakun" method="POST">
+				{% csrf_token %}
+				<p>レースID:</p>
+				<input type="text" name="raceid" maxlength="12">
+				<br>
+				<input type="submit" class="btn-square-little-rich" id="submission" value="送信">
+				<input type="reset" class="btn-square-little-rich" id="reset" value="reset">
+			</form>
+			{%if user.is_authenticated %}
+				
+				<a href="{% url 'post_new' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
+				<br>
+				<a href="{% url 'forbun' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
+
+			{% endif %}
+		</div>
+		{% block content %}
+		{% endblock %}
+	</body>
+</html>
+

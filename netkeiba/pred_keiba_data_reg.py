@@ -88,9 +88,7 @@ def getPredResult(race_name):
 				continue
 			X_test.append(list(map(float,i[2:])))
 
-
 	X_test=np.array(X_test, dtype="float32")
-
 
 	#データを全て正規化（0～1）の間に収める
 	X_test=(X_test-X_min) / (X_max - X_min)
@@ -112,7 +110,7 @@ def getPredResult(race_name):
 		print(str(idx+1).zfill(2)+"番 複勝確率：{:.3f}".format(i[0]),end=" ")
 		if i>0.5:
 			print("買い")
-			kai_list.append(idx+1)
+			kai_list.append(str(idx+1))
 		else:
 			print("不買")
 

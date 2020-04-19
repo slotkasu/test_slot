@@ -1,0 +1,15 @@
+
+h1{
+	background:yellow;
+	margin:-10 -10 -0 -10;
+	border-bottom:solid gray 5px;
+	font-family: 'Lobster';
+	font-size: 60px;
+	font-weight: lighter;
+}
+body{
+	background:#dbfffd;
+}
+.date{
+	border-bottom: solid 5px #880000;
+}

@@ -1,0 +1,13 @@
+
+	h1{
+		background:yellow;
+		margin:-10 -10 -0 -10;
+		border-bottom:solid gray 5px;
+		font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+	}
+	body{
+		background:#dbfffd;
+	}
+	.date{
+		border-bottom: solid 5px #ff0000;
+	}

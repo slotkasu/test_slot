@@ -1,0 +1,12 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+	<div>
+		<tx>{{now}}</tx>
+		<br>
+		{% for i in list %}
+		<num>{{i}}</num>
+		<br>
+		{% endfor %}
+	</div>
+{% endblock %}

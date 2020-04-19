@@ -1,0 +1,12 @@
+
+	h1{
+		background:yellow;
+		margin:-10 -10 -0 -10;
+		border-bottom:solid gray 5px;
+	}
+	body{
+		background:#dbfffd;
+	}
+	.date{
+		border-bottom: solid 5px #ff0000;
+	}

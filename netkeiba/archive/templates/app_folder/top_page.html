@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block contents %}
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center mt-5 border-bottom">
+    <h1 class="h2">予想くん</h1>
+</div>
+
+<div>
+	<form action="suko.php">
+		<fieldset>
+			<legend>入力</legend>
+			<br></br>
+			<input id="inputurl" type="url">
+			<button type = "submit">よそう</button>
+		</fieldset>
+	</form>
+</div>
+
+{% endblock %}
