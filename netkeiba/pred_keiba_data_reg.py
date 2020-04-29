@@ -89,6 +89,7 @@ def getPredResult(race_name):
 			X_test.append(list(map(float,i[2:])))
 
 	X_test=np.array(X_test, dtype="float32")
+
 	#データを全て正規化（0～1）の間に収める
 	X_test=(X_test-X_min) / (X_max - X_min)
 

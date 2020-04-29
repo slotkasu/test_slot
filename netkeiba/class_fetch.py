@@ -312,9 +312,9 @@ def makeKeibaDataset(date, train_mode=1, driver=None):
 		#testのとき
 		elif len(row) == 174:
 			#ラベル部分　オッズとか
-			row_pre=row[:2]
+			row_pre=row[:3]
 			#それ以外
-			row_past=row[2:]
+			row_past=row[3:]
 
 		#ランダムフォレストのやつでええ感じと判断された特徴量たち
 		row_past = [i for idx, i in enumerate(row_past) if idx in important]
@@ -325,4 +325,4 @@ def makeKeibaDataset(date, train_mode=1, driver=None):
 	#print("書き込み完了。お疲れさまでした（朧）")
 	return title
 
-makeKeibaDataset("201810010510",train_mode=0)
+makeKeibaDataset("201810010510")
