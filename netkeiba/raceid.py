@@ -10,6 +10,7 @@ from datetime import timedelta
 from class_fetch import makeKeibaDataset
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from get_race_name import makeRaceName
 
 year = '2020'
 
@@ -48,5 +49,7 @@ for year in years:
 						continue
 					else:
 						kekka = makeKeibaDataset(year+course+kaisai+date+race,driver=driver)
+						#レース名取得
+						#kekka = makeRaceName(year+course+kaisai+date+race)
 						if kekka == 3:
 							break
