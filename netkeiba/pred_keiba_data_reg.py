@@ -141,13 +141,12 @@ def getPredResult(race_name):
 	#		 print(str(idx+1)+":買うな")
 
 	# model.save("keiba_model.h5",include_optimizer=False)
-	print(kai_list)
-	print(",".join(kai_list))
+	# print(",".join(kai_list))
 	return ",".join(kai_list)
 
 
 def main():
-	print(getPredResult(202006030810))
+	print(getPredResult(202006030812))
 
 if __name__ == '__main__':
 	main()
