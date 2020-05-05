@@ -29,11 +29,7 @@ def makeRaceName(date):
 	html = requests.get(url)
 	html.encoding =html.apparent_encoding
 	soup = BeautifulSoup(html.content,'lxml',from_encoding="euc-jp")
-	try:
-		title = soup.find("div",class_="RaceName").text.strip()
-	except:
-		print("CANT GET RACE NAME")
-		title = None
+	
 	#trタグのHorseListクラスからtr_[0-9]{2}のものだけを抽出
 	horseLists = soup.find_all("tr",class_="HorseList",id=re.compile(r"tr_[0-9]+"))
 	if len(horseLists) == 0:
@@ -42,6 +38,11 @@ def makeRaceName(date):
 	if soup.find("tr",class_="HorseList Cancel"):
 		print("除外馬が存在するためスキップします。")
 		return 1
+	try:
+		title = soup.find("div",class_="RaceName").text.strip()
+	except:
+		print("CANT GET RACE NAME")
+		title = None
 
 	user = (int(date),title)
 	
