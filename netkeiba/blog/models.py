@@ -24,5 +24,3 @@ class Prediction(models.Model):
 
 	def __str__(self):
 		return self.raceid
-
-		#23071

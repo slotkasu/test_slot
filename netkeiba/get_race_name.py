@@ -9,7 +9,15 @@ import time
 import datetime
 from keiba_function import getRaceNum, getSexNum, getShibadaNum, getStateNum, getRaceResult, TtoF, getFuku
 from datetime import timedelta
+import sqlite3
+from contextlib import closing
+import glob
 
+# データベース名
+dbname = sqlite3.connect("keibadata.sqlite3")
+c = dbname.cursor()
+
+sql = 'insert into racenametable (race_number, racename) values (?,?)'
 
 # レース番号とレース名を対応付けするための関数
 # DBが完成したときに、SQL処理を付け足す
@@ -30,9 +38,15 @@ def makeRaceName(date):
 	if soup.find("tr",class_="HorseList Cancel"):
 		print("除外馬が存在するためスキップします。")
 		return 1
-	
-	print(date, title)
 
-	#SQLを書く
+	user = (int(date),title)
+	
+	try:
+		c.execute(sql,user)
+		dbname.commit()
+	except:
+		print(date, title, "ERROR : already exists.")
 
 	return 0
+
+makeRaceName("201804030612")

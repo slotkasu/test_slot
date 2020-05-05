@@ -33,11 +33,11 @@ options.add_argument("--log-level=3")
 
 driver = webdriver.Chrome(chrome_options=options)
 
-years=['2018']
+years=['2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020']
 for year in years:
 
 	#この番号からはじめる　8桁
-	skip = year + "04020812" #"00000000"
+	skip = year + "00000000"
 
 	for course in course_list:
 		for kaisai in kaisai_list:
@@ -48,8 +48,9 @@ for year in years:
 					if int(temp) < int(skip):
 						continue
 					else:
-						kekka = makeKeibaDataset(year+course+kaisai+date+race,driver=driver)
+						# original
+						# kekka = makeKeibaDataset(year+course+kaisai+date+race,driver=driver)
 						#レース名取得
-						#kekka = makeRaceName(year+course+kaisai+date+race)
+						kekka = makeRaceName(year+course+kaisai+date+race)
 						if kekka == 3:
 							break
