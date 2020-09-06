@@ -28,10 +28,19 @@ class SlotApp(wx.Frame):
 		#ボタン割り当て
 		self.Bind(wx.EVT_BUTTON, self.startLottery, self.startButton)
 		
+		#画像表示
+		image = wx.Image('test.jpg')
+		self.bitmap = image.ConvertToBitmap()
+		self.bitmap = wx.BitmapFromImage(image.Scale(50,50))
+
+		self.lamp=wx.StaticBitmap(self.panel, -1, self.bitmap, (0,0), self.GetClientSize())
+		self.SetSize(image.GetSize())
+
 		#レイアウト設定
 		self.layout = wx.BoxSizer(wx.VERTICAL)
 		self.layout.Add(self.flag_text,flag=wx.GROW)
 		self.layout.Add(self.startButton,flag=wx.ALIGN_CENTER | wx.BOTTOM | wx.RIGHT, border=10)
+		self.layout.Add(self.lamp,flag=wx.BOTTOM)
 		self.panel.SetSizer(self.layout)
 
 		#表示処理
