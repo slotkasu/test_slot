@@ -42,6 +42,8 @@ class Slot:
 	flag_range = []
 	koyaku_list = []
 
+	maki_count = 0
+
 	def AT_games_won(self,mode):
 		ran = rd.randrange(100)
 		if mode == 0:
@@ -64,17 +66,18 @@ class Slot:
 			else:
 				return 200
 
+	#AT抽選
 	def AT_lottery(self,flag):
 		ran = rd.randrange(100)
 		if flag == "chance_rep":
 			if ran < 60:
-				self.state = True
+				self.state = 1
 				self.AT_games_left += self.AT_games_won(0)
 			elif ran < 80 and self.state != 0:
 				self.AT_games_left += self.AT_games_won(1)
 		elif flag == "kyo_cherry":
 			if ran < 20:
-				self.state = True
+				self.state = 1
 				self.AT_games_left += 50
 			elif ran < 30 and self.state != 0:
 				self.AT_games_left += self.AT_games_won(1)
@@ -97,11 +100,16 @@ class Slot:
 	def setState(self,state):
 		self.state = state
 	def getState(self):
-		return self.state
+		if self.state == 0:
+			return "通常"
+		elif self.state == 1:
+			return "AT"
 	def getGames(self):
 		return self.games
 	def getFlagrange(self):
 		return self.flag_range
+	def getATgames(self):
+		return self.AT_games_left
 
 
 	def getLastflag(self):
@@ -120,6 +128,7 @@ class Slot:
 		
 		# makimono
 		if self.koyaku_list[i].getName() == "chance_rep":
+			self.maki_count += 1
 			if ran%2 == 1:
 				self.AT_lottery("chance_rep")
 			else:
@@ -128,6 +137,8 @@ class Slot:
 		elif self.koyaku_list[i].getName() == "kyo_cherry":
 			if ran % 3 == 0:
 				self.AT_lottery("kyo_cherry")
+			if self.state != 0:
+				self.AT_games_won(0)
 
 		# 押し順ベルのとき
 		elif self.koyaku_list[i].getName() == "osi_bell":
@@ -138,6 +149,7 @@ class Slot:
 				self.medals -= self.koyaku_list[i].getPayout()
 		elif self.koyaku_list[i].getName() == "freeze":
 			print("freeze")
+			self.AT_games_won(2)
 			# time.sleep(10)
 			#曲を流す
 
@@ -180,5 +192,6 @@ def __main__():
 	for i in range(10000):
 		slot.lottery()
 	print(slot.getMedals())
+
 	plt.plot(slot.x_games,slot.y_medals)
 	plt.show()
