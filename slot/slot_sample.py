@@ -50,16 +50,16 @@ class Slot:
 			if ran < 70:
 				return 50
 			elif ran > 97:
-				return 100
+				return 150
 			else:
-				return 70
+				return 100
 		elif mode == 1:
 			if ran < 70:
 				return 100
 			elif ran < 80:
 				return 150
 			else:
-				return 50
+				return 120
 		elif mode == 2:
 			if ran <= 50:
 				return 500
@@ -115,6 +115,9 @@ class Slot:
 	def getLastflag(self):
 		return self.last_flag
 
+	def getmakicount(self):
+		return self.maki_count
+
 	#抽選
 	def lottery(self):
 		
@@ -129,7 +132,7 @@ class Slot:
 		# makimono
 		if self.koyaku_list[i].getName() == "chance_rep":
 			self.maki_count += 1
-			if ran%2 == 1:
+			if ran%3 <= 1:
 				self.AT_lottery("chance_rep")
 			else:
 				self.AT_games_won(0)
@@ -192,6 +195,7 @@ def __main__():
 	for i in range(10000):
 		slot.lottery()
 	print(slot.getMedals())
-
+	print(slot.getmakicount())
 	plt.plot(slot.x_games,slot.y_medals)
 	plt.show()
+__main__()
