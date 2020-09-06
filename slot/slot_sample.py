@@ -3,6 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import time
 
+
+
 # 小役の定義
 class Koyaku:
 	prob = 10000
@@ -44,27 +46,29 @@ class Slot:
 
 	maki_count = 0
 
+	# 上乗せ　振り分け
 	def AT_games_won(self,mode):
 		ran = rd.randrange(100)
 		if mode == 0:
 			if ran < 70:
-				return 50
+				self.AT_games_left += 30
 			elif ran > 97:
-				return 150
+				self.AT_games_left += 100
 			else:
-				return 100
+				self.AT_games_left += 50
 		elif mode == 1:
 			if ran < 70:
-				return 100
+				self.AT_games_left += 100
 			elif ran < 80:
-				return 150
+				self.AT_games_left += 150
 			else:
-				return 120
+				self.AT_games_left += 120
 		elif mode == 2:
+			self.state = 1
 			if ran <= 50:
-				return 500
+				self.AT_games_left += 500
 			else:
-				return 200
+				self.AT_games_left += 200
 
 	#AT抽選
 	def AT_lottery(self,flag):
@@ -72,21 +76,22 @@ class Slot:
 		if flag == "chance_rep":
 			if ran < 60:
 				self.state = 1
-				self.AT_games_left += self.AT_games_won(0)
-			elif ran < 80 and self.state != 0:
-				self.AT_games_left += self.AT_games_won(1)
+				self.AT_games_won(0)
+			elif ran < 70 and self.state != 0:
+				self.AT_games_won(1)
 		elif flag == "kyo_cherry":
 			if ran < 20:
 				self.state = 1
 				self.AT_games_left += 50
-			elif ran < 30 and self.state != 0:
-				self.AT_games_left += self.AT_games_won(1)
+			elif ran < 25 and self.state != 0:
+				self.AT_games_won(1)
 
 	#フラグの個数を渡すと範囲にして返してくれる
 	def countToRange(self,flag_count):
 		flag_range = [sum(flag_count[:i]) for i in range(1,len(flag_count)+1)]
 		return flag_range
 
+	# 初期化
 	def __init__(self,koyaku_list):
 		self.games = 0
 		self.AT_games_left = 0
@@ -115,8 +120,6 @@ class Slot:
 	def getLastflag(self):
 		return self.last_flag
 
-	def getmakicount(self):
-		return self.maki_count
 
 	#抽選
 	def lottery(self):
@@ -128,17 +131,14 @@ class Slot:
 		for i in range(len(self.getFlagrange())):
 			if ran < self.getFlagrange()[i]:
 				break
-		
+
 		# makimono
 		if self.koyaku_list[i].getName() == "chance_rep":
-			self.maki_count += 1
-			if ran%3 <= 1:
+			if ran%5 <= 2:
 				self.AT_lottery("chance_rep")
-			else:
-				self.AT_games_won(0)
 		# 今日チェ
 		elif self.koyaku_list[i].getName() == "kyo_cherry":
-			if ran % 3 == 0:
+			if ran % 4 == 0:
 				self.AT_lottery("kyo_cherry")
 			if self.state != 0:
 				self.AT_games_won(0)
@@ -152,8 +152,9 @@ class Slot:
 				self.medals -= self.koyaku_list[i].getPayout()
 		elif self.koyaku_list[i].getName() == "freeze":
 			print("freeze")
+			# time.sleep(2)
 			self.AT_games_won(2)
-			# time.sleep(10)
+			
 			#曲を流す
 
 		# 毎回3枚入るので-3
@@ -187,15 +188,29 @@ def reset():
 	return slot
 
 
-tama = 0
 
+_try = 1000
+hist_array = np.zeros(_try)
 
 def __main__():
 	slot = reset()
 	for i in range(10000):
 		slot.lottery()
-	print(slot.getMedals())
-	print(slot.getmakicount())
+
+	# print(slot.getMedals())
 	plt.plot(slot.x_games,slot.y_medals)
-	plt.show()
-__main__()
+
+	return slot.getMedals()
+summed = 0
+
+for i in range(_try):
+	temp = __main__()
+	hist_array[i] = temp
+	summed += temp
+
+print(summed/_try,1+(summed/_try/30000))
+plt.show()
+
+plt.hist(hist_array)
+
+plt.show()
