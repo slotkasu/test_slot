@@ -51,7 +51,7 @@ class SlotApp(wx.Frame):
 		#抽選開始
 		self.slot.lottery()
 		#抽選内容を表示
-		self.flag_text.SetLabel(self.slot.getLastFlag()+" "+str(self.slot.getMedals()))
+		self.flag_text.SetLabel(self.slot.getLastflag()+" "+str(self.slot.getMedals()))
 
 #アプリ定義
 app=wx.App()

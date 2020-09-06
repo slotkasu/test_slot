@@ -179,5 +179,3 @@ def __main__():
 	print(slot.getMedals())
 	plt.plot(slot.x_games,slot.y_medals)
 	plt.show()
-
-__main__()
