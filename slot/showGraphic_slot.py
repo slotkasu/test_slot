@@ -22,6 +22,7 @@ class SlotApp(wx.Frame):
 		self.flag_text2 = wx.StaticText(self.panel,wx.ID_ANY,'',style=wx.ALIGN_CENTRE_HORIZONTAL |wx.ST_NO_AUTORESIZE)
 		font=wx.Font(30, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL)
 		self.flag_text.SetFont(font)
+		self.flag_text2.SetFont(font)
 
 		#ボタン作成
 		self.startButton=wx.Button(self.panel, label="Start")
