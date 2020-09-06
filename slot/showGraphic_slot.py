@@ -1,6 +1,6 @@
 import wx
 import numpy as np
-import slot_sample
+from slot_sample import *
 
 class SlotApp(wx.Frame):
 
@@ -11,7 +11,7 @@ class SlotApp(wx.Frame):
 		self.panel = wx.Panel(self)
 
 		#フラグ表示用処理
-		self.flag_text = wx.StaticText(self.panel,wx.ID_ANY,'小役',style=wx.TE_CENTER)
+		self.flag_text = wx.StaticText(self.panel,wx.ID_ANY,'小役',style=wx.ALIGN_CENTRE_HORIZONTAL |wx.ST_NO_AUTORESIZE)
 		font=wx.Font(30, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL)
 		self.flag_text.SetFont(font)
 
@@ -32,11 +32,9 @@ class SlotApp(wx.Frame):
 		self.Show()
 
 	def startLottery(self,event):
-		self.flag_text.SetLabel("テスト")
-		font=wx.Font(30, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL)
-		self.flag_text.SetFont(font)
-
-
+		self.slot=reset()
+		print(self.slot.getGames())
+		# self.flag_text.SetLabel()
 
 app=wx.App()
 SlotApp(None,id=wx.ID_ANY,title="S牙狼魔戒ノ花XX")
