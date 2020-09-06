@@ -195,5 +195,3 @@ def __main__():
 
 	plt.plot(slot.x_games,slot.y_medals)
 	plt.show()
-
-__main__()
