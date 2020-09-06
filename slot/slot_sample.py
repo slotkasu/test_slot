@@ -34,6 +34,7 @@ class Slot:
 	medals = 0
 	x_games = np.arange(0,10000)
 	y_medals = np.zeros(10000)
+	last_flag = ""
 
 	# 状態
 	state = 0
@@ -51,12 +52,12 @@ class Slot:
 			else:
 				return 70
 		elif mode == 1:
-			if ran < 50:
-				return 50
-			elif ran < 80:
+			if ran < 70:
 				return 100
+			elif ran < 80:
+				return 150
 			else:
-				return 120
+				return 50
 		elif mode == 2:
 			if ran <= 50:
 				return 500
@@ -66,10 +67,10 @@ class Slot:
 	def AT_lottery(self,flag):
 		ran = rd.randrange(100)
 		if flag == "chance_rep":
-			if ran < 40:
+			if ran < 60:
 				self.state = True
 				self.AT_games_left += self.AT_games_won(0)
-			elif ran < 50 and self.state != 0:
+			elif ran < 80 and self.state != 0:
 				self.AT_games_left += self.AT_games_won(1)
 		elif flag == "kyo_cherry":
 			if ran < 20:
@@ -77,9 +78,6 @@ class Slot:
 				self.AT_games_left += 50
 			elif ran < 30 and self.state != 0:
 				self.AT_games_left += self.AT_games_won(1)
-
-
-
 
 	#フラグの個数を渡すと範囲にして返してくれる
 	def countToRange(self,flag_count):
@@ -124,7 +122,7 @@ class Slot:
 				self.AT_games_won(0)
 		# 今日チェ
 		elif self.koyaku_list[i].getName() == "kyo_cherry":
-			if ran % 4 == 0:
+			if ran % 3 == 0:
 				self.AT_lottery("kyo_cherry")
 
 		# 押し順ベルのとき
@@ -146,6 +144,7 @@ class Slot:
 		if self.state != 0:
 			self.AT_games_left -= 1
 		self.games += 1
+		self.last_flag = self.koyaku_list[i].getName()
 
 def probToCount(prob):
 	return int(65536/prob)
