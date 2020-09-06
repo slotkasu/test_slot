@@ -2,12 +2,19 @@ import wx
 import numpy as np
 from slot_sample import *
 
+#スロットアプリ用クラス
 class SlotApp(wx.Frame):
 
 	def __init__(self, parent, id = -1, title = 'Window Title'):
+
+		#スロットクラスを定義
+		self.slot=reset()
+
+		#フレームクラスを初期化
 		wx.Frame.__init__(self, parent, id, title)
 		self.SetSize((500,200))
 
+		#パネルを定義
 		self.panel = wx.Panel(self)
 
 		#フラグ表示用処理
@@ -32,10 +39,14 @@ class SlotApp(wx.Frame):
 		self.Show()
 
 	def startLottery(self,event):
-		self.slot=reset()
-		print(self.slot.getGames())
-		# self.flag_text.SetLabel()
+		#抽選開始
+		self.slot.lottery()
+		#抽選内容を表示
+		self.flag_text.SetLabel(self.slot.getMedals())
 
+#アプリ定義
 app=wx.App()
+#スロットアプリを定義
 SlotApp(None,id=wx.ID_ANY,title="S牙狼魔戒ノ花XX")
+#アプリ起動
 app.MainLoop()
