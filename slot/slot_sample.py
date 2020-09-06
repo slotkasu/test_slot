@@ -32,8 +32,8 @@ class Slot:
 	games = 0
 	settings = 6
 	medals = 0
-	x_games = np.zeros(8000,int)
-	y_medals = np.zeros(8000,int)
+	x_games = np.arange(0,10000)
+	y_medals = np.zeros(10000)
 
 	# 状態
 	state = 0
@@ -41,7 +41,7 @@ class Slot:
 	flag_range = []
 	koyaku_list = []
 
-	def AT_games_won(mode):
+	def AT_games_won(self,mode):
 		ran = rd.randrange(100)
 		if mode == 0:
 			if ran < 70:
@@ -58,20 +58,26 @@ class Slot:
 			else:
 				return 120
 		elif mode == 2:
-			if ran == 0:
+			if ran <= 50:
 				return 500
 			else:
-				return 100
+				return 200
 
-	def AT_lottery(flag):
+	def AT_lottery(self,flag):
+		ran = rd.randrange(100)
 		if flag == "chance_rep":
-			if rd.randrange(100) < 40:
+			if ran < 40:
 				self.state = True
-				self.AT_games_left += AT_games_won()
+				self.AT_games_left += self.AT_games_won(0)
+			elif ran < 50 and self.state != 0:
+				self.AT_games_left += self.AT_games_won(1)
 		elif flag == "kyo_cherry":
-			if rd.randrange(100) < 20:
+			if ran < 20:
 				self.state = True
 				self.AT_games_left += 50
+			elif ran < 30 and self.state != 0:
+				self.AT_games_left += self.AT_games_won(1)
+
 
 
 
@@ -87,6 +93,9 @@ class Slot:
 		# self.payout = [i.getPayout() for i in koyaku_list]
 		self.koyaku_list = koyaku_list
 
+	def getMedals(self):
+		return self.medals
+
 	def setState(self,state):
 		self.state = state
 	def getState(self):
@@ -98,26 +107,45 @@ class Slot:
 
 	#抽選
 	def lottery(self):
-		# 毎回3枚入るので-3
-		if AT_games_left == 0:
+		
+		if self.AT_games_left == 0:
 			self.state = 0
-		tama = -3
+
 		ran = rd.randrange(65535)
 		for i in range(len(self.getFlagrange())):
 			if ran < self.getFlagrange()[i]:
 				break
+		
 		# makimono
-		# if self.koyaku_list[i].getName == "chance_rep":
-		# 	AT no # chusen
+		if self.koyaku_list[i].getName() == "chance_rep":
+			if ran%2 == 1:
+				self.AT_lottery("chance_rep")
+			else:
+				self.AT_games_won(0)
+		# 今日チェ
+		elif self.koyaku_list[i].getName() == "kyo_cherry":
+			if ran % 4 == 0:
+				self.AT_lottery("kyo_cherry")
 
 		# 押し順ベルのとき
-		if self.koyaku_list[i].getName == "osi_bell":
+		elif self.koyaku_list[i].getName() == "osi_bell":
+
 			if self.state == 1 or rd.randrange(6) == 0:
 				pass
-		if self.koyaku_list[i].getName == "freeze":
-			Sleep(10000)
+			else:
+				self.medals -= self.koyaku_list[i].getPayout()
+		elif self.koyaku_list[i].getName() == "freeze":
+			print("freeze")
+			# time.sleep(10)
+			#曲を流す
 
-		tama += self.koyaku_list[i].getPayout()
+		# 毎回3枚入るので-3
+		self.medals += self.koyaku_list[i].getPayout() -3
+
+		self.y_medals[self.games] = self.medals
+		if self.state != 0:
+			self.AT_games_left -= 1
+		self.games += 1
 
 def probToCount(prob):
 	return int(65536/prob)
@@ -145,5 +173,11 @@ tama = 0
 
 
 def __main__():
-	for i in range(1000000):
-		tama += slot.lottery()
+	slot = reset()
+	for i in range(10000):
+		slot.lottery()
+	print(slot.getMedals())
+	plt.plot(slot.x_games,slot.y_medals)
+	plt.show()
+
+__main__()
