@@ -1,17 +1,24 @@
 import wx
 import numpy as np
-import slot_sample
+from slot_sample import *
 
+#スロットアプリ用クラス
 class SlotApp(wx.Frame):
 
 	def __init__(self, parent, id = -1, title = 'Window Title'):
+
+		#スロットクラスを定義
+		self.slot=reset()
+
+		#フレームクラスを初期化
 		wx.Frame.__init__(self, parent, id, title)
 		self.SetSize((500,200))
 
+		#パネルを定義
 		self.panel = wx.Panel(self)
 
 		#フラグ表示用処理
-		self.flag_text = wx.StaticText(self.panel,wx.ID_ANY,'小役',style=wx.TE_CENTER)
+		self.flag_text = wx.StaticText(self.panel,wx.ID_ANY,'小役',style=wx.ALIGN_CENTRE_HORIZONTAL |wx.ST_NO_AUTORESIZE)
 		font=wx.Font(30, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL)
 		self.flag_text.SetFont(font)
 
@@ -32,12 +39,14 @@ class SlotApp(wx.Frame):
 		self.Show()
 
 	def startLottery(self,event):
-		self.flag_text.SetLabel("テスト")
-		font=wx.Font(30, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL)
-		self.flag_text.SetFont(font)
+		#抽選開始
+		self.slot.lottery()
+		#抽選内容を表示
+		self.flag_text.SetLabel(self.slot.getMedals())
 
-
-
+#アプリ定義
 app=wx.App()
+#スロットアプリを定義
 SlotApp(None,id=wx.ID_ANY,title="S牙狼魔戒ノ花XX")
+#アプリ起動
 app.MainLoop()
