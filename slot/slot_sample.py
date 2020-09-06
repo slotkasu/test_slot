@@ -1,11 +1,8 @@
 import random as rd
 import numpy as np
 import matplotlib.pyplot as plt
-import pyaudio
 import time
 
-
-time.sleep(1000)
 # 小役の定義
 class Koyaku:
 	prob = 10000
@@ -40,8 +37,43 @@ class Slot:
 
 	# 状態
 	state = 0
+	AT_games_left = 0
 	flag_range = []
 	koyaku_list = []
+
+	def AT_games_won(mode):
+		ran = rd.randrange(100)
+		if mode == 0:
+			if ran < 70:
+				return 50
+			elif ran > 97:
+				return 100
+			else:
+				return 70
+		elif mode == 1:
+			if ran < 50:
+				return 50
+			elif ran < 80:
+				return 100
+			else:
+				return 120
+		elif mode == 2:
+			if ran == 0:
+				return 500
+			else:
+				return 100
+
+	def AT_lottery(flag):
+		if flag == "chance_rep":
+			if rd.randrange(100) < 40:
+				self.state = True
+				self.AT_games_left += AT_games_won()
+		elif flag == "kyo_cherry":
+			if rd.randrange(100) < 20:
+				self.state = True
+				self.AT_games_left += 50
+
+
 
 	#フラグの個数を渡すと範囲にして返してくれる
 	def countToRange(self,flag_count):
@@ -50,10 +82,11 @@ class Slot:
 
 	def __init__(self,koyaku_list):
 		self.games = 0
+		self.AT_games_left = 0
 		self.flag_range = self.countToRange([i.getProb() for i in koyaku_list])
 		# self.payout = [i.getPayout() for i in koyaku_list]
 		self.koyaku_list = koyaku_list
-	
+
 	def setState(self,state):
 		self.state = state
 	def getState(self):
@@ -66,15 +99,20 @@ class Slot:
 	#抽選
 	def lottery(self):
 		# 毎回3枚入るので-3
+		if AT_games_left == 0:
+			self.state = 0
 		tama = -3
 		ran = rd.randrange(65535)
 		for i in range(len(self.getFlagrange())):
 			if ran < self.getFlagrange()[i]:
 				break
+		# makimono
+		# if self.koyaku_list[i].getName == "chance_rep":
+		# 	AT no # chusen
 
 		# 押し順ベルのとき
 		if self.koyaku_list[i].getName == "osi_bell":
-			if self.getState() == 1 or rd.randrange(6) == 0:
+			if self.state == 1 or rd.randrange(6) == 0:
 				pass
 		if self.koyaku_list[i].getName == "freeze":
 			Sleep(10000)
@@ -99,7 +137,7 @@ def reset():
 	# 小役たち
 	koyaku_tachi = [bell,replay,cherry,rare_bell,chance_replay,kyo_cherry,chance_me,hazure,freeze,osijun_bell]
 
-	slot = Slot(8000,koyaku_tachi)
+	slot = Slot(koyaku_tachi)
 	return slot
 
 
@@ -109,4 +147,3 @@ tama = 0
 def __main__():
 	for i in range(1000000):
 		tama += slot.lottery()
-		print(tama)
