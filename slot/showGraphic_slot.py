@@ -19,6 +19,7 @@ class SlotApp(wx.Frame):
 
 		#フラグ表示用処理
 		self.flag_text = wx.StaticText(self.panel,wx.ID_ANY,'小役',style=wx.ALIGN_CENTRE_HORIZONTAL |wx.ST_NO_AUTORESIZE)
+		self.flag_text2 = wx.StaticText(self.panel,wx.ID_ANY,'',style=wx.ALIGN_CENTRE_HORIZONTAL |wx.ST_NO_AUTORESIZE)
 		font=wx.Font(30, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL)
 		self.flag_text.SetFont(font)
 
@@ -39,6 +40,7 @@ class SlotApp(wx.Frame):
 		#レイアウト設定
 		self.layout = wx.BoxSizer(wx.VERTICAL)
 		self.layout.Add(self.flag_text,flag=wx.GROW)
+		self.layout.Add(self.flag_text2,flag=wx.GROW)
 		self.layout.Add(self.startButton,flag=wx.ALIGN_CENTER | wx.BOTTOM | wx.RIGHT, border=10)
 		self.layout.Add(self.lamp,flag=wx.BOTTOM)
 		self.panel.SetSizer(self.layout)
@@ -51,7 +53,9 @@ class SlotApp(wx.Frame):
 		#抽選開始
 		self.slot.lottery()
 		#抽選内容を表示
-		self.flag_text.SetLabel(self.slot.getLastflag()+" "+str(self.slot.getMedals()))
+		self.flag_text.SetLabel(self.slot.getLastflag()+" "+self.slot.getState())
+		#累積データを表示
+		self.flag_text2.SetLabel(str(self.slot.getGames())+" "+str(self.slot.getATgames())+" "+str(self.slot.getMedals()))
 
 #アプリ定義
 app=wx.App()
