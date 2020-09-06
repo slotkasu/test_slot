@@ -12,7 +12,7 @@ class SlotApp(wx.Frame):
 
 		#フレームクラスを初期化
 		wx.Frame.__init__(self, parent, id, title)
-		self.SetSize((500,200))
+		self.SetSize((500,500))
 
 		#パネルを定義
 		self.panel = wx.Panel(self)
@@ -31,7 +31,7 @@ class SlotApp(wx.Frame):
 		#画像表示
 		image = wx.Image('test.jpg')
 		self.bitmap = image.ConvertToBitmap()
-		self.bitmap = wx.BitmapFromImage(image.Scale(50,50))
+		self.bitmap = wx.Bitmap(image.Scale(50,50))
 
 		self.lamp=wx.StaticBitmap(self.panel, -1, self.bitmap, (0,0), self.GetClientSize())
 		self.SetSize(image.GetSize())
@@ -51,7 +51,7 @@ class SlotApp(wx.Frame):
 		#抽選開始
 		self.slot.lottery()
 		#抽選内容を表示
-		self.flag_text.SetLabel(self.slot.getMedals())
+		self.flag_text.SetLabel(self.slot.getLastFlag()+" "+str(self.slot.getMedals()))
 
 #アプリ定義
 app=wx.App()
