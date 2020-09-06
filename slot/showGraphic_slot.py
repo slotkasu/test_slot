@@ -6,6 +6,8 @@ from slot_sample import *
 class SlotApp(wx.Frame):
 
 	def __init__(self, parent, id = -1, title = 'Window Title'):
+		#抽選中フラグ
+		self.onLottery=0
 
 		#スロットクラスを定義
 		self.slot=reset()
@@ -35,14 +37,18 @@ class SlotApp(wx.Frame):
 		self.bitmap = image.ConvertToBitmap()
 		self.bitmap = wx.Bitmap(image.Scale(50,50))
 
-		self.lamp=wx.StaticBitmap(self.panel, wx.ID_ANY, self.bitmap)
+		#空の画像
+		self.empty_bitmap=wx.EmptyBitmap(50,50,depth=-1) 
+
+		self.lamp=wx.StaticBitmap(self.panel, wx.ID_ANY, self.empty_bitmap,style=wx.ALIGN_CENTRE_HORIZONTAL |wx.ST_NO_AUTORESIZE)
+		
 
 		#レイアウト設定
 		self.layout = wx.BoxSizer(wx.VERTICAL)
 		self.layout.Add(self.flag_text,flag=wx.GROW)
 		self.layout.Add(self.flag_text2,flag=wx.GROW)
 		self.layout.Add(self.startButton,flag=wx.ALIGN_CENTER | wx.BOTTOM | wx.RIGHT, border=10)
-		self.layout.Add(self.lamp,flag=wx.GROW)
+		self.layout.Add(self.lamp,flag=wx.ALIGN_CENTER)
 		self.panel.SetSizer(self.layout)
 
 		#表示処理
@@ -50,8 +56,19 @@ class SlotApp(wx.Frame):
 		self.Show()
 
 	def startLottery(self,event):
+		if self.onLottery==1:
+			return
+
+		if self.slot.getATgames()>0:
+			self.lamp.SetBitmap(self.bitmap)
+		else:
+			self.lamp.SetBitmap(self.empty_bitmap)
+
 		#抽選開始
+		self.onLottery=1
 		self.slot.lottery()
+		self.onLottery=0
+
 		#抽選内容を表示
 		self.flag_text.SetLabel(self.slot.getLastflag()+" "+self.slot.getState())
 		#累積データを表示
