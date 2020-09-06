@@ -103,6 +103,10 @@ class Slot:
 	def getFlagrange(self):
 		return self.flag_range
 
+
+	def getLastflag(self):
+		return self.last_flag
+
 	#抽選
 	def lottery(self):
 		
