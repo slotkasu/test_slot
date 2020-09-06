@@ -12,7 +12,7 @@ class SlotApp(wx.Frame):
 
 		#フレームクラスを初期化
 		wx.Frame.__init__(self, parent, id, title)
-		self.SetSize((500,500))
+		self.SetSize((800,500))
 
 		#パネルを定義
 		self.panel = wx.Panel(self)
@@ -35,15 +35,14 @@ class SlotApp(wx.Frame):
 		self.bitmap = image.ConvertToBitmap()
 		self.bitmap = wx.Bitmap(image.Scale(50,50))
 
-		self.lamp=wx.StaticBitmap(self.panel, -1, self.bitmap, (0,0), self.GetClientSize())
-		self.SetSize(image.GetSize())
+		self.lamp=wx.StaticBitmap(self.panel, wx.ID_ANY, self.bitmap)
 
 		#レイアウト設定
 		self.layout = wx.BoxSizer(wx.VERTICAL)
 		self.layout.Add(self.flag_text,flag=wx.GROW)
 		self.layout.Add(self.flag_text2,flag=wx.GROW)
 		self.layout.Add(self.startButton,flag=wx.ALIGN_CENTER | wx.BOTTOM | wx.RIGHT, border=10)
-		self.layout.Add(self.lamp,flag=wx.BOTTOM)
+		self.layout.Add(self.lamp,flag=wx.GROW)
 		self.panel.SetSizer(self.layout)
 
 		#表示処理
@@ -56,7 +55,7 @@ class SlotApp(wx.Frame):
 		#抽選内容を表示
 		self.flag_text.SetLabel(self.slot.getLastflag()+" "+self.slot.getState())
 		#累積データを表示
-		self.flag_text2.SetLabel(str(self.slot.getGames())+" "+str(self.slot.getATgames())+" "+str(self.slot.getMedals()))
+		self.flag_text2.SetLabel(str(self.slot.getGames())+" ATゲーム数:"+str(self.slot.getATgames())+" 持ちメダル:"+str(self.slot.getMedals()))
 
 #アプリ定義
 app=wx.App()
